@@ -97,9 +97,15 @@ public class GameEngine implements Runnable {
                 ups = 0;
             }
         }
+
+        System.exit(0);
     }
 
-    public void stopEngine() {
+    public void stop() {
+        System.exit(0);
+    }
+
+    public void pause() {
         running = false;
     }
 

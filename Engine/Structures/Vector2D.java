@@ -27,6 +27,22 @@ public class Vector2D {
         return y;
     }
 
+    public int getIntX() {
+        return (int)x;
+    }
+
+    public int getIntY() {
+        return (int)y;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
     public void setX(int x) {
         this.x = x;
     }
@@ -59,6 +75,16 @@ public class Vector2D {
     @Override
     public Vector2D clone() {
         return new Vector2D(x, y);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Vector2D))
+            return false;
+        
+        Vector2D other = (Vector2D)obj;
+
+        return this.x == other.x && this.y == other.y;
     }
 
     @Override
