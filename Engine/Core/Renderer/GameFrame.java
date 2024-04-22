@@ -46,6 +46,9 @@ public class GameFrame extends JFrame {
     }
 
     public void toggleFullscreen() {
+        if (!Settings.resizable)
+            return; 
+            
         if (this.fullscreen) {
             dispose();
             setExtendedState(JFrame.NORMAL);
@@ -60,7 +63,6 @@ public class GameFrame extends JFrame {
             setUndecorated(true);
             setVisible(true);
         }
-        this.fullscreen = Settings.fullscreen;
     }
 
     public void start() {
@@ -86,6 +88,7 @@ public class GameFrame extends JFrame {
         }
         if (Settings.fullscreen != this.fullscreen) {
             toggleFullscreen();
+            this.fullscreen = Settings.fullscreen;
         }
         scene.requestFocusInWindow();
         scene.refresh();
