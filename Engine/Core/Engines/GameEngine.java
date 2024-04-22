@@ -92,7 +92,7 @@ public class GameEngine implements Runnable {
 
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
-                System.out.println("FPS: " + fps + " | UPS : " + ups);
+                //System.out.println("FPS: " + fps + " | UPS : " + ups);
                 fps = 0;
                 ups = 0;
             }

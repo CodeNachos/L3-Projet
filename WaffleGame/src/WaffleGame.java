@@ -8,7 +8,6 @@ import java.awt.Dimension;
 import java.awt.Image;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.Position;
 
 import Engine.Core.Engines.GameEngine;
 import Engine.Core.Renderer.Scene;

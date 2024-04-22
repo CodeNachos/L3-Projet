@@ -10,16 +10,17 @@ public class Tile extends GameObject {
     public Vector2D mapPosition;
     
     public Tile(TileMap map, int line, int column, Image sprite) {
-        Vector2D globalPosition = new Vector2D(
-            map.position.x + column * map.tileDimension.width,
-            map.position.y + line * map.tileDimension.height
+        super(
+            new Vector2D(
+                map.position.x + column * map.tileDimension.width,
+                map.position.y + line * map.tileDimension.height
+            ),
+            new Vector2D(
+                (double)map.tileDimension.width/(double)sprite.getWidth(null),
+                (double)map.tileDimension.height/(double)sprite.getHeight(null)
+            ), 
+            sprite 
         );
-        Vector2D tileScale = new Vector2D(
-            (double)map.tileDimension.width/(double)sprite.getWidth(null),
-            (double)map.tileDimension.height/(double)sprite.getHeight(null)
-        ); 
-        super(globalPosition, tileScale, sprite);
-        
         parentMap = map;
         mapPosition = new Vector2D(line, column);
     }

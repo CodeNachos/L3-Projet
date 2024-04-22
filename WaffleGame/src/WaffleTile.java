@@ -8,8 +8,6 @@ import Engine.Entities.TileMap.TileMap;
 
 public class WaffleTile extends Tile {
 
-    private static final String WaffleTileMap = null;
-
     public WaffleTile(TileMap map, int line, int column, Image sprite) {
         super(map, line, column, sprite);
     }
@@ -17,6 +15,7 @@ public class WaffleTile extends Tile {
     @Override
     public void input(MouseEvent e) {
         if (e.getID() == MouseEvent.MOUSE_CLICKED) {
+            //System.out.println(this.getBounds());
             ((WaffleTileMap)(parentMap)).tileClicked = mapPosition;
         }
     }

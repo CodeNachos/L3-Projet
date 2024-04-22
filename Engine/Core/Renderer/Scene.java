@@ -108,19 +108,32 @@ public class Scene extends JPanel {
     }
 
     private void resizeMapTiles(TileMap mapObj, Vector2D ratio) {
+        mapObj.setSize(new Dimension(
+            (int)(mapObj.getWidth() * ratio.x),
+            (int)(mapObj.getHeight() * ratio.y)
+        ));
         // update tiles dimension
+        System.out.println(mapObj.tileDimension);
         mapObj.tileDimension = new Dimension(
-            (int)((mapObj.getSize().width * ratio.x)/mapObj.mapDimension.width), 
-            (int)((mapObj.getSize().height * ratio.y)/mapObj.mapDimension.height)
+            (int)(ratio.x * mapObj.getSize().width/mapObj.mapDimension.width), 
+            (int)(ratio.y * mapObj.getSize().height/mapObj.mapDimension.height)
         );
+        System.out.println(mapObj.tileDimension);
         // update tiles
         Vector2D updatedValues = new Vector2D();
         for (int l = 0; l < mapObj.mapDimension.height; l++) {
             for (int c = 0; c < mapObj.mapDimension.width; c++) {
                 if (mapObj.gridmap[l][c] != null) {
-                    updatedValues.setCoord(mapObj.gridmap[l][c].position.x * ratio.x, mapObj.gridmap[l][c].position.y * ratio.y);
+                    updatedValues.setCoord(
+                        mapObj.position.x + mapObj.gridmap[l][c].mapPosition.x * mapObj.tileDimension.width,
+                        mapObj.position.y + mapObj.gridmap[l][c].mapPosition.y * mapObj.tileDimension.height
+                    );
                     mapObj.gridmap[l][c].setPos(updatedValues);
-                    updatedValues.setCoord(mapObj.gridmap[l][c].scale.x * ratio.x, mapObj.gridmap[l][c].scale.y * ratio.y);
+
+                    updatedValues.setCoord(
+                        (double)mapObj.tileDimension.width/(double)mapObj.gridmap[l][c].sprite.getWidth(null),
+                        (double)mapObj.tileDimension.height/(double)mapObj.gridmap[l][c].sprite.getHeight(null)
+                    );
                     mapObj.gridmap[l][c].setScale(updatedValues);
                 }
             }

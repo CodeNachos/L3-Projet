@@ -1,6 +1,8 @@
 package Engine.Core.Renderer;
 
 import java.awt.BorderLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 
@@ -13,14 +15,25 @@ public class GameFrame extends JFrame {
     private Scene scene;
     
     public GameFrame() {
-        initialize();
-    }
-
-    private void initialize() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout()); 
         setTitle(Settings.applicationName);
-        setResizable(true);
+        setResizable(Settings.resizable);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // This method is called when the JFrame is resized
+                if (Settings.stretch) {
+                    Vector2D resizeRatio = new Vector2D(
+                        (double)(e.getComponent().getSize().width)/(double)(Settings.resolution.width),
+                        (double)(e.getComponent().getSize().height)/(double)(Settings.resolution.height)
+                    );
+                    resizeScene(resizeRatio);
+                }
+                Settings.resolution = e.getComponent().getSize();
+            }
+        });
     }
 
     public void setScene(Scene scn) {
