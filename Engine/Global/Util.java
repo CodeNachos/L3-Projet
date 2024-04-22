@@ -29,4 +29,12 @@ public class Util {
         }
         return null;
     }
+
+    public static void printError(String msg) {
+        System.err.println("ERROR: " + msg);
+    }
+
+    public static void printWarning(String msg) {
+        System.out.println("WARNING: " + msg);
+    }
 }

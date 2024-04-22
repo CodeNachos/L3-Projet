@@ -11,12 +11,15 @@ import Engine.Core.Controller.Controller;
 import Engine.Entities.GameObject;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Entities.UI.ColorBackground;
+import Engine.Entities.UI.UIFrame;
 import Engine.Entities.UI.UIObject;
 import Engine.Global.Settings;
 import Engine.Structures.Vector2D;
 
 
 public class Scene extends JPanel {
+    private static final String UIFrame = null;
+
     // Scene settings
     Controller control;
 
@@ -67,7 +70,9 @@ public class Scene extends JPanel {
             } else if (obj instanceof ColorBackground) {
                 ColorBackground cbkgdObj = (ColorBackground)obj;
                 g.setColor(cbkgdObj.color);
-                g.fillRect((int)cbkgdObj.offset.x, (int)cbkgdObj.offset.y, cbkgdObj.getWidth(), cbkgdObj.getHeight());
+                g.fillRect((int)cbkgdObj.position.x, (int)cbkgdObj.position.y, cbkgdObj.getWidth(), cbkgdObj.getHeight());
+            } else if (obj instanceof UIFrame) {
+                ((UIFrame)(obj)).draw();
             } else {
                 if (obj.sprite != null)
                     g.drawImage(obj.sprite, obj.getLocation().x, obj.getLocation().y, obj.getSize().width, obj.getSize().height,null);
