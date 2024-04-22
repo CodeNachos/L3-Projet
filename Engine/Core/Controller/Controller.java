@@ -65,7 +65,7 @@ public class Controller implements MouseListener, KeyListener {
             // check if is target object
             if (obj.getBounds().contains(e.getPoint())) {
                 // if obj is tile map send event to
-                if (obj instanceof TileMap) {   
+                if (obj instanceof TileMap) {
                     TileMap mapObj = (TileMap)obj;
                     forwardMouseEventToTiles(mapObj, e);
                 

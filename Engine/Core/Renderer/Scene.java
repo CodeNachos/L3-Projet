@@ -11,6 +11,7 @@ import Engine.Core.Controller.Controller;
 import Engine.Entities.GameObject;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Entities.UI.ColorBackground;
+import Engine.Entities.UI.UIObject;
 import Engine.Global.Settings;
 import Engine.Structures.Vector2D;
 
@@ -84,55 +85,50 @@ public class Scene extends JPanel {
     }
 
     protected void resizeComponents(Vector2D ratio) {
-        Vector2D updatedValues = new Vector2D();
         for (GameObject obj : components) {
             if (obj instanceof TileMap) {
                 TileMap mapObj = (TileMap)obj;
                 resizeMapTiles(mapObj, ratio);
-            } else if (obj instanceof ColorBackground) {
-                ColorBackground cbkdObj = (ColorBackground)obj;
-                if (cbkdObj.frame != null)
-                    cbkdObj.setSize(cbkdObj.frame.getSize());
-                else {
-                    cbkdObj.setSize(getSize());
-                }
+            } else if (obj instanceof UIObject) {
+                resizeUIObject((UIObject)obj, ratio);
             } else {
-                // set relative position
-                updatedValues.setCoord(obj.position.x * ratio.x, obj.position.y * ratio.y);
-                obj.setPos(updatedValues);
-                // set relative scaling
-                updatedValues.setCoord(obj.scale.x * ratio.x, obj.scale.y * ratio.y);
-                obj.setScale(updatedValues);
+                resizeGameObject(obj, ratio);
             }
         }
     }
 
+    private void resizeGameObject(GameObject obj, Vector2D ratio) {
+        Vector2D updatedValues = new Vector2D();
+        // set relative position
+        updatedValues.setCoord(obj.position.x * ratio.x, obj.position.y * ratio.y);
+        obj.setPos(updatedValues);
+        // set relative scaling
+        updatedValues.setCoord(obj.scale.x * ratio.x, obj.scale.y * ratio.y);
+        obj.setScale(updatedValues);
+    }
+
+    private void resizeUIObject(UIObject uiObj, Vector2D ratio) {
+        if (uiObj.frame != null)
+            uiObj.setSize(uiObj.frame.getSize());
+        else {
+            uiObj.setSize(getSize());
+        }
+    }
+
     private void resizeMapTiles(TileMap mapObj, Vector2D ratio) {
-        mapObj.setSize(new Dimension(
-            (int)(mapObj.getWidth() * ratio.x),
-            (int)(mapObj.getHeight() * ratio.y)
-        ));
-        // update tiles dimension
+        // resize tile map
+        resizeGameObject(mapObj, ratio);
+        // recalculate tile dimentions
         mapObj.tileDimension = new Dimension(
             (int)(ratio.x * mapObj.getSize().width/mapObj.mapDimension.width), 
             (int)(ratio.y * mapObj.getSize().height/mapObj.mapDimension.height)
         );
         // update tiles
-        Vector2D updatedValues = new Vector2D();
         for (int l = 0; l < mapObj.mapDimension.height; l++) {
             for (int c = 0; c < mapObj.mapDimension.width; c++) {
                 if (mapObj.gridmap[l][c] != null) {
-                    updatedValues.setCoord(
-                        mapObj.position.x + mapObj.gridmap[l][c].mapPosition.x * mapObj.tileDimension.width,
-                        mapObj.position.y + mapObj.gridmap[l][c].mapPosition.y * mapObj.tileDimension.height
-                    );
-                    mapObj.gridmap[l][c].setPos(updatedValues);
-
-                    updatedValues.setCoord(
-                        (double)mapObj.tileDimension.width/(double)mapObj.gridmap[l][c].sprite.getWidth(null),
-                        (double)mapObj.tileDimension.height/(double)mapObj.gridmap[l][c].sprite.getHeight(null)
-                    );
-                    mapObj.gridmap[l][c].setScale(updatedValues);
+                    // resize tiles
+                    resizeGameObject(mapObj.gridmap[l][c], ratio);
                 }
             }
         }

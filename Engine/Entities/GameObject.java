@@ -7,16 +7,24 @@ import javax.swing.JComponent;
 
 import Engine.Structures.Vector2D;
 
-public class GameObject extends JComponent {
+public abstract class GameObject extends JComponent {
     // Object attributes
-    public Vector2D position;
-    public Vector2D scale;
-    public Image sprite;
+    public Vector2D position = new Vector2D(0,0);
+    public Vector2D scale = new Vector2D(1,1);
+    public Image sprite = null;
     
     public GameObject() {
-        position = new Vector2D(0,0);
-        scale = new Vector2D(1,1);
-        sprite = null;
+        updateVisuals();
+    }
+
+    public GameObject(Vector2D position) {
+        this.position = position.clone();
+        updateVisuals();
+    }
+
+    public GameObject(Vector2D position, Vector2D scale) {
+        this.position = position.clone();
+        this.scale = scale.clone();
         updateVisuals();
     }
 

@@ -15,7 +15,6 @@ public class WaffleTile extends Tile {
     @Override
     public void input(MouseEvent e) {
         if (e.getID() == MouseEvent.MOUSE_CLICKED) {
-            //System.out.println(this.getBounds());
             ((WaffleTileMap)(parentMap)).tileClicked = mapPosition;
         }
     }
