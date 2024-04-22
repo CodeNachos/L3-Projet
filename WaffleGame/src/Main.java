@@ -29,8 +29,10 @@ public class Main {
 
         mainScene = new Scene();
 
+        // game manager
         game = new WaffleGame();
 
+        // tile map settings
         Vector2D tileMapOffset = new Vector2D(16,16);
         Dimension tileMapArea = new Dimension(
             Settings.resolution.width - 2*(int)tileMapOffset.x,
@@ -40,12 +42,15 @@ public class Main {
         map = new WaffleTileMap(4, 4, tileMapArea, tileMapOffset);
         map.populateWaffle();
 
+        // game background
         background = new ColorBackground(new Color(108, 39, 8, 255), null);
 
+        // add components in rendering order
         mainScene.addComponent(background);
         mainScene.addComponent(map);
         mainScene.addComponent(game);
         
+        // start engine
         engine.setCurrentScene(mainScene);
         engine.start(); 
     }
