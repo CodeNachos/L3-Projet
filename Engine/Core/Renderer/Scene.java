@@ -113,12 +113,10 @@ public class Scene extends JPanel {
             (int)(mapObj.getHeight() * ratio.y)
         ));
         // update tiles dimension
-        System.out.println(mapObj.tileDimension);
         mapObj.tileDimension = new Dimension(
             (int)(ratio.x * mapObj.getSize().width/mapObj.mapDimension.width), 
             (int)(ratio.y * mapObj.getSize().height/mapObj.mapDimension.height)
         );
-        System.out.println(mapObj.tileDimension);
         // update tiles
         Vector2D updatedValues = new Vector2D();
         for (int l = 0; l < mapObj.mapDimension.height; l++) {
