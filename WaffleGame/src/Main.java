@@ -13,11 +13,13 @@ import Engine.Global.Settings;
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 
+/**
+ * The Main class initializes and starts the WaffleGame application.
+ */
 public class Main {
     // Engine
     public static GameEngine engine;
     
-
     // Scenes
 
     // Main Scene
@@ -28,8 +30,12 @@ public class Main {
     public static ColorArea background;
     // Stats menu components
     public static JLabel playerLabel;
-    
 
+    /**
+     * The main method of the WaffleGame application.
+     * Initializes the engine and starts the main game scene.
+     * @param args The command line arguments.
+     */
     public static void main(String args[]) {
         engine = new GameEngine();
 
@@ -41,6 +47,10 @@ public class Main {
         engine.start(); 
     }
 
+    /**
+     * Initializes and configures the main game scene.
+     * @return The configured main game scene.
+     */
     public static Scene startGameScene() {
         Scene gameScene = new Scene();
 
@@ -71,6 +81,10 @@ public class Main {
         return gameScene;
     }
 
+    /**
+     * Creates and configures the stats menu.
+     * @return The configured stats menu.
+     */
     public static MenuFrame createStatsMenu() {
         int height = (int)(Settings.resolution.height * 0.1);
         MenuFrame statsMenu = new MenuFrame(new Dimension(Settings.resolution.width, height));
@@ -83,7 +97,7 @@ public class Main {
         // Use GridBagLayout
         statsMenu.setLayout(new GridBagLayout());
         
-        // Set alignement to center
+        // Set alignment to center
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -101,6 +115,10 @@ public class Main {
         return statsMenu;
     }
 
+    /**
+     * Creates and configures the game over menu.
+     * @return The configured game over menu.
+     */
     public static MenuFrame createGameOverMenu() {
         MenuFrame gameOverMenu = new MenuFrame(new Dimension(300,200));
 
@@ -131,7 +149,6 @@ public class Main {
         restartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Call your function here
                 mainScene = startGameScene();
                 engine.setCurrentScene(mainScene);
                 mainScene.remove(gameOverMenu);
@@ -152,7 +169,6 @@ public class Main {
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Call your function here
                 engine.stop();
             }
         });
