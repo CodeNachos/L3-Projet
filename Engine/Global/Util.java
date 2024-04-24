@@ -1,5 +1,6 @@
 package Engine.Global;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,5 +37,10 @@ public class Util {
 
     public static void printWarning(String msg) {
         System.out.println("WARNING: " + msg);
+    }
+
+    public static Color getContrastColor(Color color) {
+        double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
+        return y >= 128 ? Color.black : Color.white;
     }
 }

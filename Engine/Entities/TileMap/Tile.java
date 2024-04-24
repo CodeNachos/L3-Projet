@@ -1,5 +1,6 @@
 package Engine.Entities.TileMap;
 
+import java.awt.Graphics;
 import java.awt.Image;
 
 import Engine.Entities.GameObject;
@@ -12,8 +13,8 @@ public class Tile extends GameObject {
     public Tile(TileMap map, int line, int column, Image sprite) {
         super(
             new Vector2D(
-                map.position.x + column * map.tileDimension.width,
-                map.position.y + line * map.tileDimension.height
+                column * map.tileDimension.width,
+                line * map.tileDimension.height
             ),
             new Vector2D(
                 (double)map.tileDimension.width/(double)sprite.getWidth(null),
@@ -23,5 +24,10 @@ public class Tile extends GameObject {
         );
         parentMap = map;
         mapPosition = new Vector2D(line, column);
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(sprite, position.getIntX(), position.getIntY(), getSize().width, getSize().height, null);
     }
 }

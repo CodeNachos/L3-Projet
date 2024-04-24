@@ -1,6 +1,9 @@
 package WaffleGame.src;
 
 import java.awt.Image;
+
+import javax.swing.JButton;
+
 import java.awt.Dimension;
 
 import Engine.Entities.TileMap.TileMap;
@@ -43,9 +46,10 @@ public class WaffleTileMap extends TileMap {
             }
             for (int i = (int)tileClicked.x; i < mapDimension.height; i++) {
                 for (int j = (int)tileClicked.y; j < mapDimension.width; j++) {
-                    gridmap[i][j] = null;
+                    removeTile(i, j);
                 }
             }
+
             tileClicked = null;
             next_player = true;
         }

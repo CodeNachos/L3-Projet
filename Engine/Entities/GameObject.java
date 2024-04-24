@@ -1,5 +1,6 @@
 package Engine.Entities;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.*;
 
@@ -93,5 +94,22 @@ public abstract class GameObject extends JComponent {
     private void updateVisuals() {
         setLocation((int)position.x, (int)position.y);
         updateSize();
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
+        if (sprite != null)
+            g.drawImage(sprite, getLocation().x, getLocation().y, getSize().width, getSize().height,null);
+    }
+
+    public void resize(Vector2D ratio) {
+        Vector2D updatedValues = new Vector2D();
+        // set relative position
+        updatedValues.setCoord(position.x * ratio.x, position.y * ratio.y);
+        setPos(updatedValues);
+        // set relative scaling
+        updatedValues.setCoord(scale.x * ratio.x, scale.y * ratio.y);
+        setScale(updatedValues);
     }
 }
