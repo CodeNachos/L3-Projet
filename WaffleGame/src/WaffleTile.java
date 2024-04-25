@@ -10,7 +10,7 @@ import Engine.Entities.TileMap.TileMap;
  * It extends the Tile class to provide customized behavior for the game.
  */
 public class WaffleTile extends Tile {
-
+    
     /**
      * Constructs a new WaffleTile instance with the specified parameters.
      * @param map The parent TileMap to which the tile belongs

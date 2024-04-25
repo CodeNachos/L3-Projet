@@ -25,7 +25,6 @@ public class GameFrame extends JFrame {
      */
     public GameFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set default close operation
-        getContentPane().setLayout(new BorderLayout()); // Set layout to BorderLayout
         setTitle(Settings.applicationName); // Set window title
         setResizable(Settings.resizable); // Set window resizable according to settings
 
@@ -72,7 +71,7 @@ public class GameFrame extends JFrame {
             dispose(); // Dispose the frame
             setExtendedState(JFrame.NORMAL); // Set extended state to normal
             setUndecorated(false); // Set undecorated mode to false
-            setPreferredSize(Settings.resolution); // Set preferred size to default resolution
+            //setPreferredSize(Settings.resolution); // Set preferred size to default resolution
             pack(); // Pack the frame
             setVisible(true); // Set visibility to true
 
@@ -97,7 +96,7 @@ public class GameFrame extends JFrame {
             setExtendedState(JFrame.MAXIMIZED_BOTH); // Set extended state to maximized
             setUndecorated(true); // Set undecorated mode to true
         } else {
-            setPreferredSize(Settings.resolution); // Set preferred size to default resolution
+            //setPreferredSize(Settings.resolution); // Set preferred size to default resolution
             pack(); // Pack the frame
         }
 

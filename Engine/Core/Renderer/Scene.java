@@ -40,7 +40,23 @@ public class Scene extends JPanel {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); // Get screen size
             setPreferredSize(screenSize); // Set preferred size to screen size
         } else {
-            setPreferredSize(Settings.resolution); // Set preferred size to configured resolution
+            //setPreferredSize(Settings.resolution); // Set preferred size to configured resolution
+        }
+    }
+
+    public Scene(Dimension resolution) {
+        components = new LinkedList<>(); // Initialize the list of components
+        control = new Controller(this); // Create a new controller instance for input handling
+        setLayout(null); // Set layout to null for manual component positioning
+        addMouseListener(control); // Add mouse listener to handle mouse events
+        addKeyListener(control); // Add key listener to handle key events
+
+        // Set preferred size based on fullscreen setting
+        if (Settings.fullscreen) {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); // Get screen size
+            setPreferredSize(screenSize); // Set preferred size to screen size
+        } else {
+            setPreferredSize(resolution); // Set preferred size to configured resolution
         }
     }
 

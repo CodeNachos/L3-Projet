@@ -30,6 +30,11 @@ public class Main {
     public static ColorArea background;
     // Stats menu components
     public static JLabel playerLabel;
+    // History
+    public static History actionHistory;
+    // Sprites
+    public static Image waffleSprite = Util.getImage("waffleTile.png"); // Load waffle tile sprite
+    public static Image poisonSprite = Util.getImage("poison_waffleTile.png"); // Load poison waffle tile sprite
 
     /**
      * The main method of the WaffleGame application.
@@ -38,6 +43,7 @@ public class Main {
      */
     public static void main(String args[]) {
         engine = new GameEngine();
+        engine.setResolution(Settings.resolution);
 
         // start scene
         mainScene = startGameScene();
@@ -52,7 +58,7 @@ public class Main {
      * @return The configured main game scene.
      */
     public static Scene startGameScene() {
-        Scene gameScene = new Scene();
+        Scene gameScene = new Scene(engine.getResolution());
 
         // game manager
         game = new WaffleGame();
@@ -60,21 +66,22 @@ public class Main {
         // tile map settings
         Vector2D tileMapOffset = new Vector2D(16,16);
         Dimension tileMapArea = new Dimension(
-            Settings.resolution.width - 2*(int)tileMapOffset.x,
-            Settings.resolution.height - 2*(int)tileMapOffset.y - (int)(Settings.resolution.height * 0.1)
+            engine.getResolution().width - 2*(int)tileMapOffset.x,
+            engine.getResolution().height - 2*(int)tileMapOffset.y - (int)(engine.getResolution().height * 0.1)
         );
 
         map = new WaffleTileMap(5, 5, tileMapArea, tileMapOffset);
         map.populateWaffle();
 
         // game background
-        background = new ColorArea(new Color(108, 39, 8, 255), Settings.resolution);
+        background = new ColorArea(new Color(108, 39, 8, 255), engine.getResolution());
 
+        actionHistory = new History();        
         
-        gameScene.addComponent(createStatsMenu());
-
         // add components in reverse rendering order
         gameScene.addComponent(game);
+        gameScene.addComponent(actionHistory);
+        gameScene.addComponent(createStatsMenu());
         gameScene.addComponent(map);
         gameScene.addComponent(background);
 
@@ -86,9 +93,9 @@ public class Main {
      * @return The configured stats menu.
      */
     public static MenuFrame createStatsMenu() {
-        int height = (int)(Settings.resolution.height * 0.1);
-        MenuFrame statsMenu = new MenuFrame(new Dimension(Settings.resolution.width, height));
-        statsMenu.setPos(new Vector2D(0, Settings.resolution.height - height));
+        int height = (int)(engine.getResolution().height * 0.1);
+        MenuFrame statsMenu = new MenuFrame(new Dimension(engine.getResolution().width, height));
+        statsMenu.setPos(new Vector2D(0, engine.getResolution().height - height));
         
         Color menuColor = new Color(206,129,71,255);
         statsMenu.setMainColor(menuColor);
@@ -124,7 +131,7 @@ public class Main {
 
         gameOverMenu.setLayout(new BoxLayout(gameOverMenu, BoxLayout.Y_AXIS));
 
-        gameOverMenu.setPos(new Vector2D(((Settings.resolution.width/2) - 150), ((Settings.resolution.height/2) - 150)));
+        gameOverMenu.setPos(new Vector2D(((engine.getResolution().width/2) - 150), ((engine.getResolution().height/2) - 150)));
 
         gameOverMenu.setMainColor(new Color(108,39,8,255));
         gameOverMenu.setAccentColor(new Color(255,255,255,100));
@@ -152,6 +159,7 @@ public class Main {
                 mainScene = startGameScene();
                 engine.setCurrentScene(mainScene);
                 mainScene.remove(gameOverMenu);
+                actionHistory.clearRecords();
             }
         });
         

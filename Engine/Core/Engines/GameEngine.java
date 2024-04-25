@@ -77,7 +77,7 @@ public class GameEngine implements Runnable {
      * @param res The resolution to set
      */
     public void setResolution(Dimension res) {
-        Settings.resolution = res; // Set the screen resolution in the settings
+        gframe.getContentPane().setSize(res);; // Set the screen resolution in the settings
     }
 
     /**
@@ -85,7 +85,7 @@ public class GameEngine implements Runnable {
      * @return The resolution of the game window
      */
     public Dimension getResolution() {
-        return Settings.resolution; // Get the screen resolution from the settings
+        return gframe.getContentPane().getSize(); // Get the window resolution from the settings
     }
 
     /**

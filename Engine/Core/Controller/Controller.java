@@ -1,5 +1,6 @@
 package Engine.Core.Controller;
 
+import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -21,17 +22,21 @@ public class Controller implements MouseListener, KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
+        forwardKeyEvent(e);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == Settings.fullscreen_key) {
             Settings.fullscreen = !Settings.fullscreen;
+        } else {
+            forwardKeyEvent(e);
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        forwardKeyEvent(e);
     }
 
     @Override
@@ -64,7 +69,7 @@ public class Controller implements MouseListener, KeyListener {
         for (GameObject obj : scene.components) {
             // check if is target object
             if (obj.getBounds().contains(e.getPoint())) {
-                // if obj is tile map send event to
+                // if obj is tile map send event to tiles
                 if (obj instanceof TileMap) {
                     TileMap mapObj = (TileMap)obj;
                     forwardMouseEventToTiles(mapObj, e);
@@ -87,6 +92,23 @@ public class Controller implements MouseListener, KeyListener {
                 }
             }
         }
+    }
+
+    private void forwardKeyEvent(KeyEvent e) {
+        for (GameObject obj : scene.components) {
+            if (obj instanceof TileMap) {
+                TileMap mapObj = (TileMap)obj;
+                forwardKeyEventToTiles(mapObj, e);
+            
+            // else default treatment
+            } else {
+                obj.input(e);
+            }
+        }
+    }
+
+    private void forwardKeyEventToTiles(TileMap mapObj, KeyEvent e) {
+
     }
     
 }

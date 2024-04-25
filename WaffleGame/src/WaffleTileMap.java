@@ -1,7 +1,6 @@
 package WaffleGame.src;
 
 import java.awt.Dimension;
-import java.awt.Image;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
@@ -44,16 +43,13 @@ public class WaffleTileMap extends TileMap {
      * Uses different sprites for different types of tiles.
      */
     public void populateWaffle() {
-        Image waffleSprite = Util.getImage("waffleTile.png"); // Load waffle tile sprite
-        Image poisonSprite = Util.getImage("poison_waffleTile.png"); // Load poison waffle tile sprite
-
         WaffleTile tile;
         for (int l = 0; l < mapDimension.height; l++) {
             for (int c = 0; c < mapDimension.width; c++) {
                 if (l == 0 && c == 0) {
-                    tile = new WaffleTile(this, l, c, poisonSprite); // Create poison waffle tile
+                    tile = new WaffleTile(this, l, c, Main.poisonSprite); // Create poison waffle tile
                 } else {
-                    tile = new WaffleTile(this, l, c, waffleSprite); // Create regular waffle tile
+                    tile = new WaffleTile(this, l, c, Main.waffleSprite); // Create regular waffle tile
                 }
                 addTile(l, c, tile); // Add tile to the map
             }
@@ -65,18 +61,21 @@ public class WaffleTileMap extends TileMap {
      */
     @Override
     public void process() {
-        if (tileClicked != null && !next_player) { // Check if a tile is clicked and it's not the next player's turn
-            if (tileClicked.x == 0 && tileClicked.y == 0) {
-                // Perform actions specific to the clicked tile position
-            }
-            for (int i = (int) tileClicked.x; i < mapDimension.height; i++) {
-                for (int j = (int) tileClicked.y; j < mapDimension.width; j++) {
-                    removeTile(i, j); // Remove tiles from the clicked position onward
-                }
-            }
-
-            tileClicked = null; // Reset the clicked tile position
-            next_player = true; // Set the flag indicating it's the next player's turn
+        if (tileClicked != null && !next_player) { // Check if a tile is clicked and its not next player's turn
+            playAction(tileClicked);
         }
+    }
+
+    public void playAction(Vector2D action) {
+        Main.actionHistory.addAction();
+        
+        for (int i = (int) tileClicked.x; i < mapDimension.height; i++) {
+            for (int j = (int) tileClicked.y; j < mapDimension.width; j++) {
+                removeTile(i, j); // Remove tiles from the clicked position onward
+            }
+        }
+
+        tileClicked = null; // Reset the clicked tile position
+        next_player = true; // Set the flag indicating it's the next player's turn
     }
 }
