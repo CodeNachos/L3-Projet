@@ -114,8 +114,10 @@ public abstract class GameObject extends JComponent {
 
     /**
      * Runs at every frame to update the object's state.
+     * 
+     * @param delta The time since the last update in seconds
      */
-    public void process() {
+    public void process(double delta) {
         // To be implemented in subclasses
     }
 

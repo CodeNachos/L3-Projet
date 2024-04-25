@@ -31,7 +31,7 @@ public class WaffleGame extends GameObject {
      * Checks for game over condition and updates player turns.
      */
     @Override
-    public void process() {
+    public void process(double delta) { 
         if (gameOver) 
             return;
 

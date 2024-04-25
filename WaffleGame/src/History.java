@@ -123,7 +123,11 @@ public class History extends GameObject {
 
     @Override
     public void input(KeyEvent e) {
-        if (e.getID() == KeyEvent.KEY_PRESSED && !Main.game.gameOver) {
+        // Ignore input if game over or if animation is being processed
+        if (Main.game.gameOver || (Main.map.animating))
+            return;
+
+        if (e.getID() == KeyEvent.KEY_PRESSED) {
             if (e.getKeyCode() == Settings.undo_key) {
                 if (canUndoAction()) {
                     System.out.println("undoing action");

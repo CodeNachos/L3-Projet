@@ -10,7 +10,8 @@ import Engine.Entities.TileMap.TileMap;
  * It extends the Tile class to provide customized behavior for the game.
  */
 public class WaffleTile extends Tile {
-    
+    public boolean state = true;
+
     /**
      * Constructs a new WaffleTile instance with the specified parameters.
      * @param map The parent TileMap to which the tile belongs
@@ -28,6 +29,10 @@ public class WaffleTile extends Tile {
      */
     @Override
     public void input(MouseEvent e) {
+        // Ignore inputs during animations
+        if (((WaffleTileMap)parentMap).animating)
+            return;
+        
         if (e.getID() == MouseEvent.MOUSE_CLICKED) { // Check if the event is a mouse click
             // Set the clicked tile position in the WaffleTileMap
             ((WaffleTileMap)(parentMap)).tileClicked = mapPosition;

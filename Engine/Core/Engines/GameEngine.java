@@ -18,15 +18,12 @@ public class GameEngine implements Runnable {
 
     private final int fixupdate = 60; // Number of updates per second
 
-    double targetUpdateTime = 1000000000.0 / fixupdate; // Target time for one update
-    double targetFrameTime = 1000000000.0 / Settings.fixfps; // Target time for one frame
+    double targetUpdateTime = 1000000000.0 / fixupdate; // Target time for one update (in millis)
+    double targetFrameTime = 1000000000.0 / Settings.fixfps; // Target time for one frame (in millis)
 
-    // Public values
-    int fps; // Frames per second counter
-    int ups; // Updates per second counter
-
-    double deltaFrame; // Time since the last frame
-    double deltaUpdate; // Time since the last update
+    // FPS and UPS values
+    int lastfps;
+    int lastups;
 
     // Game frame (window)
     private GameFrame gframe; // Instance of the game frame
@@ -101,23 +98,25 @@ public class GameEngine implements Runnable {
     public void run() {
         long previousTime = System.nanoTime(); // Get the current time in nanoseconds
 
-        fps = 0; // Initialize the frames per second counter
-        ups = 0; // Initialize the updates per second counter
+        int fps = 0; // Initialize the frames per second counter
+        int ups = 0; // Initialize the updates per second counter
 
         long lastCheck = System.currentTimeMillis(); // Get the current time in milliseconds
 
-        deltaFrame = 0; // Initialize the time since the last frame
-        deltaUpdate = 0; // Initialize the time since the last update
+        double deltaFrame = 0; // Initialize the time since the last frame
+        double deltaUpdate = 0; // Initialize the time since the last update
 
         while(running) { // Main game loop
             long currentTime = System.nanoTime(); // Get the current time in nanoseconds
 
-            deltaUpdate += (currentTime - previousTime) / targetUpdateTime; // Calculate time since the last update
-            deltaFrame += (currentTime - previousTime) / targetFrameTime; // Calculate time since the last frame
+            double deltaTime = currentTime - previousTime;
+
+            deltaUpdate += deltaTime / targetUpdateTime; // Calculate time since the last update
+            deltaFrame += deltaTime / targetFrameTime; // Calculate time since the last frame
             previousTime = currentTime; // Update previous time
 
             if (deltaUpdate >= 1) { // If it's time for an update
-                updateScene(); // Update the scene
+                updateScene((deltaTime / fixupdate) / 100); // Update the scene
                 ups++; // Increment updates per second counter
                 deltaUpdate--; // Reset the update timer
             }
@@ -132,7 +131,8 @@ public class GameEngine implements Runnable {
                 lastCheck = System.currentTimeMillis(); // Update last check time
 
                 //System.out.println("FPS: " + fps + " | UPS : " + ups);
-                
+                lastfps = fps;
+                lastups = ups;
                 fps = 0; // Reset frames per second counter
                 ups = 0; // Reset updates per second counter
             }
@@ -156,11 +156,29 @@ public class GameEngine implements Runnable {
     }
 
     /**
-     * Updates the current active scene by processing all game objects in it.
+     * 
+     * @return number of frames per second
      */
-    private void updateScene() {
+    public int getFPS() {
+        return lastfps;
+    }
+
+    /**
+     * 
+     * @return number of updates per second
+     */
+    public int getUPS() {
+        return lastups;
+    }
+
+    /**
+     * Updates the current scene by processing each game object.
+     * 
+     * @param delta The time since the last update in seconds
+     */
+    private void updateScene(double delta) {
         for (GameObject obj : currentScene.components) { // Iterate through all game objects in the scene
-            obj.process(); // Process each game object
+            obj.process(delta); // Process each game object
         }
     }
 }

@@ -9,7 +9,7 @@ public class Settings {
     public static boolean resizable = false;
     public static boolean stretch = false;
 
-    public static int fixfps = 30;
+    public static int fixfps = 60;
 
     public static String applicationName = "Game";
 

@@ -17,6 +17,14 @@ public class WaffleTileMap extends TileMap {
     /** Flag indicating whether it's the next player's turn */
     public boolean next_player = false;
 
+    // Animation parameters
+    /** Flag indicating whether an animation is being processed */
+    public boolean animating = false;
+    private double updateDelay = 0.02; // in seconds
+    private double timeCounter;
+
+    
+
     /**
      * Constructs a new WaffleTileMap instance with the specified parameters.
      * @param lines The number of lines in the tile map
@@ -60,22 +68,64 @@ public class WaffleTileMap extends TileMap {
      * Overrides the process method to handle game-specific logic.
      */
     @Override
-    public void process() {
-        if (tileClicked != null && !next_player) { // Check if a tile is clicked and its not next player's turn
+    public void process(double delta) {
+        if (animating) {
+            processAnimation(delta);
+        } else if (tileClicked != null && !next_player) { // Check if a tile is clicked and its not next player's turn
             playAction(tileClicked);
         }
     }
 
     public void playAction(Vector2D action) {
         Main.actionHistory.addAction();
-        
-        for (int i = (int) tileClicked.x; i < mapDimension.height; i++) {
-            for (int j = (int) tileClicked.y; j < mapDimension.width; j++) {
-                removeTile(i, j); // Remove tiles from the clicked position onward
-            }
-        }
+
+        removeAndUpdate(tileClicked.getIntX(), tileClicked.getIntY());
+        animating = true;
 
         tileClicked = null; // Reset the clicked tile position
         next_player = true; // Set the flag indicating it's the next player's turn
+    }
+
+    /**
+     * Processes animation updates based on the elapsed time since the last frame.
+     * 
+     * @param delta The time elapsed since the last update in seconds.
+     */
+    public void processAnimation(double delta) {
+        timeCounter += delta; // Increment the time counter by the elapsed time
+        if (timeCounter >= updateDelay) { // If the time counter exceeds the frame delay
+            timeCounter = 0; // Reset the time counter
+        } else {
+            return; // Skip the animation processing if it's not time yet
+        }
+
+        animating = false; // Initialize the animation flag to false
+        for(int l = mapDimension.height-1; l >= 0 ; l--) { // Loop through each row of the map
+            for (int c = mapDimension.width-1; c >= 0; c--) { // Loop through each column of the map
+                if (gridmap[l][c] != null && !((WaffleTile)gridmap[l][c]).state) { // If the tile is not null and not in its animation state
+                    removeAndUpdate(l, c); // Remove and update the tile
+                    animating |= true; // Set the animation flag to true
+                }
+            }
+        }
+    }
+
+    /**
+     * Removes a tile from the grid and updates the state of neighboring tiles.
+     * 
+     * @param l The row index of the tile to be removed.
+     * @param c The column index of the tile to be removed.
+     */
+    public void removeAndUpdate(int l, int c) {
+        if (gridmap[l][c] != null) { // Check if the tile is not null
+            removeTile(l, c); // Remove the tile from the grid
+        }
+
+        if (l < mapDimension.height-1 && gridmap[l+1][c] != null) { // Check if there is a tile below and it's not null
+            ((WaffleTile)gridmap[l+1][c]).state = false; // Set the state of the tile below to false (animation state)
+        }
+        if (c < mapDimension.width-1 && gridmap[l][c+1] != null) { // Check if there is a tile to the right and it's not null
+            ((WaffleTile)gridmap[l][c+1]).state = false; // Set the state of the tile to the right to false (animation state)
+        }
     }
 }
