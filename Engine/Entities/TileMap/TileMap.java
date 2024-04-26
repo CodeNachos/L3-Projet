@@ -31,7 +31,7 @@ public class TileMap extends GameObject {
         super();
         this.setSize(area); // Set size of the TileMap component
 
-        mapDimension = new Dimension(lines, columns); // Initialize map dimension
+        mapDimension = new Dimension(columns, lines); // Initialize map dimension
         gridmap = new Tile[lines][columns]; // Initialize grid of tiles
         tileDimension = new Dimension((int)(area.width / columns), (int)(area.height / lines)); // Calculate tile dimension
 
@@ -50,7 +50,7 @@ public class TileMap extends GameObject {
         super(offset);
         this.setSize(area); // Set size of the TileMap component
 
-        mapDimension = new Dimension(lines, columns); // Initialize map dimension
+        mapDimension = new Dimension(columns, lines); // Initialize map dimension
         gridmap = new Tile[lines][columns]; // Initialize grid of tiles
         tileDimension = new Dimension((int)(area.width / columns), (int)(area.height / lines)); // Calculate tile dimension
 
@@ -140,8 +140,8 @@ public class TileMap extends GameObject {
         super.paintComponent(g); // Call superclass's paintComponent method
 
         // Render each tile in the map
-        for (int l = 0; l < mapDimension.width; l++) {
-            for (int c = 0; c < mapDimension.height; c++) {
+        for (int l = 0; l < mapDimension.height; l++) {
+            for (int c = 0; c < mapDimension.width; c++) {
                 if (gridmap[l][c] != null) {
                     gridmap[l][c].paintComponent(g); // Paint the tile
                 }

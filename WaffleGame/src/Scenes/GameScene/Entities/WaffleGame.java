@@ -1,9 +1,10 @@
-package WaffleGame.src;
-
-import java.awt.event.KeyEvent;
+package WaffleGame.src.Scenes.GameScene.Entities;
 
 import Engine.Entities.GameObject;
 import Engine.Entities.UI.MenuFrame;
+import WaffleGame.src.Main;
+import WaffleGame.src.Scenes.GameScene.GameScene;
+import WaffleGame.src.Scenes.GameScene.Interface.GameOverMenu;
 
 /**
  * The WaffleGame class represents the main game logic for the WaffleGame.
@@ -38,19 +39,19 @@ public class WaffleGame extends GameObject {
         if (isGameOver()) {
             System.out.println("Game Over : Player " + (((currentPlayer + 1) % 2) + 1) + " won");
             
-            MenuFrame gameOverMenu = Main.createGameOverMenu();
-            Main.mainScene.add(gameOverMenu);
-            Main.mainScene.setComponentZOrder(gameOverMenu, 0);
-            Main.playerLabel.setText("GAME OVER : PLAYER " + (((currentPlayer + 1) % 2) + 1) + " WON");
+            MenuFrame gameOverMenu = new GameOverMenu();
+            Main.gameScene.add(gameOverMenu);
+            Main.gameScene.setComponentZOrder(gameOverMenu, 0);
+            GameScene.statsMenu.playerLabel.setText("GAME OVER : PLAYER " + (((currentPlayer + 1) % 2) + 1) + " WON");
             
             gameOver = true;
         }
 
-        if (Main.map.next_player && !gameOver) {
+        if (GameScene.map.next_player && !gameOver) {
             nextPlayer();
             System.out.println("Player " + (currentPlayer + 1) + " turn");
-            Main.playerLabel.setText("PLAYER " + (currentPlayer + 1) + " TURN");
-            Main.map.next_player = false;
+            GameScene.statsMenu.playerLabel.setText("PLAYER " + (currentPlayer + 1) + " TURN");
+            GameScene.map.next_player = false;
         }
     }
 
@@ -59,7 +60,7 @@ public class WaffleGame extends GameObject {
      * @return True if the top-left tile of the map is null (indicating game over), otherwise false.
      */
     static boolean isGameOver() {
-        return (Main.map.gridmap[0][0] == null);
+        return (GameScene.map.gridmap[0][0] == null);
     }
 
     /**

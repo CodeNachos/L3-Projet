@@ -1,9 +1,10 @@
-package WaffleGame.src;
+package WaffleGame.src.Scenes.GameScene.Entities;
 
 import java.awt.Dimension;
+
 import Engine.Entities.TileMap.TileMap;
-import Engine.Global.Util;
 import Engine.Structures.Vector2D;
+import WaffleGame.src.Scenes.GameScene.GameScene;
 
 /**
  * The WaffleTileMap class represents a tile map specific to the WaffleGame.
@@ -55,9 +56,9 @@ public class WaffleTileMap extends TileMap {
         for (int l = 0; l < mapDimension.height; l++) {
             for (int c = 0; c < mapDimension.width; c++) {
                 if (l == 0 && c == 0) {
-                    tile = new WaffleTile(this, l, c, Main.poisonSprite); // Create poison waffle tile
+                    tile = new WaffleTile(this, l, c, GameScene.poisonSprite); // Create poison waffle tile
                 } else {
-                    tile = new WaffleTile(this, l, c, Main.waffleSprite); // Create regular waffle tile
+                    tile = new WaffleTile(this, l, c, GameScene.waffleSprite); // Create regular waffle tile
                 }
                 addTile(l, c, tile); // Add tile to the map
             }
@@ -77,7 +78,7 @@ public class WaffleTileMap extends TileMap {
     }
 
     public void playAction(Vector2D action) {
-        Main.actionHistory.addAction();
+        GameScene.actionHistory.addAction();
 
         removeAndUpdate(tileClicked.getIntX(), tileClicked.getIntY());
         animating = true;

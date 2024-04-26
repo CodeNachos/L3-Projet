@@ -91,7 +91,7 @@ public class FlatButton extends JButton {
         } else {
             g.setColor(mainColor); // Use the main color
         }
-        g.fillRoundRect(0, 0, getWidth(), getHeight(), curvature.width, curvature.height); // Draw rounded rectangle
+        g.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, curvature.width, curvature.height); // Draw rounded rectangle
 
         // Let the superclass paint the button text
         super.paintComponent(g);
@@ -103,8 +103,14 @@ public class FlatButton extends JButton {
      */
     @Override
     protected void paintBorder(Graphics g) {
+        // set stroke
+        Graphics2D g2d = (Graphics2D) g;
+        Stroke defaultStroke = g2d.getStroke();
+        g2d.setStroke(new BasicStroke(3));
         // Draw border
         g.setColor(accentColor); // Use the accent color for border
-        g.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, curvature.width, curvature.height); // Draw rounded rectangle border
+        g.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, curvature.width, curvature.height); // Draw rounded rectangle border
+        // restore stroke
+        g2d.setStroke(defaultStroke);
     }
 }

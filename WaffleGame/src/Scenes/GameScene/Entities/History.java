@@ -1,4 +1,4 @@
-package WaffleGame.src;
+package WaffleGame.src.Scenes.GameScene.Entities;
 
 import java.awt.event.KeyEvent;
 import java.util.Stack;
@@ -6,6 +6,7 @@ import java.util.Stack;
 import Engine.Entities.GameObject;
 import Engine.Global.Settings;
 import Engine.Global.Util;
+import WaffleGame.src.Scenes.GameScene.GameScene;
 
 /**
  * The History class tracks the history of game state changes,
@@ -58,7 +59,7 @@ public class History extends GameObject {
         redo.push(getGameState());
         boolean[][] action = undo.pop();
         restoreGameState(action);
-        Main.map.next_player = true; // Advance to the next player
+        GameScene.map.next_player = true; // Advance to the next player
     }
 
     /**
@@ -68,7 +69,7 @@ public class History extends GameObject {
         undo.push(getGameState());
         boolean[][] action = redo.pop();
         restoreGameState(action);
-        Main.map.next_player = true; // Advance to the next player
+        GameScene.map.next_player = true; // Advance to the next player
     }
 
     /**
@@ -85,11 +86,11 @@ public class History extends GameObject {
      * @return a 2D boolean array representing the current game state.
      */
     private boolean[][] getGameState() {
-        boolean[][] gameState = new boolean[Main.map.mapDimension.width][Main.map.mapDimension.height];
+        boolean[][] gameState = new boolean[GameScene.map.mapDimension.height][GameScene.map.mapDimension.width];
 
-        for(int l = 0; l < Main.map.mapDimension.width; l++) {
-            for (int c = 0; c < Main.map.mapDimension.height; c++) {
-               if (Main.map.gridmap[l][c] != null) {
+        for(int l = 0; l < GameScene.map.mapDimension.height; l++) {
+            for (int c = 0; c < GameScene.map.mapDimension.width; c++) {
+               if (GameScene.map.gridmap[l][c] != null) {
                     gameState[l][c] = true;
                } 
             }
@@ -105,17 +106,17 @@ public class History extends GameObject {
      */
     private void restoreGameState(boolean[][] state) {
         WaffleTile tile;
-        for(int l = 0; l < Main.map.mapDimension.width; l++) {
-            for (int c = 0; c < Main.map.mapDimension.height; c++) {
+        for(int l = 0; l < GameScene.map.mapDimension.height; l++) {
+            for (int c = 0; c < GameScene.map.mapDimension.width; c++) {
                if (state[l][c]) {
                     if (l == 0 && c == 0) {
-                        tile = new WaffleTile(Main.map, l, c, Main.poisonSprite); // Create poison waffle tile
+                        tile = new WaffleTile(GameScene.map, l, c, GameScene.poisonSprite); // Create poison waffle tile
                     } else {
-                        tile = new WaffleTile(Main.map, l, c, Main.waffleSprite); // Create regular waffle tile
+                        tile = new WaffleTile(GameScene.map, l, c, GameScene.waffleSprite); // Create regular waffle tile
                     }
-                    Main.map.addTile(l, c, tile); // Add tile to the map
-               }  else if (Main.map.gridmap[l][c] != null) {
-                    Main.map.removeTile(l, c);
+                    GameScene.map.addTile(l, c, tile); // Add tile to the map
+               }  else if (GameScene.map.gridmap[l][c] != null) {
+                    GameScene.map.removeTile(l, c);
                }
             }
         }
@@ -124,7 +125,7 @@ public class History extends GameObject {
     @Override
     public void input(KeyEvent e) {
         // Ignore input if game over or if animation is being processed
-        if (Main.game.gameOver || (Main.map.animating))
+        if (GameScene.game.gameOver || (GameScene.map.animating))
             return;
 
         if (e.getID() == KeyEvent.KEY_PRESSED) {
