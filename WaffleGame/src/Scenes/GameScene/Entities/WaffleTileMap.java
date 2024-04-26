@@ -80,7 +80,7 @@ public class WaffleTileMap extends TileMap {
     public void playAction(Vector2D action) {
         GameScene.actionHistory.addAction();
 
-        removeAndUpdate(tileClicked.getIntX(), tileClicked.getIntY());
+        removeAndUpdate(action.getIntX(), action.getIntY());
         animating = true;
 
         tileClicked = null; // Reset the clicked tile position

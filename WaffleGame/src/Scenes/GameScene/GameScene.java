@@ -30,6 +30,14 @@ public class GameScene extends Scene {
     public static Image waffleSprite = Util.getImage("waffleTile.png"); // Load waffle tile sprite
     public static Image poisonSprite = Util.getImage("moldyTile.png"); // Load poison waffle tile sprite
 
+    // Game Config
+
+    // Waffle dimensions
+    public static Dimension waffleDimension = new Dimension(10,10);
+
+    // AI enabled
+    public static boolean AIEnabled = false;
+
     public GameScene() {
         super(Main.engine.getResolution());
 
@@ -43,7 +51,7 @@ public class GameScene extends Scene {
             Main.engine.getResolution().height - 2*(int)tileMapOffset.y - (int)(Main.engine.getResolution().height * 0.1)
         );
 
-        map = new WaffleTileMap(10, 10, tileMapArea, tileMapOffset);
+        map = new WaffleTileMap(waffleDimension.width, waffleDimension.height, tileMapArea, tileMapOffset);
         map.populateWaffle();
 
         // game background

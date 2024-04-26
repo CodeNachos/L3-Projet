@@ -10,6 +10,7 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import WaffleGame.src.Main;
 import WaffleGame.src.Scenes.GameScene.GameScene;
+import WaffleGame.src.Scenes.MainMenu.MainMenuScene;
 
 public class GameOverMenu extends MenuFrame {
     public GameOverMenu() {
@@ -53,21 +54,22 @@ public class GameOverMenu extends MenuFrame {
         add(restartButton);
         add(Box.createRigidArea(new Dimension(0, 10)));
 
-        FlatButton quitButton = new FlatButton("Quit Game");
-        quitButton.setMainColor(Main.secondaryColor);
-        quitButton.setAccentColor(Main.primaryColor);
-        quitButton.setCurvature(10, 10);
-        quitButton.setForeground(Main.whiteColor);
-        quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        quitButton.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
+        FlatButton mainMenuButton = new FlatButton("Main Menu");
+        mainMenuButton.setMainColor(Main.secondaryColor);
+        mainMenuButton.setAccentColor(Main.primaryColor);
+        mainMenuButton.setCurvature(10, 10);
+        mainMenuButton.setForeground(Main.whiteColor);
+        mainMenuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainMenuButton.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
         
-        quitButton.addActionListener(new ActionListener() {
+        mainMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.engine.stop();
+                Main.mainScene = new MainMenuScene();
+                Main.engine.setCurrentScene(Main.mainScene);
             }
         });
         
-        add(quitButton);
+        add(mainMenuButton);
     }
 }

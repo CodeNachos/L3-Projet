@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import Engine.Entities.TileMap.Tile;
 import Engine.Entities.TileMap.TileMap;
+import WaffleGame.src.Scenes.GameScene.GameScene;
 
 /**
  * The WaffleTile class represents a tile specific to the WaffleGame.
@@ -29,6 +30,8 @@ public class WaffleTile extends Tile {
      */
     @Override
     public void input(MouseEvent e) {
+        if (!GameScene.game.inputEnabled)
+            return;
         // Ignore inputs during animations
         if (((WaffleTileMap)parentMap).animating)
             return;

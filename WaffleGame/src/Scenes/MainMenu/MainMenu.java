@@ -10,6 +10,7 @@ import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Global.Util;
 import WaffleGame.src.Main;
+import WaffleGame.src.Scenes.ConfigMenu.ConfigMenuScene;
 import WaffleGame.src.Scenes.GameScene.GameScene;
 
 public class MainMenu extends MenuFrame {
@@ -40,9 +41,8 @@ public class MainMenu extends MenuFrame {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.gameScene = new GameScene();
-                Main.engine.setCurrentScene(Main.gameScene);
-                GameScene.actionHistory.clearRecords();
+                Main.configScene = new ConfigMenuScene();
+                Main.engine.setCurrentScene(Main.configScene);
             }
         });
 

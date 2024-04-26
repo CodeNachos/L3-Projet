@@ -6,6 +6,7 @@ import Engine.Entities.GameObject;
 import Engine.Global.Settings;
 
 import java.awt.Dimension;
+import java.awt.Image;
 
 /**
  * The GameEngine class represents the core engine of the game.
@@ -169,6 +170,15 @@ public class GameEngine implements Runnable {
      */
     public int getUPS() {
         return lastups;
+    }
+    
+    /**
+    * Sets the icon for the application window.
+    * 
+    * @param appicon the Image object representing the icon
+    */
+    public void setIcon(Image appicon) {
+        gframe.setIconImage(appicon);
     }
 
     /**

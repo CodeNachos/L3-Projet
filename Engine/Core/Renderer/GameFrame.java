@@ -115,7 +115,7 @@ public class GameFrame extends JFrame {
             toggleFullscreen(); // Toggle fullscreen mode if settings have changed
             this.fullscreen = Settings.fullscreen; // Update fullscreen mode
         }
-        scene.requestFocusInWindow(); // Request focus for the scene
+        //scene.requestFocusInWindow(); // Request focus for the scene
         scene.refresh(); // Refresh the scene
     }
 
