@@ -1,0 +1,287 @@
+Documentation
+
+Cette documentation vous présentera ce cadre de moteur de jeu pour le développement d'applications facile et intuitif en Java. Vous trouverez également de l'aide et des instructions sur la façon de créer vos propres applications et comment contribuer au cadre.
+Contenu
+
+-----------------------
+
+Sommaire
+
+1. Présentation du moteur
+
+    Modèle
+        Moteur de jeu
+        Moteur de collision
+
+    Vue
+        Game Frame
+        Scène
+
+    Contrôle
+
+    Entités
+        Game object
+
+2. Wafflez : Un jeu simple
+
+3. Création de votre jeu
+
+4. Contribution au projet
+
+    Contribution à un jeu
+    Contribution au moteur
+
+5. Problèmes connus
+
+-----------------------
+
+Présentation du moteur
+
+Comme nous avons visé à appliquer le modèle de conception MVC tout en développant ce projet, cette introduction est divisée en 3 parties principales : Modèle (Logique), Vue (Rendu), Contrôleur (Gestionnaire d'entrée). Une quatrième partie vous présentera les objets de jeu et les classes de base fournies, qui sont à la base du processus de développement d'application utilisant ce cadre.
+
+1. Modèle
+
+Le Modèle est actuellement composé uniquement du Moteur de jeu. Les plans pour les versions futures incluent également un Moteur de collision.
+Paramètres
+
+    Engine/Global/Settings.java
+
+Cette classe simple contient des valeurs statiques utilisées par la scène et disponibles pour l'application développée.
+
+Merci de consulter le README pour plus d'information sur les attributs de cette classe
+
+    > Cette méthode est temporaire et sera probablement remplacée à l'avenir par un fichier JSON.
+
+-----------------------
+
+Moteur de jeu
+
+    Engine/Core/Engines/GameEngine.java
+
+Le Moteur de jeu s'exécute sur un thread indépendant et encapsule la boucle principale de l'application en offrant une interface conviviale pour le cœur de votre programme.
+Il est responsable de la gestion de la fenêtre de l'application, de la mise à jour des composants et du rafraîchissement de l'interface régulièrement en utilisant une fréquence de votre choix (par défaut 60 FPS).
+Cependant, les mises à jour sont effectuées à une fréquence définie par le moteur lui-même et sont définies sur 60 UPS (mises à jour par seconde). C'est la fréquence à laquelle les objets du jeu sont mis à jour et il est important de maintenir une fréquence fixe sur tous les appareils.
+Voici une brève explication de la différence entre FPS et UPS :
+
+    FPS (Images par seconde) :
+        FPS fait référence au nombre d'images affichées par seconde sur votre écran.
+    UPS (Mises à jour par seconde) :
+        UPS, en revanche, représente la fréquence à laquelle la logique ou la simulation du jeu est mise à jour par seconde.
+        Cela inclut les calculs liés aux actions des joueurs, au comportement de l'IA, aux simulations physiques et à tout autre mécanisme de jeu.
+        Avoir un UPS élevé garantit que le jeu réagit rapidement aux entrées des joueurs et maintient des mécanismes de jeu cohérents.
+        Dans les jeux multijoueurs, les UPS deviennent encore plus critiques pour garantir une jouabilité synchronisée entre tous les joueurs et éviter des problèmes tels que la désynchronisation ou le décalage.
+
+Voici un bref aperçu de l'interface implémentée :
+
+CONSTRUCTEUR : DESCRIPTION
+public GameEngine() : Construit une nouvelle instance de GameEngine.
+
+MÉTHODE	: DESCRIPTION
+public void start() : Démarre le moteur de jeu et la boucle de jeu. À exécuter après avoir configuré correctement le Moteur
+public void setMainScene(Scene scn) : Définit la scène principale du jeu.
+public void setCurrentScene(Scene scn) : Définit la scène active actuelle du jeu.
+public Scene getCurrentScene() : Obtient la scène active actuelle du jeu.
+public void setResolution(Dimension res) : Définit la résolution de la fenêtre du jeu.
+public void stop() : Arrête le moteur de jeu et quitte le programme.
+public void pause() : Met en pause la boucle de jeu.
+public int getFPS() : retourne le nombre d'images par seconde
+public int getUPS() : retourne le nombre de mises à jour par seconde
+public void setIcon(Image appicon) : Définit l'icône pour la fenêtre de l'application.
+
+-----------------------
+
+
+2. Vue
+
+La vue est basée sur Java Swing et est divisée en 2 parties :
+
+    Game Frame : La fenêtre de l'application (JFrame)
+    Scene : Contenu de la fenêtre (JPanel)
+
+En bref, le Cadre de jeu est unique et géré par le Moteur de jeu et ne doit pas être modifié directement par l'application développée. La Scène, en revanche, est conçue pour être une base à utiliser lors du développement d'applications qui contiendra toutes les entités de jeu dans votre projet, c'est une base dynamique et peut être remplacée pendant l'exécution.
+
+-----------------------
+
+Game Frame
+
+    Engine/Core/Renderer/GameFrame.java
+
+Comme il est géré par le Moteur de jeu, le Cadre de jeu lui-même ne fournit aucune interface mais peut être configuré à travers l'interface du Moteur de jeu.
+Il gère la fenêtre de l'application et le rendu du contenu.
+
+-----------------------
+
+Scene
+
+    Engine/Core/Renderer/Scene.java
+
+C'est la base de n'importe quel jeu. Tous les composants de l'application doivent être ajoutés et se fier à la Scène pour être gérés par le Moteur de jeu, elle fournira une base visuelle pour le contenu et assurera un rendu et une mise à jour appropriés.
+Nous parlerons plus en détail des composants dans la section 4 (Entités), qui sont des éléments fondamentaux utilisés pour construire des scènes dans votre jeu.
+Une scène de jeu est essentiellement une unité autonome qui représente une partie de votre monde de jeu ou une partie spécifique de votre jeu. Elle encapsule tout ce qui est nécessaire pour cette section particulière, y compris les objets, les personnages, les scripts, les visuels et la logique.
+
+    - Vous pouvez créer des scènes complexes composées de composants plus petits et réutilisables.
+    - Chaque composant dans une scène peut avoir ses propres propriétés, scripts et comportements.
+    - Les scènes peuvent contenir de la logique pour les mécaniques de jeu, les mouvements de personnages, le comportement de l'IA, les interfaces utilisateur, etc.
+    - Les scènes favorisent la réutilisabilité et la modularité dans le développement de jeux.
+    - Ces scènes peuvent être facilement réutilisées dans plusieurs parties de votre jeu ou même dans différents projets.
+    - Les scènes peuvent être chargées et déchargées dynamiquement pendant l'exécution.
+
+Voici un bref aperçu de son interface :
+
+CONSTRUCTEUR : DESCRIPTION
+public Scene() : Construit une nouvelle instance de Scène. Initialise la composition de la scène et configure le contrôleur pour les événements d'entrée.
+public Scene(Dimension resolution) : Construit une nouvelle instance de Scène ayant les dimensions données. Initialise la composition de la scène et configure le contrôleur pour les événements d'entrée.
+
+ATTRIBUTS : DESCRIPTION
+Controller control : Contrôleur pour gérer les événements d'entrée.
+public LinkedList<GameObject> components : Liste des objets de jeu dans la scène.
+
+MÉTHODE : DESCRIPTION
+public void addComponent(GameObject comp) : Ajoute un objet de jeu à la scène.
+public void addComponent(int index, GameObject comp) : Ajoute un objet de jeu à la scène à l'index spécifié.
+public void removeComponent(int index) : Supprime l'objet de jeu à l'index spécifié de la scène.
+public void removeComponent(GameObject comp) : Supprime l'objet de jeu spécifié de la scène.
+public void refresh() : Rafraîchit la scène en la redessinant.
+
+-----------------------
+
+3. Contrôle
+
+    Engine/Core/Controller/Controller.java
+
+Le contrôleur intercepte les événements d'entrée de la souris et du clavier et les redirige vers les composants concernés sur la Scène d'application actuelle. Il peut également gérer les comportements moteurs par défaut pour certaines touches prédéfinies.
+Aucune interface n'est fournie pour l'utilisateur et c'est essentiellement un composant indépendant du cadre.
+
+Les événements d'entrée sont redirigés vers les objets de jeu en appelant leur méthode input(), transférant l'événement de la scène à son composant concerné.
+
+-----------------------
+
+4. Entités
+
+Une entité ou objet de jeu est un élément fondamental utilisé pour construire des scènes dans votre jeu. Les entités représentent différents éléments tels que des objets, des personnages, des sprites, des corps physiques (pour les versions futures), des éléments d'interface utilisateur, des éléments logiques, etc.
+
+Toutes les entités sont basées sur une classe abstraite GameObject qui implémente des méthodes de base pour gérer le composant dans le moteur.
+
+GameObject
+
+    Engine/Entities/GameObject.java
+
+La classe GameObject sert de modèle de base pour créer des objets dans le monde du jeu, parent de la plupart des autres entités implémentées dans le projet.
+
+Les méthodes process() et input(...) jouent des rôles cruciaux dans la gestion du comportement de l'objet et la réponse aux événements du jeu. Voici une explication de chacune :
+
+    process() :
+
+        public void process(double delta) {
+            // À implémenter dans les sous-classes
+        }
+
+        - Est destinée à être remplacée dans les sous-classes et est appelée 60 fois par seconde (optimalement) pour mettre à jour l'état de l'objet en fonction du temps écoulé (delta).
+        - Le paramètre delta représente le temps écoulé depuis la dernière mise à jour en secondes. Il permet des mises à jour douces et cohérentes indépendamment des taux de FPS et de UPS.
+        - À l'intérieur de la méthode process, vous gérez généralement la logique du jeu liée au mouvement, à l'animation, à la physique, au comportement de l'IA ou à tout autre processus continu qui doit être mis à jour avec le temps. 
+        En utilisant delta, vous assurez que votre jeu se comporte de manière cohérente sur différents machines et taux de rafraîchissement, car les mises à jour sont mises à l'échelle en fonction du temps écoulé.
+
+    input(...) :
+
+        public void input(KeyEvent e) {
+            // À implémenter dans les sous-classes
+        }
+
+        public void input(MouseEvent e) {
+            // À implémenter dans les sous-classes
+        }
+
+        - La méthode input(KeyEvent e) est appelée lorsqu'un événement de clavier se produit, tel qu'une pression de touche ou une libération de touche.
+        - La méthode input(MouseEvent e) est appelée lorsqu'un événement de souris se produit, tel qu'un clic de souris.
+        - Ces méthodes permettent à vos instances de GameObject de répondre aux entrées utilisateur, permettant des interactions avec le monde du jeu, les contrôles des joueurs et les éléments d'interface utilisateur.
+        - Vous pouvez remplacer ces méthodes dans les sous-classes pour définir une logique de traitement d'entrée personnalisée adaptée au comportement spécifique de chaque objet.
+            > Par exemple, un personnage joueur pourrait répondre aux entrées du clavier pour le mouvement, tandis qu'un bouton cliquable pourrait répondre aux clics de souris.
+
+-----------------------
+
+Utilisation du Moteur:
+
+Pour commencer à utiliser le Moteur, vous devez créer une scène où vos objets de jeu seront affichés.
+
+    import Engine.Core.Renderer.Scene;
+
+    // Créer une nouvelle scène
+    Scene scene = new Scene();
+    
+
+Ajout d'objets à la scène:
+
+Vous pouvez ajouter des objets de jeu, tels que des sprites, des éléments d'interface utilisateur ou des entités personnalisées, à la scène.
+
+    import Engine.Entities.GameObject;
+    import Engine.Entities.UI.ColorArea;
+
+    // Créer un objet de jeu
+    GameObject gameObject = new GameObject();
+
+    // Ajouter l'objet de jeu à la scène
+    scene.addComponent(gameObject);
+
+    // Créer un objet d'interface utilisateur de zone colorée
+    ColorArea colorArea = new ColorArea(Color.RED, new Dimension(100, 100));
+
+    // Ajouter la zone colorée à la scène
+    scene.addComponent(colorArea);
+        
+
+Configuration du Moteur de jeu :
+
+Avant de lancer votre jeu, vous devez configurer le moteur de jeu.
+
+    import Engine.Core.Engines.GameEngine;
+
+    // Créer une nouvelle instance du moteur de jeu
+    GameEngine engine = new GameEngine();
+
+    // Définir la scène actuelle
+    engine.setCurrentScene(scene);
+    
+
+Démarrage du Moteur:
+
+Une fois que tout est configuré, vous pouvez démarrer le moteur de jeu pour exécuter votre jeu.
+
+    // Démarrer le moteur de jeu
+    engine.start();
+    
+
+Gestion des entrées:
+
+Vous pouvez gérer les entrées utilisateur, telles que les événements de clavier ou de souris, pour interagir avec vos objets de jeu.
+Vous devez simplement écraser ces fonctions dans n'importe quelle classe héritée d'un GameObject.
+
+    import java.awt.event.KeyEvent;
+    import java.awt.event.MouseEvent;
+
+    // Implémenter les méthodes de gestion d'entrée dans vos objets de jeu
+    public void input(KeyEvent e) {
+        // Gérer l'entrée du clavier
+    }
+
+    public void input(MouseEvent e) {
+        // Gérer l'entrée de la souris
+    }
+    
+
+Mise à jour de la logique du jeu:
+
+Chaque GameObject dans votre scène peut avoir une méthode process(), qui est appelée à chaque mise à jour de trame. Vous pouvez utiliser cette méthode pour mettre à jour la logique du jeu, effectuer des calculs et gérer les comportements des objets.
+
+    // Implémentation d'exemple de la méthode process dans un objet de jeu
+    public void process() {
+        // Mettre à jour la logique du jeu ici
+        // Effectuer des calculs, gérer les collisions, etc.
+    }
+    
+-----------------------
+
+Conclusion
+
+Cette documentation couvre l'utilisation de base du framework Engine, y compris la création de scènes, l'ajout d'objets, la configuration du moteur, la gestion des entrées et la mise à jour de la logique du jeu. Vous pouvez explorer les fonctionnalités et les fonctionnalités supplémentaires fournies par le moteur pour créer des applications plus complexes et interactives. Référez-vous à Rafael pour des informations plus détaillées et une utilisation avancée.
+
+De nouvelles fonctionnalités d'interface utilisateur ont été ajoutées, telles que la prise en charge des menus en utilisant la bibliothèque Java Swing par défaut, la documentation sera bientôt ajoutée. Pendant ce temps, vous pouvez également consulter le code fourni pour l'implémentation des menus WaffleGame.

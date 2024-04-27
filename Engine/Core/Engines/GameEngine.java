@@ -68,7 +68,7 @@ public class GameEngine implements Runnable {
      */
     public Scene getCurrentScene() {
         return currentScene; // Get the current scene
-    }
+    } 
 
     /**
      * Sets the resolution of the game window.
