@@ -83,8 +83,8 @@ public class ConfigMenu extends MenuFrame implements ItemListener {
         add(textField2, gbc);
 
         // Attach document filter to allow only numbers
-        ((AbstractDocument) textField1.getDocument()).setDocumentFilter(new NumberFilter(1, 100));
-        ((AbstractDocument) textField2.getDocument()).setDocumentFilter(new NumberFilter(1, 100));
+        ((AbstractDocument) textField1.getDocument()).setDocumentFilter(new NumberFilter(1, 20));
+        ((AbstractDocument) textField2.getDocument()).setDocumentFilter(new NumberFilter(1, 20));
 
         JLabel aiLabel = new JLabel("ENNABLE AI?");
         aiLabel.setForeground(Main.whiteColor);

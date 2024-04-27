@@ -11,7 +11,6 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Global.Util;
 import WaffleGame.src.Main;
 import WaffleGame.src.Scenes.ConfigMenu.ConfigMenuScene;
-import WaffleGame.src.Scenes.GameScene.GameScene;
 
 public class MainMenu extends MenuFrame {
 

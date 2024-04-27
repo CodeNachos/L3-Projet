@@ -11,7 +11,6 @@ public class FlatTextField extends JTextField {
 
     private Color mainColor = new Color(255, 255, 255, 255); // Main color of the button
     private Color accentColor = new Color(255, 255, 255, 255); // Accent color of the button (border color)
-    private Color textColor = new Color(0, 0, 0, 255); // Text color of the button
 
     private Dimension curvature = new Dimension(0, 0); // Curvature of the button corners
 
