@@ -5,9 +5,10 @@ import java.util.Random;
 import Engine.Structures.Vector2D;
 import WaffleGame.src.Scenes.GameScene.GameScene;
 
-public class RandomAI {
+public class RandomAI implements AI {
 
-    public static Vector2D getAction() {
+    @Override
+    public Vector2D getAction() {
         Vector2D action =  new Vector2D();
         Random random = new Random();
         int l, c;

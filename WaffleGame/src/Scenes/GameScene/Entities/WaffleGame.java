@@ -4,6 +4,7 @@ import Engine.Entities.GameObject;
 import Engine.Entities.UI.MenuFrame;
 import WaffleGame.src.Main;
 import WaffleGame.src.Scenes.GameScene.GameScene;
+import WaffleGame.src.Scenes.GameScene.Entities.AI.AI;
 import WaffleGame.src.Scenes.GameScene.Entities.AI.RandomAI;
 import WaffleGame.src.Scenes.GameScene.Interface.GameOverMenu;
 
@@ -25,6 +26,8 @@ public class WaffleGame extends GameObject {
     /** Flag indicating whether player's input is enabled */
     boolean inputEnabled = true;
     
+    /** AI **/
+    AI ai;
     
     /**
      * Constructs a new WaffleGame instance.
@@ -32,6 +35,7 @@ public class WaffleGame extends GameObject {
      */
     public WaffleGame() {
         currentPlayer = 0;
+        ai = new RandomAI();
         System.out.println("Player " + (currentPlayer + 1) + " turn");
     }
 
@@ -45,7 +49,7 @@ public class WaffleGame extends GameObject {
             return;
 
         if (AITurn && !GameScene.map.animating) {
-            GameScene.map.tileClicked = RandomAI.getAction();
+            GameScene.map.tileClicked = ai.getAction();
             AITurn = false;
             inputEnabled = true;
         }
