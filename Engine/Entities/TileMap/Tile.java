@@ -38,6 +38,22 @@ public class Tile extends GameObject {
         mapPosition = new Vector2D(line, column); // Set position of the tile in the map grid
     }
 
+    public Tile(TileMap map, int line, int column) {
+        super(
+            new Vector2D(
+                column * map.tileDimension.width, // Calculate x-coordinate based on column and tile width
+                line * map.tileDimension.height // Calculate y-coordinate based on line and tile height
+            ),
+            new Vector2D(
+                map.tileDimension.width, // Calculate x-scale based on tile width and sprite width
+                map.tileDimension.height // Calculate y-scale based on tile height and sprite height
+            ),
+            null
+        );
+        parentMap = map; // Set reference to parent tile map
+        mapPosition = new Vector2D(line, column); // Set position of the tile in the map grid
+    }
+
     /**
      * Overrides the paintComponent method to render the tile.
      * @param g The Graphics context used for painting

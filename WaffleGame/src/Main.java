@@ -37,7 +37,7 @@ public class Main {
 
         engine = new GameEngine();
         engine.setResolution(Settings.resolution);
-        engine.setIcon(Util.getImage("icon.png"));
+        engine.setIcon(Util.getImage("WaffleGame/res/icon.png"));
 
         // start scene
         // start engine

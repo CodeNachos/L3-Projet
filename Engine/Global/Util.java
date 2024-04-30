@@ -12,7 +12,7 @@ public class Util {
     public static InputStream open(String s) {
 		InputStream in = null;
 		try {
-			in = new FileInputStream("WaffleGame/res/" + s);
+			in = new FileInputStream(s);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

@@ -27,8 +27,8 @@ public class GameScene extends Scene {
     public static History actionHistory;
 
     // Sprites
-    public static Image waffleSprite = Util.getImage("waffleTile.png"); // Load waffle tile sprite
-    public static Image poisonSprite = Util.getImage("moldyTile.png"); // Load poison waffle tile sprite
+    public static Image waffleSprite = Util.getImage("WaffleGame/res/waffleTile.png"); // Load waffle tile sprite
+    public static Image poisonSprite = Util.getImage("WaffleGame/res/moldyTile.png"); // Load poison waffle tile sprite
 
     // Game Config
 

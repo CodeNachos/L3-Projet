@@ -24,7 +24,7 @@ public class MainMenu extends MenuFrame {
         setCurvature(10,10);
 
         JLabel waffleLable = new JLabel();
-        waffleLable.setIcon(new ImageIcon(Util.getImage("icon.png")));
+        waffleLable.setIcon(new ImageIcon(Util.getImage("WaffleGame/res/icon.png")));
         waffleLable.setAlignmentX(CENTER_ALIGNMENT);
         waffleLable.setBorder(BorderFactory.createEmptyBorder(80, 0,30, 0));
         add(waffleLable);
