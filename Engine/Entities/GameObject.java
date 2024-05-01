@@ -47,6 +47,17 @@ public class GameObject extends JComponent {
     }
 
     /**
+     * Constructs a new GameObject instance with the given position, and sprite.
+     * @param position The position of the object
+     * @param sprite The sprite of the object
+     */
+    public GameObject(Vector2D position, Sprite sprite) {
+        this.position = position.clone(); // Set position
+        this.sprite = sprite; // Set sprite
+        updateVisuals(); // Update visuals based on attributes
+    }
+
+    /**
      * Constructs a new GameObject instance with the given position, scale, and sprite.
      * @param position The position of the object
      * @param scale The scale of the object
@@ -178,7 +189,7 @@ public class GameObject extends JComponent {
         super.paintComponent(g); // Call superclass's paintComponent method
         
         if (sprite != null) // If a sprite is set
-           sprite.drawSprite(g, getLocation().x, getLocation().y, getSize().width, getSize().height); // Draw the sprite
+           sprite.drawSprite(g, 0, 0, getSize().width, getSize().height); // Draw the sprite
     }
 
     /**

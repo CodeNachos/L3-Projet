@@ -44,7 +44,6 @@ public class Tile extends GameObject {
      * @param g The Graphics context used for painting
      */
     public void paintComponent(Graphics g) {
-        super.paintComponent(g); // Call superclass's paintComponent method
         sprite.drawSprite(g, position.getIntX(), position.getIntY(), getSize().width, getSize().height); // Draw the tile sprite
     }
 }

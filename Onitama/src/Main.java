@@ -5,9 +5,12 @@ import java.awt.*;
 import Engine.Core.Engines.GameEngine;
 import Engine.Core.Renderer.Scene;
 import Engine.Global.Settings;
+import Engine.Structures.Sprite;
+import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
 import Onitama.src.GameScene.Entities.Board.Board;
 import Onitama.src.GameScene.Entities.Board.PieceSet;
+import Onitama.src.GameScene.Entities.Cards.Card;
 import Onitama.src.GameScene.Interface.GameGUI;
 
 public class Main {
@@ -15,11 +18,19 @@ public class Main {
 
     public static Scene gameScene;
 
+    public static Texture idleCardTexture;
+    public static Texture selectedCardTexture;
+    public static Sprite idleCardSprite;
+    public static Sprite selectedCardSprite;
+
     public static void main(String[] args) {
         // Custom Settings
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Settings.resolution = screenSize;
-        
+        double aspectRatio = (double) screenSize.width / screenSize.height;
+        //Settings.resolution = screenSize;
+        Settings.resolution = new Dimension((int)(aspectRatio*600),600);
+        Settings.stretch = false;
+
         // create engine
         engine = new GameEngine();
         engine.setResolution(Settings.resolution);
@@ -40,9 +51,36 @@ public class Main {
 
         PieceSet gamePieces = new PieceSet(boardArea, boardPos);
         Board gameBoard = new Board(boardArea, boardPos, gamePieces);
+
+        idleCardTexture  = new Texture(
+            Main.Palette.background,
+            (int)(Main.engine.getResolution().getHeight()/5),
+            (int)(Main.engine.getResolution().getHeight()/5),
+            10
+        );
+        idleCardSprite = new Sprite(idleCardTexture);
+        idleCardSprite.setBorder(5, Palette.selection, 10);
+
+        selectedCardTexture  = new Texture(
+            Main.Palette.selection,
+            (int)(Main.engine.getResolution().getHeight()/5),
+            (int)(Main.engine.getResolution().getHeight()/5),
+            10
+        );
+        selectedCardSprite = new Sprite(selectedCardTexture);
+        selectedCardSprite.setBorder(5, Palette.highlight, 10);
+
+
+        Vector2D cardPos = new Vector2D(
+            (engine.getResolution().width/2) - (int)(idleCardTexture.getWidth()/2),
+            (int)(engine.getResolution().height) -(int)(1.5*idleCardTexture.getHeight())
+        );
+
+        Card standByCard = new Card(cardPos, idleCardSprite);
         
         // Set main scene
         gameScene = new Scene();
+        gameScene.addComponent(standByCard);
         gameScene.addComponent(gamePieces);
         gameScene.addComponent(gameBoard);
         gameScene.addComponent(gui);
