@@ -4,9 +4,12 @@ import Engine.Core.Renderer.GameFrame;
 import Engine.Core.Renderer.Scene;
 import Engine.Entities.GameObject;
 import Engine.Global.Settings;
+import Engine.Global.Util;
 
 import java.awt.Dimension;
 import java.awt.Image;
+
+import javax.naming.OperationNotSupportedException;
 
 /**
  * The GameEngine class represents the core engine of the game.
@@ -39,6 +42,7 @@ public class GameEngine implements Runnable {
     public GameEngine() {
         mainScene = currentScene = null; // Initialize scenes as null
         gframe = new GameFrame(); // Create a new game frame
+        gframe.setSize(Settings.resolution);
     }
 
     /**
@@ -88,8 +92,19 @@ public class GameEngine implements Runnable {
 
     /**
      * Starts the game engine and the game loop.
+     * @throws OperationNotSupportedException 
      */
     public void start() {
+        if (currentScene == null && mainScene == null) {
+            Util.printError("Scene not set. Please set the scene before starting the engine");
+            stop();
+        }
+
+        // set scene
+        if (mainScene != null) {
+            setCurrentScene(mainScene);
+        }
+
         running = true; // Start the game loop
         new Thread(this).start(); // Start a new thread for the game loop
         gframe.start(); // Start the game frame
@@ -97,6 +112,7 @@ public class GameEngine implements Runnable {
 
     @Override
     public void run() {
+
         long previousTime = System.nanoTime(); // Get the current time in nanoseconds
 
         int fps = 0; // Initialize the frames per second counter

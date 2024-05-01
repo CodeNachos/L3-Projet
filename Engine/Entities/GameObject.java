@@ -86,6 +86,17 @@ public abstract class GameObject extends JComponent {
     }
 
     /**
+     * Sets the position of the object.
+     * @param x The new position x coordinate
+     * @param y The new position y coordinate
+     */
+    public void setPos(int x, int y) {
+        position.x = x; // Set position x-coordinate
+        position.y = y; // Set position y-coordinate
+        this.setLocation((int)position.x, (int)position.y); // Set component location
+    }
+
+    /**
      * Sets the scale of the object.
      * @param newscale The new scale to set
      */

@@ -63,6 +63,7 @@ public class Controller implements MouseListener, KeyListener {
         forwardMouseEvent(e);
     }
 
+
     // sends mouse event to concerned game object in current scene
     private void forwardMouseEvent(MouseEvent e) {
         for (GameObject obj : scene.components) {

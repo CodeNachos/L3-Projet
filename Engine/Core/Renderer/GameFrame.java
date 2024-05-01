@@ -7,6 +7,7 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JFrame;
 
 import Engine.Global.Settings;
+import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 
 /**
@@ -27,23 +28,6 @@ public class GameFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set default close operation
         setTitle(Settings.applicationName); // Set window title
         setResizable(Settings.resizable); // Set window resizable according to settings
-
-        // Add component listener for resizing events
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                // This method is called when the JFrame is resized
-                if (Settings.stretch) {
-                    // Calculate resize ratio if stretching is enabled
-                    Vector2D resizeRatio = new Vector2D(
-                        (double)(e.getComponent().getSize().width) / (double)(Settings.resolution.width),
-                        (double)(e.getComponent().getSize().height) / (double)(Settings.resolution.height)
-                    );
-                    resizeScene(resizeRatio); // Resize the scene components
-                }
-                Settings.resolution = e.getComponent().getSize(); // Update screen resolution in settings
-            }
-        });
     }
 
     /**
@@ -51,6 +35,9 @@ public class GameFrame extends JFrame {
      * @param scn The scene to set as current
      */
     public void setScene(Scene scn) {
+        if (scn == null) {
+            Util.printError("null reference to scene");
+        }
         this.scene = scn; // Set the current scene
         getContentPane().removeAll(); // Remove all components from the content pane
         getContentPane().add(scene, BorderLayout.CENTER); // Add the scene to the center of the content pane
@@ -89,7 +76,7 @@ public class GameFrame extends JFrame {
      */
     public void start() {
         if (scene == null) {
-            System.err.println("Scene not set. Please set the scene before starting rendering.");
+            Util.printError("Scene not set. Please set the scene before start rendering.");
             return;
         }
         if (fullscreen) {
@@ -100,6 +87,23 @@ public class GameFrame extends JFrame {
             pack(); // Pack the frame
         }
 
+        // Add component listener for resizing events
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                // This method is called when the JFrame is resized
+                if (Settings.stretch) {
+                    // Calculate resize ratio if stretching is enabled
+                    Vector2D resizeRatio = new Vector2D(
+                        (double)(e.getComponent().getSize().width) / (double)(Settings.resolution.width),
+                        (double)(e.getComponent().getSize().height) / (double)(Settings.resolution.height)
+                    );
+                    resizeScene(resizeRatio); // Resize the scene components
+                }
+                Settings.resolution = e.getComponent().getSize(); // Update screen resolution in settings
+            }
+        });
+
         setVisible(true); // Set visibility to true
     }
 
@@ -108,7 +112,7 @@ public class GameFrame extends JFrame {
      */
     public void refresh() {
         if (scene == null) {
-            System.err.println("Scene not set. Please set the scene before refreshing.");
+            Util.printError("Scene not set. Please set the scene before refreshing.");
             return;
         }
         if (Settings.fullscreen != this.fullscreen) {

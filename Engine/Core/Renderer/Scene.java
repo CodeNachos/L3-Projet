@@ -42,6 +42,8 @@ public class Scene extends JPanel {
         } else {
             //setPreferredSize(Settings.resolution); // Set preferred size to configured resolution
         }
+
+        setPreferredSize(Settings.resolution);
     }
 
     public Scene(Dimension resolution) {

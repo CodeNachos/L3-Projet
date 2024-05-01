@@ -64,7 +64,7 @@ public class Vector2D {
         return new Vector2D(this.x - other.getX(), this.y - other.getY());
     }
 
-    public Vector2D multiply(int scalar) {
+    public Vector2D multiply(double scalar) {
         return new Vector2D(this.x * scalar, this.y * scalar);
     }
 
