@@ -5,7 +5,7 @@ import Engine.Entities.UI.MenuFrame;
 import WaffleGame.src.Main;
 import WaffleGame.src.Scenes.GameScene.GameScene;
 import WaffleGame.src.Scenes.GameScene.Entities.AI.AI;
-import WaffleGame.src.Scenes.GameScene.Entities.AI.RandomAI;
+import WaffleGame.src.Scenes.GameScene.Entities.AI.SmartAI;
 import WaffleGame.src.Scenes.GameScene.Interface.GameOverMenu;
 
 /**
@@ -35,7 +35,7 @@ public class WaffleGame extends GameObject {
      */
     public WaffleGame() {
         currentPlayer = 0;
-        ai = new RandomAI();
+        ai = new SmartAI();
         System.out.println("Player " + (currentPlayer + 1) + " turn");
     }
 
