@@ -2,10 +2,10 @@ package Engine.Entities.TileMap;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 
 import Engine.Entities.GameObject;
 import Engine.Global.Util;
+import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 
 /**
@@ -64,7 +64,7 @@ public class TileMap extends GameObject {
      * @param c The column index of the tile
      * @param sprite The sprite image of the tile
      */
-    public void addTile(int l, int c, Image sprite) {
+    public void addTile(int l, int c, Sprite sprite) {
         gridmap[l][c] = new Tile(this, l, c, sprite); // Create a new Tile instance and add it to the grid
     }
 
@@ -88,7 +88,7 @@ public class TileMap extends GameObject {
     }
 
     @Override
-    public void setSprite(Image sprite) {
+    public void setSprite(Sprite sprite) {
         Util.printError("Unsupported operation: Updates to come.");
     }
 

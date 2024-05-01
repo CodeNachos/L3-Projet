@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import Engine.Entities.TileMap.Tile;
 import Engine.Entities.TileMap.TileMap;
+import Engine.Structures.Sprite;
 import WaffleGame.src.Scenes.GameScene.GameScene;
 
 /**
@@ -21,7 +22,7 @@ public class WaffleTile extends Tile {
      * @param sprite The image sprite associated with the tile
      */
     public WaffleTile(TileMap map, int line, int column, Image sprite) {
-        super(map, line, column, sprite); // Call superclass constructor with parameters
+        super(map, line, column, new Sprite(sprite)); // Call superclass constructor with parameters
     }
 
     /**

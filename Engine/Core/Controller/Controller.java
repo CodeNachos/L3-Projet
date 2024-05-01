@@ -1,12 +1,16 @@
 package Engine.Core.Controller;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.SwingUtilities;
+
 import Engine.Core.Renderer.Scene;
 import Engine.Entities.GameObject;
+import Engine.Entities.TileMap.Tile;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Global.Settings;
 
@@ -87,11 +91,23 @@ public class Controller implements MouseListener, KeyListener {
     private void forwardMouseEventToTiles(TileMap mapObj, MouseEvent e) {
         for (int l = 0; l < mapObj.mapDimension.height; l++) {
             for (int c = 0; c < mapObj.mapDimension.width; c++) {
-                if (mapObj.gridmap[l][c] != null && mapObj.gridmap[l][c].getBounds().contains(e.getPoint())) {
+                if (mapObj.gridmap[l][c] != null && getTileGlobalBounds(mapObj.gridmap[l][c]).contains(e.getPoint())) {
                     mapObj.gridmap[l][c].input(e);
                 }
             }
         }
+    }
+
+    private Rectangle getTileGlobalBounds(Tile t) {
+        Rectangle globalBounds;
+
+        globalBounds = new Rectangle(t.parentMap.getPos().getIntX() + t.getPos().getIntX(),
+            t.parentMap.getPos().getIntY() + t.getPos().getIntY(), 
+            t.getBounds().width,
+            t.getBounds().height
+        );
+
+        return globalBounds;
     }
 
     private void forwardKeyEvent(KeyEvent e) {
