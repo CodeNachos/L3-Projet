@@ -61,6 +61,11 @@ public class GameConfiguration {
             }
         }
     }
+
+    public char[][] getBoard()
+    {
+        return board;
+    }
     
     public PlayerHand getPlayer1Hand()
     {
@@ -152,9 +157,9 @@ public class GameConfiguration {
         }
     }
     
-    public void updateConfig(int player, Card playerCard, Position piece, Position move) {
-        applyMove(player, piece, move);
-        exchangeCards(player, playerCard);
+    public void updateConfig(Turn turn) {
+        applyMove(turn.getPlayer(), turn.getPiece(), turn.getMove());
+        exchangeCards(turn.getPlayer(), turn.getCard());
     }
     
     public void exchangeCards(int player, Card playerCard)

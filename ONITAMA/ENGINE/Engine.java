@@ -8,6 +8,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import JSON.*;
+
 public class Engine {
     List<Card> listOfCards;
     List<Card> gameCards;
@@ -18,12 +19,14 @@ public class Engine {
     int firstNumber;
     int secondNumber;
     Random random;
-    int player;
+    //int player;
+    Player player;
     PlayerHand ph1;
     PlayerHand ph2;
     Scanner scanner;
     GameConfiguration gameConfig;
     List<Position> posPositions;
+    Turn turn;
     private final static char BLUE_PAWN = 'b';
     private final static char RED_PAWN = 'r';
     private final static char BLUE_KING = 'B';
@@ -40,7 +43,9 @@ public class Engine {
         gameCards = new ArrayList<>();
         random = new Random();
         scanner = new Scanner(System.in);
-        player = 0;
+        turn = null;
+        player = new Player(0);
+        //player = 0;
         initialiseGame();
     }
 
@@ -127,7 +132,12 @@ public class Engine {
         }
     }
 
-    public void playTurn() {
+    public void playTurn(Position piece, Card playCard, Position move) {
+
+        turn = player.getTurn(piece, playCard, move);
+        gameConfig.updateConfig(turn);
+
+        /*
         String ans = "";
         Position piece = null;
         Card playCard = null;
@@ -155,15 +165,17 @@ public class Engine {
         }
         //gameConfig.applyMove(player,piece, move);
         gameConfig.updateConfig(player, playCard, piece, move);
-    }
-
-    public void changePlayer() {
+        */
+        }
+        
+        /*
+        public void changePlayer() {
         player = (player + 1) % 2;
         return;
-    }
-
-    public Position askPlayerPiece()
-    {
+        }
+        
+        public Position askPlayerPiece()
+        {
         if (player == 0) {
             System.out.println("Choose a red pawn in the table (enter i,j)");
         }
@@ -179,7 +191,8 @@ public class Engine {
             }
             Position piece = new Position(firstNumber, secondNumber);
             return piece;
-    }
+        }
+        */
     
     public void parse(String input)
     {
@@ -201,6 +214,7 @@ public class Engine {
         return;
     }
     
+    /*
     public boolean validPiece(int i, int j)
     {
         char c = board[i][j];
@@ -254,6 +268,7 @@ public class Engine {
             return false;
 
     }
+    */
 
     public boolean gameOver()
     {
@@ -300,5 +315,10 @@ public class Engine {
     public GameConfiguration getGameConfiguration()
     {
         return gameConfig;
+    }
+
+    public Player getPlayer()
+    {
+        return player;
     }
 }
