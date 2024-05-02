@@ -7,7 +7,6 @@ import Engine.Entities.TileMap.TileMap;
 import Engine.Global.Util;
 import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
-import Onitama.src.Main;
 
 public class PieceSet extends TileMap {
 
