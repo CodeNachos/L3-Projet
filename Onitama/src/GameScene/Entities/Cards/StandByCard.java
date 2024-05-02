@@ -1,5 +1,8 @@
 package Onitama.src.GameScene.Entities.Cards;
 
+
+import java.awt.event.MouseEvent;
+
 import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 
@@ -10,8 +13,12 @@ public class StandByCard extends Card {
     }
 
     @Override
-    public void process(double delta) {
-
+    public void input(MouseEvent e) {
+        if (e.getID() == MouseEvent.MOUSE_ENTERED) {
+            zoomIn();
+        } else if (e.getID() == MouseEvent.MOUSE_EXITED) {
+            zoomOut();
+        }
     }
 
 

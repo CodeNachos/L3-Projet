@@ -7,6 +7,7 @@ import Engine.Entities.GameObject;
 import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.GameScene.GameScene;
 
 public class Card extends GameObject {
 
@@ -42,21 +43,14 @@ public class Card extends GameObject {
     }
 
     @Override
-    public void process(double delta) {
-        if (selected && sprite != Main.selectedCardSprite) {
-            sprite = Main.selectedCardSprite;
-        } else if (!selected && sprite != Main.idleCardSprite) {
-            sprite = Main.idleCardSprite;
-        }
-    }
-
-    @Override
     public void input(MouseEvent e) {
         if (e.getID() == MouseEvent.MOUSE_CLICKED) {
             if (selected) {
                 selected = false;
+                sprite = GameScene.idleCardSprite;
             } else {
                 selected = true;
+                sprite = GameScene.selectedCardSprite;
             }
         } else if (e.getID() == MouseEvent.MOUSE_ENTERED) {
             zoomIn();
