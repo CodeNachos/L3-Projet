@@ -1,14 +1,25 @@
 package Onitama.src.GameScene.Entities.Cards;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+
+import Engine.Core.Renderer.Scene;
 import Engine.Entities.GameObject;
+import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
+import Onitama.src.Main;
 
 public class Card extends GameObject {
     String name;
     PlayerHand hand = null;
+    public CardMap cardMap;
+    public MenuFrame cardLabel;
 
     // Visual settings
     private Vector2D originalScale;
@@ -24,6 +35,11 @@ public class Card extends GameObject {
         );
 
         originalScale = getScale();
+
+        this.name = name;
+
+        createCardMap();
+        createCardLabel();
         
     }
 
@@ -60,11 +76,39 @@ public class Card extends GameObject {
         originalScale = getScale();
         setScale(getScale().multiply(zoomFactor));
         setPos(getPos().add(zoomMovement));
+
+        cardLabel.setScale(scale);
+        cardLabel.setPos(new Vector2D(
+            position.x + getSize().width * 0.15,
+            position.y + getSize().height * 0.7 
+        ));
+        Font font = ((JLabel)cardLabel.getComponent(0)).getFont();
+        ((JLabel)cardLabel.getComponent(0)).setFont(font.deriveFont(font.getStyle(), 17));
+
+        cardMap.setScale(scale);
+        cardMap.setPos(new Vector2D(
+            position.x + getSize().width * 0.2,
+            position.y + getSize().height * 0.12
+        ));
     }
 
     private void zoomOut() {
         setScale(originalScale);
         setPos(getPos().subtract(zoomMovement));
+
+        cardLabel.setScale(scale);
+        cardLabel.setPos(new Vector2D(
+            position.x + getSize().width * 0.15,
+            position.y + getSize().height * 0.7 
+        ));
+        Font font = ((JLabel)cardLabel.getComponent(0)).getFont();
+        ((JLabel)cardLabel.getComponent(0)).setFont(font.deriveFont(font.getStyle(), 15));
+
+        cardMap.setScale(scale);
+        cardMap.setPos(new Vector2D(
+            position.x + getSize().width * 0.2,
+            position.y + getSize().height * 0.12
+        ));
     }
 
     @Override
@@ -76,5 +120,49 @@ public class Card extends GameObject {
         } else if (e.getID() == MouseEvent.MOUSE_CLICKED && hand != null) {
             hand.setSelectedCard(this);
         }
+    }
+
+    private void createCardMap() {
+        cardMap = new CardMap(new Dimension(
+            (int)(getSize().width * 0.6),
+            (int)(getSize().height * 0.6)
+        ));
+        cardMap.setPos(new Vector2D(
+            position.x + getSize().width * 0.2,
+            position.y + getSize().height * 0.12
+        ));
+    }
+
+    private void createCardLabel() {
+        cardLabel = new MenuFrame(new Dimension(
+            (int)(getSize().width * 0.7),
+            (int)(getSize().height * 0.2)
+        ));
+        cardLabel.setPos(new Vector2D(
+            position.x + getSize().width * 0.15,
+            position.y + getSize().height * 0.7 
+        ));
+
+        cardLabel.setMainColor(new Color(0,0,0,0));
+        cardLabel.setAccentColor(new Color(0,0,0,0));
+        
+        JLabel label = new JLabel(name);
+        label.setAlignmentX(CENTER_ALIGNMENT);
+        label.setForeground(Main.Palette.foreground);
+        label.setFont(new Font("Arial", Font.BOLD, 16));
+        label.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+        cardLabel.add(label);
+    }
+
+    public void addCardToScene(Scene scene) {
+        scene.addComponent(cardLabel);
+        scene.addComponent(cardMap);
+        scene.addComponent(this);
+    }
+
+    public void updateCard() {
+        if (hand == null)
+            return;
+        cardMap.populateActions(name, hand.player);
     }
 }

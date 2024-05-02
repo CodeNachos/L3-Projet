@@ -1,7 +1,12 @@
 package Onitama.src.GameScene;
 
 import java.awt.Dimension;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import Engine.Core.Renderer.Scene;
 import Engine.Structures.Sprite;
@@ -11,13 +16,19 @@ import Onitama.src.Main;
 import Onitama.src.GameScene.Entities.Board.Board;
 import Onitama.src.GameScene.Entities.Board.PieceSet;
 import Onitama.src.GameScene.Entities.Cards.Card;
+import Onitama.src.GameScene.Entities.Cards.CardInfo;
 import Onitama.src.GameScene.Entities.Cards.PlayerHand;
 import Onitama.src.GameScene.Interface.GameGUI;
+import Onitama.src.lib.json.JsonReader;
 
 public class GameScene extends Scene {
+    // JSON file reader
+    JsonReader jReader;
+
     // Game Parameters
-    List<Card> listOfCards;
-    List<Card> gameCards;
+    static final int CARD_COUNT = 16; 
+    static List<CardInfo> listOfCards;
+    public static HashMap<String, CardInfo> gameCards;
     
     // Player ID's
     public static final int PLAYER_RED = 0;
@@ -41,10 +52,19 @@ public class GameScene extends Scene {
     public static PlayerHand blueHand;
 
     public GameScene() {
+        // Load all game cards
+        jReader = new JsonReader();
+        listOfCards = jReader.readJson("Onitama/res/cards.json");
+
+        // Pick game cards
+        chooseCards();
+
         // Add Board to scene
         createBoard();
+
         // Add cards to scene
         createCards();
+        
         // Add gui to scene
         GameGUI gui = new GameGUI(Main.engine.getResolution());
         addComponent(gui);
@@ -101,8 +121,9 @@ public class GameScene extends Scene {
             (int)(Main.engine.getResolution().height) -(int)(1.5*idleCardTexture.getHeight())
         );
 
-        Card standByCard = new Card("", cardPos, idleCardSprite);
-        addComponent(standByCard);
+
+        // iterate trough card game names
+        Iterator<String> cardIter = gameCards.keySet().iterator();
 
         // Create blue player hand
         Vector2D card1Pos = new Vector2D(
@@ -113,9 +134,12 @@ public class GameScene extends Scene {
             (int)(gameBoard.getPos().getIntX()/2) - (int)(idleCardTexture.getWidth()/2),
             (int)(gameBoard.getPos().getIntY() + gameBoard.getSize().height) - (int)(idleCardTexture.getHeight())
         );
-        blueHand = new PlayerHand(PLAYER_BLUE, new Card("", card1Pos, idleCardSprite), new Card("", card2Pos, idleCardSprite));
-        addComponent(blueHand.getFirstCard());
-        addComponent(blueHand.getSecondCard());
+        blueHand = new PlayerHand(
+            PLAYER_BLUE, 
+            new Card(gameCards.get(cardIter.next()).getName(), card1Pos, idleCardSprite), 
+            new Card(gameCards.get(cardIter.next()).getName(), card2Pos, idleCardSprite)
+        );
+        blueHand.updateCards();
 
         // Create red player hand
         card1Pos = new Vector2D(
@@ -126,14 +150,46 @@ public class GameScene extends Scene {
             (int)(card2Pos.getIntX() + gameBoard.getPos().getIntX() + gameBoard.getSize().height),
             (int)(gameBoard.getPos().getIntY() + gameBoard.getSize().height) - (int)(idleCardTexture.getHeight())
         );
-        redHand = new PlayerHand(PLAYER_RED, new Card("", card1Pos, idleCardSprite), new Card("", card2Pos, idleCardSprite));
-        addComponent(redHand.getFirstCard());
-        addComponent(redHand.getSecondCard());
+        redHand = new PlayerHand(
+            PLAYER_RED, 
+            new Card(gameCards.get(cardIter.next()).getName(), card1Pos, idleCardSprite), 
+            new Card(gameCards.get(cardIter.next()).getName(), card2Pos, idleCardSprite)
+        );
+        redHand.updateCards();
+
+        redHand.addHandToScene(this);
+        blueHand.addHandToScene(this);
+
+
+        Card standByCard = new Card(
+            gameCards.get(cardIter.next()).getName(), 
+            cardPos, 
+            idleCardSprite
+        );
+        standByCard.cardMap.populateActions(standByCard.getName(), PLAYER_RED);
+        standByCard.addCardToScene(this);
+
     
     }
 
     private void chooseCards() {
-        
+        gameCards = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
+
+        Random random = new Random();
+
+        int i = 0;
+        while (i<5)
+        {
+            int cardIndex = random.nextInt(16);
+            if (!set.contains(cardIndex)) {
+                CardInfo card = listOfCards.get(cardIndex);
+                gameCards.put(card.getName(), card);
+                set.add(cardIndex);
+                ++i;
+            }
+        }
+        return;
     }
     
 }

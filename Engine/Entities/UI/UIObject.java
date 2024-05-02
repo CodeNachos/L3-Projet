@@ -1,21 +1,21 @@
 package Engine.Entities.UI;
 
 import java.awt.Dimension;
-import java.awt.Image;
 
 import Engine.Entities.GameObject;
 import Engine.Global.Settings;
 import Engine.Global.Util;
+import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 
 /**
  * The UIObject class represents a user interface element in the game.
  * It inherits properties and functionalities from GameObject.
  */
-public class UIObject extends GameObject {
+public abstract class UIObject extends GameObject {
 
     // DO NOT CHANGE AFTER CONSTRUCTOR INITIALIZATION
-    private Dimension initialArea = null; // Initial area size of the UI object
+    protected Dimension initialArea = null; // Initial area size of the UI object
 
     /**
      * Constructs a new UIObject instance with the specified area and position.
@@ -55,14 +55,14 @@ public class UIObject extends GameObject {
      * Sets the sprite of the UI object.
      * @param sprite The sprite image to set
      */
-    public void setSprite(Image sprite) {
+    public void setSprite(Sprite sprite) {
         Util.printError("Unsupported operation: Updates to come.");
     }
 
     /**
      * Updates the size of the UI object based on its initial area and scale.
      */
-    private void updateSize() {
+    protected void updateSize() {
         if (initialArea != null) { // If initial area is set
             this.setSize(
                 (int)(initialArea.width * scale.x), // Set width based on initial area width and scale

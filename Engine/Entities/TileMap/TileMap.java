@@ -104,6 +104,7 @@ public class TileMap extends GameObject {
             (int)(initialArea.width * scale.x), // Set width based on initial area width and scale
             (int)(initialArea.height * scale.y) // Set height based on initial area height and scale
         );
+        
     }
 
     @Override

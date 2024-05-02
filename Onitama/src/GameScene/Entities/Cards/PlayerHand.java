@@ -1,5 +1,6 @@
 package Onitama.src.GameScene.Entities.Cards;
 
+import Engine.Core.Renderer.Scene;
 import Onitama.src.GameScene.GameScene;
 
 public class PlayerHand {
@@ -64,5 +65,15 @@ public class PlayerHand {
         
         selectedCard = c;
         selectedCard.sprite = GameScene.selectedCardSprite;
+    }
+
+    public void addHandToScene(Scene scene) {
+        card1.addCardToScene(scene);
+        card2.addCardToScene(scene);
+    }
+
+    public void updateCards() {
+        card1.updateCard();
+        card2.updateCard();
     }
 }

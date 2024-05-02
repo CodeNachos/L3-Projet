@@ -1,7 +1,6 @@
 package Engine.Entities.TileMap;
 
 import java.awt.Graphics;
-import java.awt.Image;
 
 import Engine.Entities.GameObject;
 import Engine.Structures.Sprite;
