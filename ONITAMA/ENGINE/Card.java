@@ -41,6 +41,16 @@ public class Card {
         return redMovement;
     }
 
+    public void setBlueMovement(List<Movement> bl)
+    {
+        this.blueMovement = bl;
+    }
+
+    public void setRedMovement(List<Movement>rl)
+    {
+        this.redMovement = rl;
+    }
+
     
     
 }

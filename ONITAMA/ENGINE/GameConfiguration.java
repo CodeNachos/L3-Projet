@@ -82,12 +82,18 @@ public class GameConfiguration {
         return on_standby;
     }
 
-    public void displayMark(int player,Position piece, Card card)
+    public char[][] copyBoard()
     {
         char[][] cpy = new char[board.length][];
         for (int i = 0; i < board.length; i++) {
             cpy[i] = Arrays.copyOf(board[i], board[i].length);
         }
+        return cpy;
+    }
+
+    public void displayMark(int player,Position piece, Card card)
+    {
+        char[][] cpy = copyBoard();
         List<Position> possiblePositions = getPossiblePositions(player, piece, card);
         for(int i = 0; i<rows;++i)
         {
@@ -130,6 +136,7 @@ public class GameConfiguration {
 
     }
 
+
     public void applyMove(int player,Position piece, Position move)
     {
         int i = piece.getI();
@@ -156,34 +163,117 @@ public class GameConfiguration {
             }
         }
     }
+    //Method overload
+    public char[][] applyMove(char[][] cpy,int player,Position piece, Position move)
+    {
+        int i = piece.getI();
+        int j = piece.getJ();
+        int new_i = move.getI();
+        int new_j = move.getJ();
+        if (player == 0) {
+            if (cpy[i][j] == 'r') {
+                cpy[i][j] = '.';
+                cpy[new_i][new_j] = 'r';
+
+            } else {
+                cpy[i][j] = '.';
+                cpy[new_i][new_j] = 'R';
+            }
+        } else {
+            if (cpy[i][j] == 'b') {
+                cpy[i][j] = '.';
+                cpy[new_i][new_j] = 'b';
+
+            } else {
+                cpy[i][j] = '.';
+                cpy[new_i][new_j] = 'B';
+            }
+        }
+        return cpy;
+    }
     
     public void updateConfig(Turn turn) {
         applyMove(turn.getPlayer(), turn.getPiece(), turn.getMove());
         exchangeCards(turn.getPlayer(), turn.getCard());
     }
+
+    public GameConfiguration nextConfig(Turn turn)
+    {
+        char[][] cpy = copyBoard();
+        PlayerHand ph1 = new PlayerHand(0);
+        PlayerHand ph2 = new PlayerHand(1);
+        Card new_stdby = new Card();
+        cpy = applyMove(cpy, turn.getPlayer(), turn.getPiece(), turn.getMove());
+        exchangeCards(ph1, ph2, turn.getPlayer(), turn.getCard(), new_stdby);
+        return new GameConfiguration(cpy, ph1, ph2, new_stdby);
+
+    }
     
     public void exchangeCards(int player, Card playerCard)
     {
         Card tmp = playerCard;
+        if (player == 0) {
+            if (player1Hand.getFirstCard().getName().equals(playerCard.getName())) {
+                player1Hand.setFirstCard(on_standby);
+            } else {
+                player1Hand.setSecondCard(on_standby);
+            }
+            on_standby = tmp;
+        } else {
+            if (player2Hand.getFirstCard().getName().equals(playerCard.getName())) {
+                player2Hand.setFirstCard(on_standby);
+            } else {
+                player2Hand.setSecondCard(on_standby);
+            }
+            on_standby = tmp;
+        }
+    }
+    
+    //Method Overload
+    public void exchangeCards(PlayerHand ph1, PlayerHand ph2,int player, Card playerCard, Card new_stdby)
+    {
         if(player==0)
         {
             if(player1Hand.getFirstCard().getName().equals(playerCard.getName()))
             {
-                player1Hand.setFirstCard(on_standby);
+                //player1Hand.setFirstCard(on_standby);
+                ph1.setFirstCard(on_standby);
+                ph1.setSecondCard(player1Hand.getSecondCard());
+                new_stdby.setString(player1Hand.getFirstCard().getName());
+                new_stdby.setBlueMovement(player1Hand.getFirstCard().getBlueMovement());
+                new_stdby.setRedMovement(player1Hand.getFirstCard().getRedMovement());
             }
             else {
-                player1Hand.setSecondCard(on_standby);
+                //player1Hand.setSecondCard(on_standby);
+                ph1.setSecondCard(on_standby);
+                ph1.setFirstCard(player1Hand.getFirstCard());
+                new_stdby.setString(player1Hand.getSecondCard().getName());
+                new_stdby.setBlueMovement(player1Hand.getSecondCard().getBlueMovement());
+                new_stdby.setRedMovement(player1Hand.getSecondCard().getRedMovement());
+
             }
-            on_standby = tmp;
+            ph2.setFirstCard(player2Hand.getFirstCard());
+            ph2.setSecondCard(player2Hand.getSecondCard());
         }
         else {
             if (player2Hand.getFirstCard().getName().equals(playerCard.getName())) {
-                player2Hand.setFirstCard(on_standby);
+                //player2Hand.setFirstCard(on_standby);
+                ph2.setFirstCard(on_standby);
+                ph2.setSecondCard(player2Hand.getSecondCard());
+                new_stdby.setString(player2Hand.getFirstCard().getName());
+                new_stdby.setBlueMovement(player2Hand.getFirstCard().getBlueMovement());
+                new_stdby.setRedMovement(player2Hand.getFirstCard().getRedMovement());
             }
             else {
-                player2Hand.setSecondCard(on_standby);
+                //player2Hand.setSecondCard(on_standby);
+                ph2.setSecondCard(on_standby);
+                ph2.setFirstCard(player2Hand.getFirstCard());
+                new_stdby.setString(player2Hand.getSecondCard().getName());
+                new_stdby.setBlueMovement(player2Hand.getSecondCard().getBlueMovement());
+                new_stdby.setRedMovement(player2Hand.getSecondCard().getRedMovement());
             }
-            on_standby = tmp;
+            ph1.setFirstCard(player1Hand.getFirstCard());
+            ph1.setSecondCard(player1Hand.getSecondCard());
         }
     }
 

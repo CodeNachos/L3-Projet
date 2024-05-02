@@ -45,7 +45,6 @@ public class Engine {
         scanner = new Scanner(System.in);
         turn = null;
         player = new Player(0);
-        //player = 0;
         initialiseGame();
     }
 
@@ -56,14 +55,6 @@ public class Engine {
         Card standby = gameCards.get(4);
         //Initial game config
         gameConfig = new GameConfiguration(board, ph1, ph2, standby);
-        /* 
-        gameConfig.displayConfig();
-        playTurn();
-        gameConfig.displayConfig();
-        changePlayer();
-        playTurn();
-        gameConfig.displayConfig();
-        */
     }
     
     private void initBoard() {
@@ -136,139 +127,7 @@ public class Engine {
 
         turn = player.getTurn(piece, playCard, move);
         gameConfig.updateConfig(turn);
-
-        /*
-        String ans = "";
-        Position piece = null;
-        Card playCard = null;
-        Position move = null;
-        while (!ans.equals("confirm") && !ans.equals("Confirm")) {
-            piece = askPlayerPiece();
-            playCard = askPlayerCard();
-            System.out.println("You want to play piece (" + piece.getI() + "," + piece.getJ() + ") with card "
-                    + playCard.getName());
-            System.out.println("These are the possibilities:");
-            gameConfig.displayMark(player, piece, playCard);
-            boolean mark = gameConfig.getMarked();
-            if (!mark)
-            {
-                System.out.println("As you can see, no marks are found. Therefore, you must change cards!");
-                continue;
-            }
-            posPositions = gameConfig.getPossiblePositions(player, piece, playCard);
-            move = askMove();
-            System.out.println("You will play piece (" + piece.getI() + "," + piece.getJ() + ") with card "
-                    + playCard.getName() + " at spot (" + move.getI() + "," + move.getJ() + ")");
-            gameConfig.setMarked(false);
-            System.out.println("Confirm move?: (type Confirm)");
-            ans = scanner.nextLine();
         }
-        //gameConfig.applyMove(player,piece, move);
-        gameConfig.updateConfig(player, playCard, piece, move);
-        */
-        }
-        
-        /*
-        public void changePlayer() {
-        player = (player + 1) % 2;
-        return;
-        }
-        
-        public Position askPlayerPiece()
-        {
-        if (player == 0) {
-            System.out.println("Choose a red pawn in the table (enter i,j)");
-        }
-        else {
-            System.out.println("Choose a blue pawn in the table (enter i,j)");
-        }
-            String input = scanner.nextLine();
-            parse(input);
-            while (firstNumber == -1 || !validPiece(firstNumber, secondNumber)) {
-                System.out.println("Invalid piece! please try again!");
-                input = scanner.nextLine();
-                parse(input);
-            }
-            Position piece = new Position(firstNumber, secondNumber);
-            return piece;
-        }
-        */
-    
-    public void parse(String input)
-    {
-        String[] parts = input.split("\\s+");
-        if (parts.length != 2) {
-            System.out.println("Incorrect input!");
-            this.firstNumber = -1;
-            this.secondNumber = -1;
-            return;
-        }
-
-        try {
-            firstNumber = Integer.parseInt(parts[0]);
-            secondNumber = Integer.parseInt(parts[1]);
-
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter valid integers.");
-        }
-        return;
-    }
-    
-    /*
-    public boolean validPiece(int i, int j)
-    {
-        char c = board[i][j];
-        if (player == 0 && (c == RED_PAWN || c == RED_KING))
-            return true;
-        else if (player == 1 && (c == BLUE_PAWN || c == BLUE_KING))
-            return true;
-        return false;
-    }
-    
-    public Card askPlayerCard()
-    {
-        PlayerHand ph;
-        if (player == 0)
-            ph = gameConfig.getPlayer1Hand();
-        else
-            ph = gameConfig.getPlayer2Hand();
-        System.out.println("Which card would you like to play? (intput 1 or 2)");
-        int cardNumb = Integer.valueOf(scanner.nextLine());
-        while (cardNumb != 1 && cardNumb != 2) {
-            System.out.println("Please insert 1 or 2!");
-            cardNumb = Integer.valueOf(scanner.nextLine());
-        }
-        if (cardNumb == 1)
-            return ph.getFirstCard();
-        else
-            return ph.getSecondCard();
-
-    }
-    
-    public Position askMove()
-    {
-        System.out.println("Choose a marked spot: (i,j)");
-        String move = scanner.nextLine();
-        parse(move);
-        while (firstNumber == -1 || !validMove(firstNumber, secondNumber)) {
-            System.out.println("Invalid move! please try again!");
-            move = scanner.nextLine();
-            parse(move);
-        }
-        return new Position(firstNumber, secondNumber);
-
-    }
-    
-    public boolean validMove(int firstNumber, int secondNumber)
-    {
-        Position position = new Position(firstNumber, secondNumber);
-        if (posPositions.contains(position))
-            return true;
-        else
-            return false;
-
-    }
-    */
 
     public boolean gameOver()
     {

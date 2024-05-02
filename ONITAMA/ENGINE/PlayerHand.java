@@ -15,6 +15,13 @@ public class PlayerHand {
         this.card2 = card2;
     }
 
+    public PlayerHand(int player)
+    {
+        this.player = player;
+        card1 = null;
+        card2 = null;
+    }
+
     public void displayInfo() {
         if (player == 0) {
             System.out.println("Red currently has cards: " + card1.getName() + " and " + card2.getName());
