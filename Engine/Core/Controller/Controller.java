@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.SwingUtilities;
 
@@ -14,7 +15,7 @@ import Engine.Entities.TileMap.Tile;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Global.Settings;
 
-public class Controller implements MouseListener, KeyListener {
+public class Controller implements MouseListener, MouseMotionListener, KeyListener {
     // Controller scene
     Scene scene;
 
@@ -67,6 +68,17 @@ public class Controller implements MouseListener, KeyListener {
         forwardMouseEvent(e);
     }
 
+    
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        // unimplemented
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        handleBoundEvents(e);
+    }
+
 
     // sends mouse event to concerned game object in current scene
     private void forwardMouseEvent(MouseEvent e) {
@@ -96,6 +108,58 @@ public class Controller implements MouseListener, KeyListener {
                 }
             }
         }
+    }
+
+    private void handleBoundEvents(MouseEvent e) {
+        for (GameObject obj : scene.components) {
+            // check if is target object
+            if (obj.getBounds().contains(e.getPoint())) {
+                if (obj.cursorIn)
+                    continue;
+                
+                obj.cursorIn = true;
+                // if obj is tile map send event to tiles
+                if (obj instanceof TileMap) {
+                    TileMap mapObj = (TileMap)obj;
+                    forwardBoundEventToTiles(mapObj, e);
+                
+                // else default treatment
+                } else {
+                    obj.input(generateMouseEntered(e, obj));
+                }
+            } else if (obj.cursorIn) {
+                obj.cursorIn = false;
+                obj.input(generateMouseExited(e, obj));
+            }
+        }
+    }
+
+    private void forwardBoundEventToTiles(TileMap mapObj, MouseEvent e) {
+        
+    }
+
+    private MouseEvent generateMouseEntered(MouseEvent e, GameObject obj) {
+        return new MouseEvent(
+            obj, 
+            MouseEvent.MOUSE_ENTERED,
+            e.getWhen(),
+            0,
+            e.getX(),
+            e.getY(),
+            0,
+            false);
+    }
+
+    private MouseEvent generateMouseExited(MouseEvent e, GameObject obj) {
+        return new MouseEvent(
+            obj, 
+            MouseEvent.MOUSE_EXITED,
+            e.getWhen(),
+            0,
+            e.getX(),
+            e.getY(),
+            0,
+            false);
     }
 
     private Rectangle getTileGlobalBounds(Tile t) {

@@ -33,6 +33,7 @@ public class Scene extends JPanel {
         control = new Controller(this); // Create a new controller instance for input handling
         setLayout(null); // Set layout to null for manual component positioning
         addMouseListener(control); // Add mouse listener to handle mouse events
+        addMouseMotionListener(control);
         addKeyListener(control); // Add key listener to handle key events
 
         // Set preferred size based on fullscreen setting

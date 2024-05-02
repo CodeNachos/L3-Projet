@@ -26,25 +26,7 @@ public class Card extends GameObject {
 
         originalScale = getScale();
 
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                zoomIn();
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-                zoomOut();
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (selected) {
-                    selected = false;
-                } else {
-                    selected = true;
-                }
-            }
-        });
+        
         
     }
 
@@ -65,6 +47,21 @@ public class Card extends GameObject {
             sprite = Main.selectedCardSprite;
         } else if (!selected && sprite != Main.idleCardSprite) {
             sprite = Main.idleCardSprite;
+        }
+    }
+
+    @Override
+    public void input(MouseEvent e) {
+        if (e.getID() == MouseEvent.MOUSE_CLICKED) {
+            if (selected) {
+                selected = false;
+            } else {
+                selected = true;
+            }
+        } else if (e.getID() == MouseEvent.MOUSE_ENTERED) {
+            zoomIn();
+        } else if (e.getID() == MouseEvent.MOUSE_EXITED) {
+            zoomOut();
         }
     }
 }

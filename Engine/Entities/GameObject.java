@@ -12,7 +12,8 @@ import Engine.Structures.Vector2D;
  * The GameObject class represents the most basic object within the game world.
  * It provides functionalities for position, scaling, sprite handling, and event handling.
  */
-public class GameObject extends JComponent {
+public abstract class GameObject extends JComponent {
+    public boolean cursorIn = false;
 
     // Object attributes
     public Vector2D position = new Vector2D(0, 0); // Position of the object

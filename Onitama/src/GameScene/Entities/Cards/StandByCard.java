@@ -1,15 +1,19 @@
 package Onitama.src.GameScene.Entities.Cards;
 
-import java.awt.Dimension;
+import Engine.Structures.Sprite;
+import Engine.Structures.Vector2D;
 
-import Engine.Entities.UI.MenuFrame;
+public class StandByCard extends Card {
 
-public class StandByCard extends MenuFrame {
-
-
-    public StandByCard(Dimension area) {
-        super(area);
+    public StandByCard(Vector2D position, Sprite sprite) {
+        super(position, sprite);
     }
+
+    @Override
+    public void process(double delta) {
+
+    }
+
 
     
     
