@@ -22,6 +22,11 @@ public class Player {
         return;
     }
 
+    public int nextPlayer()
+    {
+        return (player + 1) % 2;
+    }
+
     public int getCurrentPlayer()
     {
         return player;

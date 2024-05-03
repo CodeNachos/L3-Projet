@@ -15,8 +15,9 @@ public class GameConfiguration {
     int rows;
     int cols;
     boolean marked;
+    int currentPlayer;
 
-    public GameConfiguration(char[][] board, PlayerHand ph1, PlayerHand ph2, Card stb) {
+    public GameConfiguration(char[][] board, PlayerHand ph1, PlayerHand ph2, Card stb, int player) {
         this.board = board;
         this.player1Hand = ph1;
         this.player2Hand = ph2;
@@ -24,11 +25,13 @@ public class GameConfiguration {
         this.rows = board.length;
         this.cols = board[0].length;
         marked = false;
+        this.currentPlayer = player;
     }
 
     public void displayConfig()
     {
         displayBoard();
+        System.out.println("Player that is currently playing: " + currentPlayer);
         System.out.println("Red's cards:" + player1Hand.getFirstCard().getName() + " and "
                 + player1Hand.getSecondCard().getName());
         System.out.println("Blue's cards:" + player2Hand.getFirstCard().getName() + " and "
@@ -193,6 +196,7 @@ public class GameConfiguration {
     }
     
     public void updateConfig(Turn turn) {
+        setCurrentPlayer((turn.getPlayer() + 1)%2);
         applyMove(turn.getPlayer(), turn.getPiece(), turn.getMove());
         exchangeCards(turn.getPlayer(), turn.getCard());
     }
@@ -205,7 +209,7 @@ public class GameConfiguration {
         Card new_stdby = new Card();
         cpy = applyMove(cpy, turn.getPlayer(), turn.getPiece(), turn.getMove());
         exchangeCards(ph1, ph2, turn.getPlayer(), turn.getCard(), new_stdby);
-        return new GameConfiguration(cpy, ph1, ph2, new_stdby);
+        return new GameConfiguration(cpy, ph1, ph2, new_stdby, (turn.getPlayer()+1)%2);
 
     }
     
@@ -285,6 +289,16 @@ public class GameConfiguration {
     public void setMarked(boolean m)
     {
         marked = m;
+    }
+
+    public void setCurrentPlayer(int player)
+    {
+        this.currentPlayer = player;
+    }
+
+    public int getCurrentPlayer()
+    {
+        return currentPlayer;
     }
 
 }

@@ -37,7 +37,7 @@ public class InterfaceTextuelle {
                 askPlayer();
                 break;
             case "AI":
-                if(eng.getPlayer().getCurrentPlayer()==0)
+                if(eng.getPlayer().getCurrentPlayer()==0) // if player == 0 -> human
                 {
                     askPlayer();
                 }

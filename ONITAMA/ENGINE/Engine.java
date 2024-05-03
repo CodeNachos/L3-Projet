@@ -54,7 +54,7 @@ public class Engine {
         assignCards();
         Card standby = gameCards.get(4);
         //Initial game config
-        gameConfig = new GameConfiguration(board, ph1, ph2, standby);
+        gameConfig = new GameConfiguration(board, ph1, ph2, standby,player.getCurrentPlayer());
     }
     
     private void initBoard() {
