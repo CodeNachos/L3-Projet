@@ -203,8 +203,6 @@ public class GameEngine implements Runnable {
      * @param delta The time since the last update in seconds
      */
     private void updateScene(double delta) {
-        for (GameObject obj : currentScene.components) { // Iterate through all game objects in the scene
-            obj.process(delta); // Process each game object
-        }
+        currentScene.update(delta);
     }
 }

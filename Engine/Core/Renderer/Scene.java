@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import Engine.Core.Controller.Controller;
 import Engine.Entities.GameObject;
+import Engine.Entities.TileMap.TileMap;
 import Engine.Global.Settings;
 import Engine.Structures.Vector2D;
 
@@ -96,6 +97,21 @@ public class Scene extends JPanel {
      */
     public void removeComponent(GameObject comp) {
         components.remove(comp); // Remove the specified component from the list of components
+    }
+
+    /**
+     * Updates scene by processing each game object.
+     * 
+     * @param delta The time since the last update in seconds
+     */
+    public void update(double delta) {
+        for (GameObject obj : components) { // Iterate through all game objects in the scene
+            if (obj instanceof TileMap) {
+                ((TileMap)obj).update(delta);
+            } else {
+                obj.process(delta); // Process each game object
+            }
+        }
     }
 
     /**

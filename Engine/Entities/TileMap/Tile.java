@@ -38,6 +38,14 @@ public class Tile extends GameObject {
         mapPosition = new Vector2D(line, column); // Set position of the tile in the map grid
     }
 
+    public int getLine() {
+        return mapPosition.getIntX();
+    }
+
+    public int getColumn() {
+        return mapPosition.getIntY();
+    }
+
     /**
      * Overrides the paintComponent method to render the tile.
      * @param g The Graphics context used for painting

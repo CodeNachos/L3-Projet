@@ -9,7 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import Engine.Structures.Vector2D;
-import Onitama.src.GameScene.Scripts.Card.CardInfo;
+import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 
 public class JsonReader {
     List<CardInfo> jsonCards;

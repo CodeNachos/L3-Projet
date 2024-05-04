@@ -1,4 +1,4 @@
-package Onitama.src.GameScene.Interface;
+package Onitama.src.Scenes.GameScene.Interface;
 
 import java.awt.Dimension;
 

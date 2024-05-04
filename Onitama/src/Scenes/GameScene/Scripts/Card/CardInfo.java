@@ -1,4 +1,4 @@
-package Onitama.src.GameScene.Scripts.Card;
+package Onitama.src.Scenes.GameScene.Scripts.Card;
 
 
 import java.util.*;

@@ -1,11 +1,11 @@
-package Onitama.src.GameScene.Interface;
+package Onitama.src.Scenes.GameScene.Interface;
 
 import java.awt.Dimension;
 
 import Engine.Entities.UI.ColorArea;
 import Engine.Entities.UI.MenuFrame;
 import Onitama.src.Main;
-import Onitama.src.GameScene.Entities.Board.Board;
+import Onitama.src.Scenes.GameScene.Entities.Board.Board;
 
 public class GameGUI extends MenuFrame {
 

@@ -5,7 +5,7 @@ import java.awt.*;
 import Engine.Core.Engines.GameEngine;
 import Engine.Core.Renderer.Scene;
 import Engine.Global.Settings;
-import Onitama.src.GameScene.GameScene;
+import Onitama.src.Scenes.GameScene.GameScene;
 
 public class Main {
     public static GameEngine engine;

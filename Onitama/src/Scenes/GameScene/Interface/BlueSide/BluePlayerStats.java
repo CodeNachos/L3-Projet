@@ -1,4 +1,4 @@
-package Onitama.src.GameScene.Interface.BlueSide;
+package Onitama.src.Scenes.GameScene.Interface.BlueSide;
 
 import java.awt.Dimension;
 

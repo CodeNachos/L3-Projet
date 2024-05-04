@@ -1,4 +1,4 @@
-package Onitama.src.GameScene.Entities.Board;
+package Onitama.src.Scenes.GameScene.Entities.Board;
 
 import java.awt.Dimension;
 
@@ -7,6 +7,7 @@ import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.Scripts.Match;
 
 public class Board extends TileMap{
 
@@ -40,22 +41,6 @@ public class Board extends TileMap{
                 addTile(l, c, tile);
             }
         }
-    }
-
-    protected void setSelectedTile(BoardTile t) {
-        if (t == null)
-            return;
-        
-        if (pieces.gridmap[t.mapPosition.getIntX()][t.mapPosition.getIntY()] == null)
-            return;
-        
-        if (selectedTile != null) {
-            selectedTile.sprite = tileSprite;
-        }
-
-        t.sprite = selectedTileSprite;
-        selectedTile = t;
-        
     }
     
 }

@@ -1,4 +1,4 @@
-package Onitama.src.GameScene.Entities.Cards;
+package Onitama.src.Scenes.GameScene.Entities.Cards;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,8 +14,9 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
-import Onitama.src.GameScene.GameScene;
-import Onitama.src.GameScene.Scripts.Card.PlayerHand;
+import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.GameScene.Scripts.Match;
+import Onitama.src.Scenes.GameScene.Scripts.Card.PlayerHand;
 
 public class Card extends GameObject {
     String name;
@@ -28,34 +29,23 @@ public class Card extends GameObject {
     private double zoomFactor = 1.1;
     private Vector2D zoomMovement = new Vector2D(0,0);
 
-    public Card(String name, Vector2D position, Sprite sprite) {
+    public Card(String name, Vector2D position, Sprite sprite, PlayerHand hand) {
         super(position, sprite);
-        
+
         zoomMovement = new Vector2D(
             (1-zoomFactor)*getSize().width/2,
             (1-zoomFactor)*getSize().height/2
         );
 
         originalScale = getScale();
-
+        
         this.name = name;
+        this.hand = hand;
 
         createCardMap();
         createCardLabel();
-        
-    }
 
-    public Card(String name, Vector2D position, Sprite sprite, PlayerHand hand) {
-        super(position, sprite);
-        
-        zoomMovement = new Vector2D(
-            (1-zoomFactor)*getSize().width/2,
-            (1-zoomFactor)*getSize().height/2
-        );
-
-        originalScale = getScale();
-        
-        this.hand = hand;
+        updateCard();
     }
 
     public void setName(String name) {
@@ -120,7 +110,31 @@ public class Card extends GameObject {
         } else if (e.getID() == MouseEvent.MOUSE_EXITED) {
             zoomOut();
         } else if (e.getID() == MouseEvent.MOUSE_CLICKED && hand != null) {
-            hand.setSelectedCard(this);
+            toggleSelected();
+        }
+    }
+
+    @Override
+    public void process(double delta) {
+        if (Match.getSelectedCard().compareTo(this.name) == 0) {
+            if (sprite != GameScene.selectedCardSprite)
+                sprite = GameScene.selectedCardSprite;
+        } else if (sprite != GameScene.idleCardSprite) {
+            sprite = GameScene.idleCardSprite;
+        }
+    }
+
+    public void toggleSelected() {
+
+        if (Match.currentPlayer != hand.getPlayer())
+            return;
+
+        if (sprite == GameScene.idleCardSprite) {
+            Match.setSelectedCard(this.name);
+            sprite = GameScene.selectedCardSprite;
+        } else {
+            Match.setSelectedCard("");
+            sprite = GameScene.idleCardSprite;
         }
     }
 
@@ -164,7 +178,7 @@ public class Card extends GameObject {
 
     public void updateCard() {
         if (hand == null)
-            cardMap.populateActions(name, GameScene.PLAYER1);
+            cardMap.populateActions(name, Match.PLAYER1);
         else 
             cardMap.populateActions(name, hand.getPlayer());
     }

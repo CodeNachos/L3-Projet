@@ -157,4 +157,21 @@ public class TileMap extends GameObject {
             }
         }
     }
+
+    /**
+     * Updates tile map by updating every tile.
+     * 
+     * @param delta The time since the last update in seconds
+     */
+    public void update(double delta) {
+        this.process(delta);
+
+        for (int l = 0; l < mapDimension.height; l++) {
+            for (int c = 0; c < mapDimension.width; c++) {
+                if (gridmap[l][c] != null) {
+                    gridmap[l][c].process(delta);
+                }
+            }
+        }
+    }
 }
