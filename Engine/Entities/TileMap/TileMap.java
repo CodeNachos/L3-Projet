@@ -87,6 +87,16 @@ public class TileMap extends GameObject {
         gridmap[l][c] = null; // Remove the tile at the specified position
     }
 
+    /**
+     * Recuperates the tile at coordinates (l,c)
+     * @param l The line (row) index of the tile
+     * @param c The column index of the tile
+     * @return Tile at coordinates (l,c), null if empty
+     */
+    public Tile getTile(int l, int c) {
+        return gridmap[l][c];
+    }
+
     @Override
     public void setSprite(Sprite sprite) {
         Util.printError("Unsupported operation: Updates to come.");

@@ -134,4 +134,12 @@ public class Match {
     public static void changePlayer() {
         currentPlayer = (currentPlayer + 1) % 2;
     }
+
+    public static boolean isPieceSelected() {
+        return selectedPiece != null;
+    }
+
+    public static boolean isCardSelected() {
+        return selectedCard != null;
+    }
 }
