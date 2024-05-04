@@ -1,7 +1,8 @@
-package Onitama.src.GameScene.Entities.Cards;
+package Onitama.src.GameScene.Scripts.Card;
 
 import Engine.Core.Renderer.Scene;
 import Onitama.src.GameScene.GameScene;
+import Onitama.src.GameScene.Entities.Cards.Card;
 
 public class PlayerHand {
     int player;
@@ -15,8 +16,8 @@ public class PlayerHand {
         this.card1 = card1;
         this.card2 = card2;
 
-        this.card1.hand = this;
-        this.card2.hand = this;
+        this.card1.setHand(this);
+        this.card2.setHand(this);
     }
 
     public void printInfo() {
@@ -27,9 +28,12 @@ public class PlayerHand {
         }
     }
     
-    public void setPlayer(int player)
-    {
+    public void setPlayer(int player) {
         this.player = player;
+    }
+
+    public int getPlayer() {
+        return player;
     }
 
     public void setFirstCard(Card card) {

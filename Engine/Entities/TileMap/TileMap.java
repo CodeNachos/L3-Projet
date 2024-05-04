@@ -94,9 +94,11 @@ public class TileMap extends GameObject {
 
     @Override
     public void setScale(Vector2D newscale) {
-        scale.x = newscale.x; // Set scale x-coordinate
-        scale.y = newscale.y; // Set scale y-coordinate
-        updateSize(); // Update size based on scale
+        Vector2D ratio = new Vector2D(newscale.x / scale.x, newscale.y/scale.y);
+        resize(ratio);
+        //scale.x = newscale.x; // Set scale x-coordinate
+        //scale.y = newscale.y; // Set scale y-coordinate
+        //updateSize(); // Update size based on scale
     }
 
     private void updateSize() {
@@ -115,7 +117,13 @@ public class TileMap extends GameObject {
         setPos(updatedValues);
         // set relative scaling
         updatedValues.setCoord(scale.x * ratio.x, scale.y * ratio.y);
-        setScale(updatedValues);
+        scale.x = updatedValues.x; // Set scale x-coordinate
+        scale.y = updatedValues.y; // Set scale y-coordinate
+        // Update size based on scale
+        this.setSize(
+            (int)(initialArea.width * scale.x), // Set width based on initial area width and scale
+            (int)(initialArea.height * scale.y) // Set height based on initial area height and scale
+        );
 
         // recalculate tile dimensions
         tileDimension = new Dimension(

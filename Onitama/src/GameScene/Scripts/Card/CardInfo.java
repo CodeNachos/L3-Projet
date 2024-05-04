@@ -1,4 +1,4 @@
-package Onitama.src.GameScene.Entities.Cards;
+package Onitama.src.GameScene.Scripts.Card;
 
 
 import java.util.*;
@@ -10,15 +10,13 @@ public class CardInfo {
     List<Vector2D> blueMovement;
     List<Vector2D> redMovement;
 
-    public CardInfo()
-    {
+    public CardInfo() {
         name = "";
         blueMovement = new ArrayList<>();
         redMovement = new ArrayList<>();
     }
 
-    public void setString(String str)
-    {
+    public void setString(String str) {
         this.name = str;
     }
 

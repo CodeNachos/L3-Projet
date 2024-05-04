@@ -32,9 +32,9 @@ public class Scene extends JPanel {
         components = new LinkedList<>(); // Initialize the list of components
         control = new Controller(this); // Create a new controller instance for input handling
         setLayout(null); // Set layout to null for manual component positioning
-        addMouseListener(control); // Add mouse listener to handle mouse events
-        addMouseMotionListener(control);
-        addKeyListener(control); // Add key listener to handle key events
+        addMouseListener(control.getMouseListener()); // Add mouse listener to handle mouse events
+        addMouseMotionListener(control.getMotionListener()); // Add mouse motion listener to handle motion events
+        addKeyListener(control.getKeyListener()); // Add key listener to handle key events
 
         // Set preferred size based on fullscreen setting
         if (Settings.fullscreen) {
@@ -51,8 +51,9 @@ public class Scene extends JPanel {
         components = new LinkedList<>(); // Initialize the list of components
         control = new Controller(this); // Create a new controller instance for input handling
         setLayout(null); // Set layout to null for manual component positioning
-        addMouseListener(control); // Add mouse listener to handle mouse events
-        addKeyListener(control); // Add key listener to handle key events
+        addMouseListener(control.getMouseListener()); // Add mouse listener to handle mouse events
+        addMouseMotionListener(control.getMotionListener()); // Add mouse motion listener to handle motion events
+        addKeyListener(control.getKeyListener()); // Add key listener to handle key events
 
         // Set preferred size based on fullscreen setting
         if (Settings.fullscreen) {

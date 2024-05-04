@@ -11,6 +11,7 @@ import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.GameScene.GameScene;
+import Onitama.src.GameScene.Scripts.Card.CardInfo;
 
 public class CardMap extends TileMap {
 
@@ -29,7 +30,7 @@ public class CardMap extends TileMap {
         centerTileSprite = new Sprite(centerTileTexture);
         centerTileSprite.setBorder(1, Main.Palette.selection.brighter(), 5);
 
-        actionTileTexture = new Texture(Main.Palette.highlight, tileDimension.width, tileDimension.height, 5);
+        actionTileTexture = new Texture(Main.Palette.orange, tileDimension.width, tileDimension.height, 5);
         actionTileSprite = new Sprite(actionTileTexture);
         actionTileSprite.setBorder(1, Main.Palette.selection.brighter(), 5);
 
@@ -40,7 +41,7 @@ public class CardMap extends TileMap {
 
     public void populateActions(String name, int player) {
         CardInfo cardInfo = GameScene.gameCards.get(name);
-        List<Vector2D> actions = player == GameScene.PLAYER_RED ? cardInfo.redMovement : cardInfo.blueMovement;
+        List<Vector2D> actions = player == GameScene.PLAYER1 ? cardInfo.getRedMovement() : cardInfo.getBlueMovement();
 
         for (int l = 0; l < mapDimension.height ; l++) {
             for (int c = 0; c < mapDimension.width; c++) {

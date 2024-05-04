@@ -16,9 +16,9 @@ import Onitama.src.Main;
 import Onitama.src.GameScene.Entities.Board.Board;
 import Onitama.src.GameScene.Entities.Board.PieceSet;
 import Onitama.src.GameScene.Entities.Cards.Card;
-import Onitama.src.GameScene.Entities.Cards.CardInfo;
-import Onitama.src.GameScene.Entities.Cards.PlayerHand;
 import Onitama.src.GameScene.Interface.GameGUI;
+import Onitama.src.GameScene.Scripts.Card.CardInfo;
+import Onitama.src.GameScene.Scripts.Card.PlayerHand;
 import Onitama.src.lib.json.JsonReader;
 
 public class GameScene extends Scene {
@@ -31,11 +31,11 @@ public class GameScene extends Scene {
     public static HashMap<String, CardInfo> gameCards;
     
     // Player ID's
-    public static final int PLAYER_RED = 0;
-    public static final int PLAYER_BLUE = 1;
+    public static final int PLAYER1 = 0; // red
+    public static final int PLAYER2 = 1; // blue
 
     // Turn Info
-    public static int currentPlayer = PLAYER_RED;
+    public static int currentPlayer = PLAYER1;
 
     // Game board
     public static PieceSet gamePieces;
@@ -48,8 +48,8 @@ public class GameScene extends Scene {
     public static Sprite selectedCardSprite;
 
     // Player Hands
-    public static PlayerHand redHand;
-    public static PlayerHand blueHand;
+    public static PlayerHand player1Hand;
+    public static PlayerHand player2Hand;
 
     public GameScene() {
         // Load all game cards
@@ -134,12 +134,12 @@ public class GameScene extends Scene {
             (int)(gameBoard.getPos().getIntX()/2) - (int)(idleCardTexture.getWidth()/2),
             (int)(gameBoard.getPos().getIntY() + gameBoard.getSize().height) - (int)(idleCardTexture.getHeight())
         );
-        blueHand = new PlayerHand(
-            PLAYER_BLUE, 
+        player2Hand = new PlayerHand(
+            PLAYER2, 
             new Card(gameCards.get(cardIter.next()).getName(), card1Pos, idleCardSprite), 
             new Card(gameCards.get(cardIter.next()).getName(), card2Pos, idleCardSprite)
         );
-        blueHand.updateCards();
+        player2Hand.updateCards();
 
         // Create red player hand
         card1Pos = new Vector2D(
@@ -150,15 +150,15 @@ public class GameScene extends Scene {
             (int)(card2Pos.getIntX() + gameBoard.getPos().getIntX() + gameBoard.getSize().height),
             (int)(gameBoard.getPos().getIntY() + gameBoard.getSize().height) - (int)(idleCardTexture.getHeight())
         );
-        redHand = new PlayerHand(
-            PLAYER_RED, 
+        player1Hand = new PlayerHand(
+            PLAYER1, 
             new Card(gameCards.get(cardIter.next()).getName(), card1Pos, idleCardSprite), 
             new Card(gameCards.get(cardIter.next()).getName(), card2Pos, idleCardSprite)
         );
-        redHand.updateCards();
+        player1Hand.updateCards();
 
-        redHand.addHandToScene(this);
-        blueHand.addHandToScene(this);
+        player1Hand.addHandToScene(this);
+        player2Hand.addHandToScene(this);
 
 
         Card standByCard = new Card(
@@ -166,7 +166,7 @@ public class GameScene extends Scene {
             cardPos, 
             idleCardSprite
         );
-        standByCard.cardMap.populateActions(standByCard.getName(), PLAYER_RED);
+        standByCard.cardMap.populateActions(standByCard.getName(), PLAYER1);
         standByCard.addCardToScene(this);
 
     
