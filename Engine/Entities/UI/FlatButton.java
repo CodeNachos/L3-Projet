@@ -50,7 +50,6 @@ public class FlatButton extends JButton {
             Util.printError("null reference to color");
             return;
         }
-        setBorder(BorderFactory.createLineBorder(accentColor)); // Set the border color
         accentColor = color; // Set accent color of the button
     }
 

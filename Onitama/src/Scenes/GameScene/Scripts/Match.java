@@ -35,7 +35,7 @@ public class Match {
 
     
     // Turn Info
-    public static int currentPlayer = PLAYER2;
+    public static int currentPlayer = PLAYER1;
     public static CardInfo selectedCard = null; // current player hand selected card
     public static Vector2D selectedPiece = null; // current player selected piece
     public static Vector2D selectedAction = null; // current player selected action tile

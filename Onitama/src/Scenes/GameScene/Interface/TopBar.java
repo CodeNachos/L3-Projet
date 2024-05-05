@@ -1,8 +1,6 @@
 package Onitama.src.Scenes.GameScene.Interface;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -45,7 +43,7 @@ public class TopBar extends MenuFrame {
         add(Box.createHorizontalGlue()); // Add glue to right-align components
     }
 
-    public void createValidateButton() {
+    private void createValidateButton() {
         validateButton = new FlatButton("End Turn");
         validateButton.setFont(new Font("Arial", Font.BOLD, 16));
         validateButton.setForeground(Main.Palette.background);
@@ -57,7 +55,7 @@ public class TopBar extends MenuFrame {
         add(validateButton);
     }
 
-    public void createTimerLabel() {
+    private void createTimerLabel() {
         timerLabel = new JLabel("0:00");
         timerLabel.setFont(new Font("Arial", Font.BOLD, 16));
         timerLabel.setForeground(Main.Palette.foreground);
@@ -65,7 +63,7 @@ public class TopBar extends MenuFrame {
         add(timerLabel);
     }
 
-    public void createPlayerLabel() {
+    private void createPlayerLabel() {
         playerLabel = new JLabel(getPlayerName());
         playerLabel.setFont(new Font("Arial", Font.BOLD, 16));
         playerLabel.setForeground(Main.Palette.foreground);
@@ -73,7 +71,7 @@ public class TopBar extends MenuFrame {
         add(playerLabel);
     }
 
-    public String getPlayerName() {
+    private String getPlayerName() {
         if (Match.getCurrentPlayer() == Match.PLAYER1) {
             return "RED";
         } else {
@@ -89,6 +87,22 @@ public class TopBar extends MenuFrame {
         } else {
             playerLabel.setForeground(Main.Palette.highlight);
         }
+
+        if (isValidTurn()) {
+            validateButton.setMainColor(Main.Palette.orange);
+            validateButton.setAccentColor(Main.Palette.orange);
+            validateButton.setEnabled(true);
+        } else {
+            validateButton.setMainColor(Main.Palette.selection);
+            validateButton.setAccentColor(Main.Palette.selection.brighter());
+            validateButton.setEnabled(false);
+        }
+
+
+    }
+
+    private boolean isValidTurn() {
+        return (Match.isCardSelected() && Match.isPieceSelected() && Match.isActionSelected());
     }
     
 }
