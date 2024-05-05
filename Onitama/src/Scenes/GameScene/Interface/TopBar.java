@@ -1,13 +1,94 @@
 package Onitama.src.Scenes.GameScene.Interface;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+
+import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
+import Engine.Structures.Vector2D;
+import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.Scripts.Match;
 
 public class TopBar extends MenuFrame {
-
-    public TopBar(Dimension area) {
+    FlatButton validateButton;
+    JLabel timerLabel;
+    JLabel playerLabel;
+    
+    public TopBar(Dimension area, Vector2D offset) {
         super(area);
+        setPos(offset);
+
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+
+        setMainColor(Main.Palette.selection.darker());
+        setAccentColor(Main.Palette.selection.darker());
+        setCurvature(5, 5);
+
+        add(Box.createHorizontalGlue()); // Add glue to left-align components
+
+        createPlayerLabel();
+
+        add(Box.createHorizontalGlue());
+
+        createValidateButton();
+
+        add(Box.createHorizontalGlue());
+        
+        createTimerLabel();
+
+        add(Box.createHorizontalGlue()); // Add glue to right-align components
+    }
+
+    public void createValidateButton() {
+        validateButton = new FlatButton("End Turn");
+        validateButton.setFont(new Font("Arial", Font.BOLD, 16));
+        validateButton.setForeground(Main.Palette.background);
+        validateButton.setMainColor(Main.Palette.orange);
+        validateButton.setAccentColor(Main.Palette.orange);
+        validateButton.setCurvature(20, 20);
+        validateButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        add(validateButton);
+    }
+
+    public void createTimerLabel() {
+        timerLabel = new JLabel("0:00");
+        timerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        timerLabel.setForeground(Main.Palette.foreground);
+
+        add(timerLabel);
+    }
+
+    public void createPlayerLabel() {
+        playerLabel = new JLabel(getPlayerName());
+        playerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        playerLabel.setForeground(Main.Palette.foreground);
+
+        add(playerLabel);
+    }
+
+    public String getPlayerName() {
+        if (Match.getCurrentPlayer() == Match.PLAYER1) {
+            return "RED";
+        } else {
+            return "BLUE";
+        }
+    }
+
+    @Override
+    public void process(double delta) {
+        playerLabel.setText(getPlayerName());
+        if (Match.getCurrentPlayer() == Match.PLAYER1) {
+            playerLabel.setForeground(Main.Palette.red);
+        } else {
+            playerLabel.setForeground(Main.Palette.highlight);
+        }
     }
     
 }

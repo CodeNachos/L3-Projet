@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.util.Iterator;
 
 import Engine.Core.Renderer.Scene;
+import Engine.Entities.UI.ColorArea;
 import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
@@ -11,7 +12,7 @@ import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.Entities.Board.Board;
 import Onitama.src.Scenes.GameScene.Entities.Board.PieceSet;
 import Onitama.src.Scenes.GameScene.Entities.Cards.Card;
-import Onitama.src.Scenes.GameScene.Interface.GameGUI;
+import Onitama.src.Scenes.GameScene.Interface.TopBar;
 import Onitama.src.Scenes.GameScene.Scripts.Match;
 
 public class GameScene extends Scene {
@@ -45,8 +46,21 @@ public class GameScene extends Scene {
         
         // Instantiate GUI
         // Add gui to scene
-        GameGUI gui = new GameGUI(Main.engine.getResolution());
+        // Dimension for top bar
+        Dimension topBarArea = new Dimension(
+            Main.engine.getResolution().width/3,
+            (int) (Main.engine.getResolution().height /10)
+        );
+        Vector2D topBarPos = new Vector2D(
+            (int)(Main.engine.getResolution().width/3),
+            0
+        );
+        TopBar gui = new TopBar(topBarArea, topBarPos);
         addComponent(gui);
+
+        // Add background
+        ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
+        addComponent(background);
     }
 
 
@@ -61,7 +75,7 @@ public class GameScene extends Scene {
         );
         Vector2D boardPos = new Vector2D(
             (Main.engine.getResolution().width/2) - (boardArea.width/2),
-            (Main.engine.getResolution().height / 3) - (boardArea.height/2)
+            (Main.engine.getResolution().height / 2.5) - (boardArea.height/2)
         );
 
         // Create game pieces

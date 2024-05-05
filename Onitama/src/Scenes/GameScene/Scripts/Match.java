@@ -35,9 +35,10 @@ public class Match {
 
     
     // Turn Info
-    public static int currentPlayer = PLAYER1;
+    public static int currentPlayer = PLAYER2;
     public static CardInfo selectedCard = null; // current player hand selected card
     public static Vector2D selectedPiece = null; // current player selected piece
+    public static Vector2D selectedAction = null; // current player selected action tile
 
     public static void initialise() {
         // Load all game cards
@@ -98,6 +99,8 @@ public class Match {
         } else {
             selectedCard = gameCards.get(card);
         }
+
+        selectedAction = null;
     }
 
     public static String getSelectedCard() {
@@ -118,6 +121,8 @@ public class Match {
         else {
             selectedPiece = piece.clone();
         }
+
+        selectedAction = null;
     }
 
     public static Vector2D getSelectedPiece() {
@@ -125,6 +130,21 @@ public class Match {
             return null;
         
         return selectedPiece.clone();
+    }
+
+    public static void setSelectedAction(Vector2D tile) {
+        if (tile == null)
+            selectedAction = null;
+        else {
+            selectedAction = tile.clone();
+        }
+    }
+
+    public static Vector2D getSelectedAction() {
+        if (selectedAction == null) 
+            return null;
+        
+        return selectedAction.clone();
     }
 
     public static int getNextPlayer() {
@@ -141,5 +161,9 @@ public class Match {
 
     public static boolean isCardSelected() {
         return selectedCard != null;
+    }
+
+    public static boolean isActionSelected() {
+        return selectedAction != null;
     }
 }

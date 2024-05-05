@@ -14,10 +14,12 @@ public class Board extends TileMap{
 
     Sprite tileSprite;
     Sprite selectedTileSprite;
-    Sprite moveHighlightTileSprite;
+    Sprite actionTileSprite;
+    Sprite selectedActionTileSprite;
     Sprite hoverTileSprite;
     Sprite hoverSelectedTileSprite;
-    Sprite hoverHighlightTileSprite;
+    Sprite hoverActionTileSprite;
+    Sprite hoverSelectedActionTileSprite;
 
     BoardTile selectedTile;
 
@@ -34,8 +36,11 @@ public class Board extends TileMap{
         selectedTileSprite = new Sprite(new Texture(Main.Palette.selection, tileDimension.width, tileDimension.height,10));
         selectedTileSprite.setBorder(5, Main.Palette.highlight, 10);
 
-        moveHighlightTileSprite = new Sprite(new Texture(Main.Palette.background.brighter(), tileDimension.width, tileDimension.height,10));
-        moveHighlightTileSprite.setBorder(5, Main.Palette.orange, 10);
+        actionTileSprite = new Sprite(new Texture(Main.Palette.background.brighter(), tileDimension.width, tileDimension.height,10));
+        actionTileSprite.setBorder(5, Main.Palette.orange, 10);
+
+        selectedActionTileSprite = new Sprite(new Texture(Main.Palette.background.brighter(), tileDimension.width, tileDimension.height,10));
+        selectedActionTileSprite.setBorder(5, Main.Palette.green, 10);
 
         hoverTileSprite = new Sprite(new Texture(Main.Palette.background.brighter(), tileDimension.width, tileDimension.height,10));
         hoverTileSprite.setBorder(5, Main.Palette.selection.brighter(), 10);
@@ -43,8 +48,11 @@ public class Board extends TileMap{
         hoverSelectedTileSprite = new Sprite(new Texture(Main.Palette.selection.brighter(), tileDimension.width, tileDimension.height,10));
         hoverSelectedTileSprite.setBorder(5, Main.Palette.highlight.brighter(), 10);
 
-        hoverHighlightTileSprite = new Sprite(new Texture(Main.Palette.background.brighter().brighter(), tileDimension.width, tileDimension.height,10));
-        hoverHighlightTileSprite.setBorder(5, Main.Palette.orange.brighter(), 10);
+        hoverActionTileSprite = new Sprite(new Texture(Main.Palette.background.brighter().brighter(), tileDimension.width, tileDimension.height,10));
+        hoverActionTileSprite.setBorder(5, Main.Palette.orange.brighter(), 10);
+
+        hoverSelectedActionTileSprite = new Sprite(new Texture(Main.Palette.background.brighter(), tileDimension.width, tileDimension.height,10));
+        hoverSelectedActionTileSprite.setBorder(5, Main.Palette.green.brighter(), 10);
 
         this.pieces = pieces;
 
