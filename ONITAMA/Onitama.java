@@ -1,5 +1,3 @@
-import org.json.simple.JSONObject;
-
 import ENGINE.Engine;
 import GLOBAL.Configurations;
 import INTERFACE.InterfaceTextuelle;
