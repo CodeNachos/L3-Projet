@@ -1,8 +1,9 @@
 package ENGINE;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Card {
+public class Card implements Serializable{
     String name;
     List<Movement> blueMovement;
     List<Movement> redMovement;

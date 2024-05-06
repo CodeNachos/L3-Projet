@@ -1,9 +1,10 @@
 package ENGINE;
 
+import java.io.Serializable;
 
 //Turn = player that is playing + card they'll play + piece they'll move + actual movement
 
-public class Turn {
+public class Turn implements Serializable {
     int player;
     Card playCard;
     Position piece;

@@ -1,5 +1,6 @@
 package ENGINE;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /* 
  Game configuration = board + (player1,card1,card2) + (player2,card1,card2) + card_on_standby
 */
-public class GameConfiguration {
+public class GameConfiguration implements Serializable {
     char[][] board;
     PlayerHand player1Hand;
     PlayerHand player2Hand;

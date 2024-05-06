@@ -265,7 +265,8 @@ public class Engine {
 			LinkedList<GameConfiguration> undoStack = (LinkedList<GameConfiguration>) in.readObject();
 			@SuppressWarnings("unchecked")
 			LinkedList<GameConfiguration> redoStack = (LinkedList<GameConfiguration>) in.readObject();
-			setConfig(gc_cpy);
+            setConfig(gc_cpy);
+            setPlayer(gc_cpy.getCurrentPlayer());
 			past = undoStack;
 			futur = redoStack;
 			return;

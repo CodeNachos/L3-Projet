@@ -1,10 +1,11 @@
 package ENGINE;
 
+import java.io.Serializable;
 
 /*
  * PlayerHand = cards on a player
  */
-public class PlayerHand {
+public class PlayerHand implements Serializable {
     int player;
     Card card1;
     Card card2;

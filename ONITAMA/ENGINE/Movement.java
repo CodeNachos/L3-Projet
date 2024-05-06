@@ -1,6 +1,8 @@
 package ENGINE;
 
-public class Movement {
+import java.io.Serializable;
+
+public class Movement implements Serializable {
     int deltaRow;
     int deltaCol;
 

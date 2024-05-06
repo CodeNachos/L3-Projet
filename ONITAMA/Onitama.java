@@ -3,11 +3,18 @@ import GLOBAL.Configurations;
 import INTERFACE.InterfaceTextuelle;
 
 public class Onitama {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Engine eng = new Engine(5, 5);
         Configurations config = new Configurations();
         InterfaceTextuelle it = new InterfaceTextuelle(config, eng);
         //eng.printCards();
+
+        eng.load("ONITAMA/gameSave.txt");
+        it.display();
+        eng.playTurn(it.getPiece(), it.getCard(), it.getMove());
+        eng.changePlayer();
+
+        /*
         it.display();
         eng.playTurn(it.getPiece(), it.getCard(), it.getMove());
         eng.changePlayer();
@@ -32,12 +39,14 @@ public class Onitama {
         it.display();
         eng.playTurn(it.getPiece(), it.getCard(), it.getMove());
         eng.changePlayer();
-
-
-
+        eng.save("ONITAMA/gameSave.txt");
+        */
+        
+        
+        
         /*
-       while(!eng.gameOver())
-       {
+        while(!eng.gameOver())
+        {
             it.display();
             eng.playTurn(it.getPiece(), it.getCard(), it.getMove());
             eng.changePlayer();
