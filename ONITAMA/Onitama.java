@@ -12,7 +12,7 @@ public class Onitama {
        {
             it.display();
             eng.playTurn(it.getPiece(), it.getCard(), it.getMove());
-            eng.getPlayer().changePlayer();
+            eng.changePlayer();
         /*
         eng.getGameConfiguration().displayConfig();
         eng.playTurn();

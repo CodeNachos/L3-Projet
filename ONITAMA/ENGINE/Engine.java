@@ -19,8 +19,7 @@ public class Engine {
     int firstNumber;
     int secondNumber;
     Random random;
-    //int player;
-    Player player;
+    int player;
     PlayerHand ph1;
     PlayerHand ph2;
     Scanner scanner;
@@ -44,7 +43,7 @@ public class Engine {
         random = new Random();
         scanner = new Scanner(System.in);
         turn = null;
-        player = new Player(0);
+        player = 0;
         initialiseGame();
     }
 
@@ -54,7 +53,7 @@ public class Engine {
         assignCards();
         Card standby = gameCards.get(4);
         //Initial game config
-        gameConfig = new GameConfiguration(board, ph1, ph2, standby,player.getCurrentPlayer());
+        gameConfig = new GameConfiguration(board, ph1, ph2, standby,player);
     }
     
     private void initBoard() {
@@ -125,8 +124,9 @@ public class Engine {
 
     public void playTurn(Position piece, Card playCard, Position move) {
 
-        turn = player.getTurn(piece, playCard, move);
+        turn = new Turn(player, playCard, piece, move);
         gameConfig.updateConfig(turn);
+        gameConfig.setCurrentPlayer(nextPlayer());
         }
 
     public boolean gameOver()
@@ -176,8 +176,17 @@ public class Engine {
         return gameConfig;
     }
 
-    public Player getPlayer()
+    public int getPlayer()
     {
         return player;
+    }
+
+    public void changePlayer() {
+        this.player = (this.player + 1) % 2;
+    }
+
+    public int nextPlayer()
+    {
+        return (this.player + 1) % 2;
     }
 }

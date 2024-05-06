@@ -196,7 +196,6 @@ public class GameConfiguration {
     }
     
     public void updateConfig(Turn turn) {
-        setCurrentPlayer((turn.getPlayer() + 1)%2);
         applyMove(turn.getPlayer(), turn.getPiece(), turn.getMove());
         exchangeCards(turn.getPlayer(), turn.getCard());
     }

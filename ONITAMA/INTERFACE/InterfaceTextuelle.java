@@ -37,7 +37,7 @@ public class InterfaceTextuelle {
                 askPlayer();
                 break;
             case "AI":
-                if(eng.getPlayer().getCurrentPlayer()==0) // if player == 0 -> human
+                if(eng.getPlayer()==0) // if player == 0 -> human
                 {
                     askPlayer();
                 }
@@ -61,13 +61,13 @@ public class InterfaceTextuelle {
             System.out.println("You want to play piece (" + piece.getI() + "," + piece.getJ() + ") with card "
                     + playCard.getName());
             System.out.println("These are the possibilities:");
-            eng.getGameConfiguration().displayMark(eng.getPlayer().getCurrentPlayer(), piece, playCard);
+            eng.getGameConfiguration().displayMark(eng.getPlayer(), piece, playCard);
             boolean mark = eng.getGameConfiguration().getMarked();
             if (!mark) {
                 System.out.println("As you can see, no marks are found. Therefore, you must change cards!");
                 continue;
             }
-            posPositions = eng.getGameConfiguration().getPossiblePositions(eng.getPlayer().getCurrentPlayer(), piece,
+            posPositions = eng.getGameConfiguration().getPossiblePositions(eng.getPlayer(), piece,
                     playCard);
             move = askMove();
             System.out.println("You will play piece (" + piece.getI() + "," + piece.getJ() + ") with card "
@@ -80,7 +80,7 @@ public class InterfaceTextuelle {
     }
     public Position askPlayerPiece()
     {
-        if (eng.getPlayer().getCurrentPlayer() == 0) {
+        if (eng.getPlayer() == 0) {
             System.out.println("Choose a red pawn in the table (enter i,j)");
         } else {
             System.out.println("Choose a blue pawn in the table (enter i,j)");
@@ -119,9 +119,9 @@ public class InterfaceTextuelle {
     {
         char[][] board = eng.getGameConfiguration().getBoard();
         char c = board[i][j];
-        if (eng.getPlayer().getCurrentPlayer() == 0 && (c == RED_PAWN || c == RED_KING))
+        if (eng.getPlayer() == 0 && (c == RED_PAWN || c == RED_KING))
             return true;
-        else if (eng.getPlayer().getCurrentPlayer() == 1 && (c == BLUE_PAWN || c == BLUE_KING))
+        else if (eng.getPlayer()== 1 && (c == BLUE_PAWN || c == BLUE_KING))
             return true;
         return false;
     }
@@ -129,7 +129,7 @@ public class InterfaceTextuelle {
     public Card askPlayerCard()
     {
         PlayerHand ph;
-        if (eng.getPlayer().getCurrentPlayer() == 0)
+        if (eng.getPlayer() == 0)
             ph = eng.getGameConfiguration().getPlayer1Hand();
         else
             ph = eng.getGameConfiguration().getPlayer2Hand();
