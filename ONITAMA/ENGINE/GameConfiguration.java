@@ -300,4 +300,21 @@ public class GameConfiguration {
         return currentPlayer;
     }
 
+    public GameConfiguration copyConfig()
+    {
+        char [][] cpy = copyBoard();
+        PlayerHand ph1 = new PlayerHand(0);
+        PlayerHand ph2 = new PlayerHand(1);
+        Card cpy_stdby = new Card();
+        int cpy_player = currentPlayer;
+        ph1.setFirstCard(player1Hand.getFirstCard());
+        ph1.setSecondCard(player1Hand.getSecondCard());
+        ph2.setFirstCard(player2Hand.getFirstCard());
+        ph2.setSecondCard(player2Hand.getSecondCard());
+        cpy_stdby.setString(on_standby.getName());
+        cpy_stdby.setBlueMovement(on_standby.getBlueMovement());
+        cpy_stdby.setRedMovement(on_standby.getRedMovement());
+        return new GameConfiguration(cpy, ph1, ph2, cpy_stdby, cpy_player);
+    }
+
 }

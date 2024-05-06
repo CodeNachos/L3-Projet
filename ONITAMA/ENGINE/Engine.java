@@ -1,17 +1,28 @@
 package ENGINE;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import JSON.*;
 
 public class Engine {
     List<Card> listOfCards;
     List<Card> gameCards;
+    LinkedList<GameConfiguration> past;
+    LinkedList<GameConfiguration> futur;
     JsonReader jReader;
     char[][] board;
     int rows;
@@ -37,6 +48,8 @@ public class Engine {
         jReader = new JsonReader();
         listOfCards = jReader.readJson();
         board = new char[w][h];
+        past = new LinkedList<>();
+        futur = new LinkedList<>();
         this.rows = w;
         this.cols = h;
         gameCards = new ArrayList<>();
@@ -123,10 +136,10 @@ public class Engine {
     }
 
     public void playTurn(Position piece, Card playCard, Position move) {
-
+        past.addFirst(gameConfig.copyConfig());
+        futur.clear();
         turn = new Turn(player, playCard, piece, move);
         gameConfig.updateConfig(turn);
-        gameConfig.setCurrentPlayer(nextPlayer());
         }
 
     public boolean gameOver()
@@ -183,10 +196,79 @@ public class Engine {
 
     public void changePlayer() {
         this.player = (this.player + 1) % 2;
+        gameConfig.setCurrentPlayer(player);
     }
 
     public int nextPlayer()
     {
         return (this.player + 1) % 2;
     }
+
+    public void setPlayer(int player)
+    {
+        this.player = player;
+    }
+
+    public boolean canUndo()
+    {
+        return !past.isEmpty();
+    }
+
+    public boolean canRedo()
+    {
+        return !futur.isEmpty();
+    }
+
+    public void undo()
+    {
+        if(canUndo())
+        {
+            futur.addFirst(gameConfig.copyConfig());
+            setConfig(past.removeFirst());
+            setPlayer(gameConfig.getCurrentPlayer());
+        }
+        return;
+    }
+
+    public void redo()
+    {
+        if(canRedo())
+        {
+            past.addFirst(gameConfig.copyConfig());
+            setConfig(futur.removeFirst());
+            setPlayer(gameConfig.getCurrentPlayer());
+        }
+    }
+
+    public void setConfig(GameConfiguration gc)
+    {
+        this.gameConfig = gc;
+    }
+
+    public void save(String file) throws Exception {
+        
+        try (FileOutputStream fileOut = new FileOutputStream(file);
+				GZIPOutputStream gzipOut = new GZIPOutputStream(new BufferedOutputStream(fileOut));
+				ObjectOutputStream out = new ObjectOutputStream(gzipOut)) {
+				out.writeObject(gameConfig);
+				out.writeObject(past);
+				out.writeObject(futur);		
+		    }  
+    }
+
+    public void load(String file) throws Exception{
+		try (FileInputStream fileIn = new FileInputStream(file);
+			GZIPInputStream gzipIn = new GZIPInputStream(new BufferedInputStream(fileIn));
+				ObjectInputStream in = new ObjectInputStream(gzipIn)) {
+			GameConfiguration gc_cpy = (GameConfiguration) in.readObject();
+			@SuppressWarnings("unchecked")
+			LinkedList<GameConfiguration> undoStack = (LinkedList<GameConfiguration>) in.readObject();
+			@SuppressWarnings("unchecked")
+			LinkedList<GameConfiguration> redoStack = (LinkedList<GameConfiguration>) in.readObject();
+			setConfig(gc_cpy);
+			past = undoStack;
+			futur = redoStack;
+			return;
+		}
+	}
 }

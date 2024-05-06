@@ -53,6 +53,7 @@ public class InterfaceTextuelle {
 
     public void askPlayer()
     {
+        
         String ans = "";
         while (!ans.equals("confirm") && !ans.equals("Confirm")) {
             eng.getGameConfiguration().displayConfig();
