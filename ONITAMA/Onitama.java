@@ -9,7 +9,7 @@ public class Onitama {
         InterfaceTextuelle it = new InterfaceTextuelle(config, eng);
         //eng.printCards();
 
-        
+        /* 
         eng.load("ONITAMA/gameSaveTest.txt");
         System.out.println("Before undoing:");
         eng.getGameConfiguration().displayConfig();
@@ -18,7 +18,7 @@ public class Onitama {
         it.display();
         eng.playTurn(it.getPiece(), it.getCard(), it.getMove());
         eng.changePlayer();
-        
+        */
         
         /*
         it.display();
@@ -50,13 +50,14 @@ public class Onitama {
         
         
         
-        /*
+        
         while(!eng.gameOver())
         {
             it.display();
             eng.playTurn(it.getPiece(), it.getCard(), it.getMove());
             eng.changePlayer();
-        
+        }
+        /*
         eng.getGameConfiguration().displayConfig();
         eng.playTurn();
         eng.changePlayer();

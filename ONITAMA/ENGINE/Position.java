@@ -7,6 +7,11 @@ public class Position implements Serializable {
     int i;
     int j;
 
+    public Position()
+    {
+        this.i = -1;
+        this.j = -1;
+    }
     public Position(int i, int j) {
         this.i = i;
         this.j = j;
@@ -18,6 +23,16 @@ public class Position implements Serializable {
 
     public int getJ() {
         return j;
+    }
+
+    public void setI(int i)
+    {
+        this.i = i;
+    }
+
+    public void setJ(int j)
+    {
+        this.j = j;
     }
 
      @Override

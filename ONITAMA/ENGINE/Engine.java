@@ -23,6 +23,8 @@ public class Engine {
     List<Card> gameCards;
     //LinkedList<GameConfiguration> past;
     //LinkedList<GameConfiguration> futur;
+    List<Position> listOfRedPawns;
+    List<Position> listOfBluePawns;
     History hist;
     JsonReader jReader;
     char[][] board;
@@ -34,6 +36,8 @@ public class Engine {
     int player;
     PlayerHand ph1;
     PlayerHand ph2;
+    Position RED_KINGPOS;
+    Position BLUE_KINGPOS;
     Scanner scanner;
     GameConfiguration gameConfig;
     List<Position> posPositions;
@@ -57,7 +61,10 @@ public class Engine {
         random = new Random();
         scanner = new Scanner(System.in);
         hist = new History(this);
-
+        listOfBluePawns = new ArrayList<>();
+        listOfRedPawns = new ArrayList<>();
+        RED_KINGPOS = new Position(4, 2);
+        BLUE_KINGPOS = new Position(0, 2);
         turn = null;
         player = 0;
         initialiseGame();
@@ -65,11 +72,12 @@ public class Engine {
 
     private void initialiseGame() {
         initBoard();
+        initPawnPositions();
         chooseCards();
         assignCards();
         Card standby = gameCards.get(4);
         //Initial game config
-        gameConfig = new GameConfiguration(board, ph1, ph2, standby, player);
+        gameConfig = new GameConfiguration(board, ph1, ph2, standby, player, listOfBluePawns, listOfRedPawns, RED_KINGPOS, BLUE_KINGPOS);
     }
 
     private void initBoard() {
@@ -90,6 +98,23 @@ public class Engine {
             }
         }
 
+        return;
+    }
+
+    private void initPawnPositions()
+    {
+
+        for(int i = 0; i<cols;++i)
+        {
+            Position position = new Position(0, i);
+            listOfBluePawns.add(position);
+        }
+
+        for(int i = 0; i<cols;++i)
+        {
+            Position position = new Position(4, i);
+            listOfRedPawns.add(position);
+        }
         return;
     }
 
@@ -138,8 +163,22 @@ public class Engine {
         //futur.clear();
         hist.getPast().addFirst(gameConfig.copyConfig());
         hist.getFutur().clear();
-        turn = new Turn(player, playCard, piece, move);
+        turn = new Turn(playCard, piece, move);
         gameConfig.updateConfig(turn);
+        updatePawnList(turn.getPiece(), turn.getMove());
+    }
+
+    public void updatePawnList(Position piece, Position newPosition)
+    {
+        List<Position> l;
+        if (player == 0)
+            l = listOfRedPawns;
+        else
+            l = listOfBluePawns;
+        l.remove(piece);
+        l.add(newPosition);
+        return;
+        
     }
 
     public boolean gameOver() {
