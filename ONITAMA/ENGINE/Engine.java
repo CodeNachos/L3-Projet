@@ -21,8 +21,9 @@ import JSON.*;
 public class Engine {
     List<Card> listOfCards;
     List<Card> gameCards;
-    LinkedList<GameConfiguration> past;
-    LinkedList<GameConfiguration> futur;
+    //LinkedList<GameConfiguration> past;
+    //LinkedList<GameConfiguration> futur;
+    History hist;
     JsonReader jReader;
     char[][] board;
     int rows;
@@ -42,19 +43,21 @@ public class Engine {
     private final static char BLUE_KING = 'B';
     private final static char RED_KING = 'R';
     private final static Position RED_THRONE = new Position(4, 2);
-    private final static Position BLUE_THRONE = new Position(0, 2); 
-    public Engine(int w, int h)
-    {
+    private final static Position BLUE_THRONE = new Position(0, 2);
+
+    public Engine(int w, int h) {
         jReader = new JsonReader();
         listOfCards = jReader.readJson();
         board = new char[w][h];
-        past = new LinkedList<>();
-        futur = new LinkedList<>();
+        //past = new LinkedList<>();
+        //futur = new LinkedList<>();
         this.rows = w;
         this.cols = h;
         gameCards = new ArrayList<>();
         random = new Random();
         scanner = new Scanner(System.in);
+        hist = new History(this);
+
         turn = null;
         player = 0;
         initialiseGame();
@@ -66,38 +69,34 @@ public class Engine {
         assignCards();
         Card standby = gameCards.get(4);
         //Initial game config
-        gameConfig = new GameConfiguration(board, ph1, ph2, standby,player);
+        gameConfig = new GameConfiguration(board, ph1, ph2, standby, player);
     }
-    
+
     private void initBoard() {
-        for (int i = 0; i < rows; ++i)
-        {
+        for (int i = 0; i < rows; ++i) {
             for (int j = 0; j < cols; ++j) {
                 if (i == 0) {
                     if (j == 2)
                         board[i][j] = BLUE_KING;
                     else
                         board[i][j] = BLUE_PAWN;
-                }
-                else if (i == 4) {
+                } else if (i == 4) {
                     if (j == 2)
                         board[i][j] = RED_KING;
                     else
                         board[i][j] = RED_PAWN;
-                }
-                else
+                } else
                     board[i][j] = '.';
             }
         }
-        
+
         return;
     }
 
     private void chooseCards() {
         Set<Integer> set = new HashSet<>();
         int i = 0;
-        while (i<5)
-        {
+        while (i < 5) {
             int cardIndex = random.nextInt(16);
             if (!set.contains(cardIndex)) {
                 Card card = listOfCards.get(cardIndex);
@@ -119,7 +118,6 @@ public class Engine {
         ph2 = new PlayerHand(1, player2Card1, player2Card2);
     }
 
-
     public void printCards() {
         for (Card card : listOfCards) {
             System.out.println("Card name is: " + card.getName());
@@ -136,19 +134,19 @@ public class Engine {
     }
 
     public void playTurn(Position piece, Card playCard, Position move) {
-        past.addFirst(gameConfig.copyConfig());
-        futur.clear();
+        //past.addFirst(gameConfig.copyConfig());
+        //futur.clear();
+        hist.getPast().addFirst(gameConfig.copyConfig());
+        hist.getFutur().clear();
         turn = new Turn(player, playCard, piece, move);
         gameConfig.updateConfig(turn);
-        }
+    }
 
-    public boolean gameOver()
-    {
+    public boolean gameOver() {
         return conqueredKing() || capturedKing();
     }
 
-    public boolean conqueredKing()
-    {
+    public boolean conqueredKing() {
         int red_i = RED_THRONE.getI();
         int red_j = RED_THRONE.getJ();
         int blue_i = BLUE_THRONE.getI();
@@ -156,26 +154,21 @@ public class Engine {
         if (board[red_i][red_j] == BLUE_KING) {
             System.out.println("Player 2 has won!");
             return true;
-        }
-        else if(board[blue_i][blue_j] == RED_KING)
-        {
+        } else if (board[blue_i][blue_j] == RED_KING) {
             System.out.println("Player 1 has won");
             return true;
         }
         return false;
     }
 
-    public boolean capturedKing()
-    {
+    public boolean capturedKing() {
 
         return ((!checkPresence(BLUE_KING) && checkPresence(RED_KING))
                 || (checkPresence(BLUE_KING) && !checkPresence(RED_KING)));
     }
 
-    public boolean checkPresence(char king)
-    {
-        for (int i = 0; i < rows;++i)
-        {
+    public boolean checkPresence(char king) {
+        for (int i = 0; i < rows; ++i) {
             for (int j = 0; j < cols; ++j) {
                 if (board[i][j] == king)
                     return true;
@@ -184,13 +177,11 @@ public class Engine {
         return false;
     }
 
-    public GameConfiguration getGameConfiguration()
-    {
+    public GameConfiguration getGameConfiguration() {
         return gameConfig;
     }
 
-    public int getPlayer()
-    {
+    public int getPlayer() {
         return player;
     }
 
@@ -199,77 +190,80 @@ public class Engine {
         gameConfig.setCurrentPlayer(player);
     }
 
-    public int nextPlayer()
-    {
+    public int nextPlayer() {
         return (this.player + 1) % 2;
     }
 
-    public void setPlayer(int player)
-    {
+    public void setPlayer(int player) {
         this.player = player;
     }
 
-    public boolean canUndo()
-    {
+    /* 
+    public boolean canUndo() {
         return !past.isEmpty();
     }
-
-    public boolean canRedo()
-    {
+    
+    public boolean canRedo() {
         return !futur.isEmpty();
     }
-
+    */
+    
     public void undo()
     {
+        hist.undo();
+    /*
         if(canUndo())
         {
             futur.addFirst(gameConfig.copyConfig());
             setConfig(past.removeFirst());
             setPlayer(gameConfig.getCurrentPlayer());
         }
-        return;
-    }
+    */
+    return;
 
-    public void redo()
-    {
+}
+
+    public void redo() {
+        hist.redo();
+        /*
         if(canRedo())
         {
             past.addFirst(gameConfig.copyConfig());
             setConfig(futur.removeFirst());
             setPlayer(gameConfig.getCurrentPlayer());
         }
+        */
     }
 
-    public void setConfig(GameConfiguration gc)
-    {
+    public void setConfig(GameConfiguration gc) {
         this.gameConfig = gc;
     }
 
     public void save(String file) throws Exception {
-        
+
         try (FileOutputStream fileOut = new FileOutputStream(file);
-				GZIPOutputStream gzipOut = new GZIPOutputStream(new BufferedOutputStream(fileOut));
-				ObjectOutputStream out = new ObjectOutputStream(gzipOut)) {
-				out.writeObject(gameConfig);
-				out.writeObject(past);
-				out.writeObject(futur);		
-		    }  
+                GZIPOutputStream gzipOut = new GZIPOutputStream(new BufferedOutputStream(fileOut));
+                ObjectOutputStream out = new ObjectOutputStream(gzipOut)) {
+            out.writeObject(gameConfig);
+            out.writeObject(hist.getPast());
+            out.writeObject(hist.getFutur());
+        }
     }
 
-    public void load(String file) throws Exception{
-		try (FileInputStream fileIn = new FileInputStream(file);
-			GZIPInputStream gzipIn = new GZIPInputStream(new BufferedInputStream(fileIn));
-				ObjectInputStream in = new ObjectInputStream(gzipIn)) {
-			GameConfiguration gc_cpy = (GameConfiguration) in.readObject();
-			@SuppressWarnings("unchecked")
-			LinkedList<GameConfiguration> undoStack = (LinkedList<GameConfiguration>) in.readObject();
-			@SuppressWarnings("unchecked")
-			LinkedList<GameConfiguration> redoStack = (LinkedList<GameConfiguration>) in.readObject();
+    public void load(String file) throws Exception {
+        try (FileInputStream fileIn = new FileInputStream(file);
+                GZIPInputStream gzipIn = new GZIPInputStream(new BufferedInputStream(fileIn));
+                ObjectInputStream in = new ObjectInputStream(gzipIn)) {
+            GameConfiguration gc_cpy = (GameConfiguration) in.readObject();
+            @SuppressWarnings("unchecked")
+            LinkedList<GameConfiguration> undoStack = (LinkedList<GameConfiguration>) in.readObject();
+            @SuppressWarnings("unchecked")
+            LinkedList<GameConfiguration> redoStack = (LinkedList<GameConfiguration>) in.readObject();
             setConfig(gc_cpy);
             setPlayer(gc_cpy.getCurrentPlayer());
-			past = undoStack;
-			futur = redoStack;
-			return;
-		}
-	}
+            hist.setPast(undoStack);
+            hist.setFutur(redoStack);
+            return;
+        }
+    }
 }
