@@ -9,6 +9,9 @@ import java.util.List;
  Game configuration = board + (player1,card1,card2) + (player2,card1,card2) + card_on_standby
 */
 public class GameConfiguration implements Serializable {
+    static final int RED = 0;
+    static final int BLUE = 1;
+    
     char[][] board;
     PlayerHand player1Hand;
     PlayerHand player2Hand;
@@ -89,14 +92,6 @@ public class GameConfiguration implements Serializable {
         return player2Hand;
     }
 
-    public PlayerHand getCurrentHand()
-    {
-        if (currentPlayer == 0)
-            return player1Hand;
-        else
-            return player2Hand;
-    }
-
     public Card getOnStandby()
     {
         return on_standby;
@@ -114,7 +109,7 @@ public class GameConfiguration implements Serializable {
     public void displayMark(int player,Position piece, Card card)
     {
         char[][] cpy = copyBoard();
-        List<Position> possiblePositions = getPossiblePositions(player, piece, card);
+        List<Position> possiblePositions = possiblePositions(piece, card);
         for(int i = 0; i<rows;++i)
         {
             for (int j = 0; j < cols; ++j) {
@@ -136,26 +131,6 @@ public class GameConfiguration implements Serializable {
         displayBoard(cpy);
 
     }
-    
-    public List<Position> getPossiblePositions(int player, Position piece, Card card)
-    {
-        List<Movement> curMovement;
-        if (player == 0)
-            curMovement = card.getRedMovement();
-        else
-            curMovement = card.getBlueMovement();
-
-        List<Position> newPossiblePos = new ArrayList<>();
-        for (Movement movement : curMovement) {
-            int deltaRow = movement.getDeltaRow();
-            int deltaCol = movement.getDeltaCol();
-            Position possPosition = new Position(piece.getI() + deltaRow, piece.getJ() + deltaCol);
-            newPossiblePos.add(possPosition);
-        }
-        return newPossiblePos;
-
-    }
-
 
     public void applyMove(Position piece, Position move)
     {
@@ -217,28 +192,6 @@ public class GameConfiguration implements Serializable {
         exchangeCards(turn.getCard());
         updatePawnList(turn.getPiece(), turn.getMove());
         updateKings(turn.getPiece(), turn.getMove());
-    }
-
-    public GameConfiguration nextConfig(Turn turn)
-    {
-        char[][] cpy = copyBoard();
-        PlayerHand ph1 = new PlayerHand(0);
-        PlayerHand ph2 = new PlayerHand(1);
-        Card new_stdby = new Card();
-        List<Position> new_redPositions = new ArrayList<>();
-        List<Position> new_bluePositions = new ArrayList<>();
-        Position new_REDKINGPOS = new Position(RED_KINGPOS.getI(),RED_KINGPOS.getJ());
-        Position new_BLUEKINGPOS = new Position(BLUE_KINGPOS.getI(),BLUE_KINGPOS.getJ());
-        copyList(listOfRedPawns, new_redPositions);
-        copyList(listOfBluePawns, new_bluePositions);
-        cpy = applyMove(cpy,turn.getPiece(), turn.getMove());
-        exchangeCards(ph1, ph2,turn.getCard(), new_stdby);
-        copyList(listOfRedPawns, new_redPositions);
-        copyList(listOfBluePawns, new_bluePositions);
-        updatePawnList(new_bluePositions, new_redPositions, turn.getPiece(), turn.getMove());
-        updateKings(new_REDKINGPOS, new_BLUEKINGPOS,turn.getPiece(), turn.getMove());
-        return new GameConfiguration(cpy, ph1, ph2, new_stdby, nextPlayer(),new_bluePositions,new_redPositions,new_REDKINGPOS,new_BLUEKINGPOS);
-
     }
 
     public void updatePawnList(Position piece, Position newPosition)
@@ -416,12 +369,96 @@ public class GameConfiguration implements Serializable {
         return new GameConfiguration(cpy, ph1, ph2, cpy_stdby, cpy_player,cpy_blue,cpy_red, cpy_REDKING, cpy_BLUEKING);
     }
 
-    public List<Position> getPawnPositions()
+    /* Start of AI's interface */
+    /* Please discuss with Duc if you want to change something */
+
+    public List<Position> allyPawns()
     {
-        if (currentPlayer == 0)
+        if (currentPlayer == RED)
             return listOfRedPawns;
         else
             return listOfBluePawns;
     }
 
+    public List<Position> enemyPawns()
+    {
+        if (currentPlayer == BLUE)
+            return listOfRedPawns;
+        else
+            return listOfBluePawns;
+    }
+
+    public Position allyKing()
+    {
+        if (currentPlayer == RED)
+            return RED_KINGPOS;
+        else
+            return BLUE_KINGPOS;
+    }
+
+    public Position enemyKing()
+    {
+        if (currentPlayer == BLUE)
+            return RED_KINGPOS;
+        else
+            return BLUE_KINGPOS;
+    }
+
+    public List<Card> availableCards()
+    {
+        List<Card> cards = new ArrayList<>();
+        PlayerHand hand;
+        if (currentPlayer == 0)
+            hand = player1Hand;
+        else
+            hand = player2Hand;
+        cards.add(hand.card1);
+        cards.add(hand.card2);
+        return cards;
+    }
+
+    public List<Position> possiblePositions(Position piece, Card card)
+    {
+        List<Position> allies = allyPawns();
+        List<Movement> curMovement;
+        if (currentPlayer == 0)
+            curMovement = card.getRedMovement();
+        else
+            curMovement = card.getBlueMovement();
+
+        List<Position> newPossiblePos = new ArrayList<>();
+        for (Movement movement : curMovement) {
+            int deltaRow = movement.getDeltaRow();
+            int deltaCol = movement.getDeltaCol();
+            Position possPosition = new Position(piece.getI() + deltaRow, piece.getJ() + deltaCol);
+            if (0 <= possPosition.i && possPosition.i < 5 &&
+                0 <= possPosition.j && possPosition.j < 5 &&
+                !allies.contains(possPosition))
+                newPossiblePos.add(possPosition);
+        }
+        return newPossiblePos;
+    }
+
+    public GameConfiguration nextConfig(Turn turn)
+    {
+        char[][] cpy = copyBoard();
+        PlayerHand ph1 = new PlayerHand(0);
+        PlayerHand ph2 = new PlayerHand(1);
+        Card new_stdby = new Card();
+        List<Position> new_redPositions = new ArrayList<>();
+        List<Position> new_bluePositions = new ArrayList<>();
+        Position new_REDKINGPOS = new Position(RED_KINGPOS.getI(),RED_KINGPOS.getJ());
+        Position new_BLUEKINGPOS = new Position(BLUE_KINGPOS.getI(),BLUE_KINGPOS.getJ());
+        copyList(listOfRedPawns, new_redPositions);
+        copyList(listOfBluePawns, new_bluePositions);
+        cpy = applyMove(cpy,turn.getPiece(), turn.getMove());
+        exchangeCards(ph1, ph2,turn.getCard(), new_stdby);
+        copyList(listOfRedPawns, new_redPositions);
+        copyList(listOfBluePawns, new_bluePositions);
+        updatePawnList(new_bluePositions, new_redPositions, turn.getPiece(), turn.getMove());
+        updateKings(new_REDKINGPOS, new_BLUEKINGPOS,turn.getPiece(), turn.getMove());
+        return new GameConfiguration(cpy, ph1, ph2, new_stdby, nextPlayer(),new_bluePositions,new_redPositions,new_REDKINGPOS,new_BLUEKINGPOS);
+    }
+
+    /* End of AI's interface */
 }

@@ -1,7 +1,7 @@
 package GLOBAL;
 
 public class Configurations {
-    private static final String Interface = "Textual";
+    //private static final String Interface = "Textual";
     String AI = "";
     String mode = "Normal"; //Normal = player vs player, AI = player vs AI, Automatic = AI vs AI
     String difficulty = "";
