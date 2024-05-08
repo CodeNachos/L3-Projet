@@ -3,7 +3,7 @@ package Controller;
 import ENGINE.Turn;
 
 /**
- * AI
+ * Player
  */
 public interface Player {
     public Turn play();
