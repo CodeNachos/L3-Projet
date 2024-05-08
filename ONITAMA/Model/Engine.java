@@ -196,6 +196,11 @@ public class Engine {
         }
     }
 
+    public boolean isGameOver()
+    {
+        return gameConfig.gameOver();
+    }
+
     /*Getter for GameConfiguration */
     public GameConfiguration getGameConfiguration() {
         return gameConfig;
