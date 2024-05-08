@@ -16,7 +16,7 @@ public class SmartAI implements AI {
         return null;
     }
 
-    private int minmax(GameConfiguration state) {
+    private int minmax(GameConfiguration state, boolean minNotMax) {
         return 0;
     }
 }
