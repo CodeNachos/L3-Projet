@@ -460,5 +460,8 @@ public class GameConfiguration implements Serializable {
         return new GameConfiguration(cpy, ph1, ph2, new_stdby, nextPlayer(),new_bluePositions,new_redPositions,new_REDKINGPOS,new_BLUEKINGPOS);
     }
 
+    public boolean gameOver() {
+        return false;
+    }
     /* End of AI's interface */
 }
