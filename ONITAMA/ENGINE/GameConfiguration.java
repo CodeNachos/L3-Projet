@@ -114,7 +114,7 @@ public class GameConfiguration implements Serializable {
     public void displayMark(int player,Position piece, Card card)
     {
         char[][] cpy = copyBoard();
-        List<Position> possiblePositions = getPossiblePositions(player, piece, card);
+        List<Position> possiblePositions = getPossiblePositions(piece, card);
         for(int i = 0; i<rows;++i)
         {
             for (int j = 0; j < cols; ++j) {
@@ -137,10 +137,10 @@ public class GameConfiguration implements Serializable {
 
     }
     
-    public List<Position> getPossiblePositions(int player, Position piece, Card card)
+    public List<Position> getPossiblePositions(Position piece, Card card)
     {
         List<Movement> curMovement;
-        if (player == 0)
+        if (currentPlayer == 0)
             curMovement = card.getRedMovement();
         else
             curMovement = card.getBlueMovement();
