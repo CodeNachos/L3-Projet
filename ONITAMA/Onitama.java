@@ -51,7 +51,7 @@ public class Onitama {
         
         
         
-        while(!eng.gameOver())
+        while(!eng.getGameConfiguration().gameOver())
         {
             it.display();
             eng.playTurn(it.getPiece(), it.getCard(), it.getMove());

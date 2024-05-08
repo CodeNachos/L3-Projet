@@ -24,7 +24,7 @@ public class RandomAI implements Player {
         List<Card> cards = config.availableCards();
         Card chosenCard = cards.get(random.nextInt(cards.size()));
 
-        List<Position> pawns = config.allyPieces();
+        List<Position> pawns = config.allyPositions();
         Position chosenPawn = pawns.get(random.nextInt(pawns.size()));
 
         List<Position> moves = config.possiblePositions(chosenPawn, chosenCard);

@@ -2,13 +2,14 @@ package Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /* 
  Game configuration = board + (player1,card1,card2) + (player2,card1,card2) + card_on_standby
 */
 public class GameConfiguration implements Serializable {
+    static final Position RED_THRONE = new Position(4, 2);
+    static final Position BLUE_THRONE = new Position(0, 2);
     static final int RED = 0;
     static final int BLUE = 1;
 
@@ -176,7 +177,7 @@ public class GameConfiguration implements Serializable {
 
     public void displayMark(Piece piece, Card card) {
         Board cpy = copyBoard();
-        List<Position> possiblePositions = possiblePositions(piece, card);
+        List<Position> possiblePositions = possiblePositions(piece.getPosition(), card);
         for (int i = 0; i < ROWS; ++i) {
             for (int j = 0; j < COLS; ++j) {
                 Position possible = new Position(i, j);
@@ -452,29 +453,94 @@ public class GameConfiguration implements Serializable {
     gc_cpy.setCurrentPlayer(currentPlayer);
     return gc_cpy;
     }
+
+    /*
+     * Method: gameOver
+     * Specs: Indicates whether the game is over or not
+     * Return: boolean
+     */
+    public boolean gameOver() {
+        return conqueredKing() || capturedKing();
+    }
+
+    /*
+     * Method: ConqueredKing
+     * Specs: Checks whether a red king has conquered the throne of the blue king, and vice versa
+     * Return: boolean
+     */
+    public boolean conqueredKing() {
+        int red_i = RED_THRONE.getI();
+        int red_j = RED_THRONE.getJ();
+        int blue_i = BLUE_THRONE.getI();
+        int blue_j = BLUE_THRONE.getJ();
+        for (Piece piece : board.getBoard())
+        {
+            Type t = piece.getType();
+            Position pos = piece.getPosition();
+            if (t == Type.RED_KING && (pos.getI() == blue_i && pos.getJ() == blue_j)){
+                System.out.println("Player 1 has won!");
+                return true; 
+            }
+            else if (t == Type.BLUE_KING && (pos.getI() == red_i && pos.getJ() == red_j)) {
+                System.out.println("Player 2 has won!");
+                return true;
+            }
+        }
+
+    /* 
+    int red_i = RED_THRONE.getI();
+    int red_j = RED_THRONE.getJ();
+    int blue_i = BLUE_THRONE.getI();
+    int blue_j = BLUE_THRONE.getJ();
+    if (board[red_i][red_j] == BLUE_KING) {
+        System.out.println("Player 2 has won!");
+        return true;
+    } else if (board[blue_i][blue_j] == RED_KING) {
+        System.out.println("Player 1 has won");
+        return true;
+    }
+    */
+    return false;
+    }
+    
+    /*
+    * Method capturedKing
+    * Specs: Checks whether a king has been eaten or not
+    * Return: boolean
+    */
+    public boolean capturedKing() {
+
+        return ((!checkPresence(Type.BLUE_KING) && checkPresence(Type.RED_KING))
+                || (checkPresence(Type.BLUE_KING) && !checkPresence(Type.RED_KING)));
+    }
+
+    /*
+     * Method: checkPresence
+     * Specs: Checks whether a king is still on the board or not
+     * Args: char king
+     * Return: boolean
+     */
+    public boolean checkPresence(Type king) {
+        for (Piece piece : board.getBoard())
+        {
+            Type t = piece.getType();
+            if (t == king)
+                return true;
+        }
+        return false;
+    }
     
     /* Start of AI's interface */
     /* Please discuss with Duc if you want to change something */
 
-    public List<Position> allyPawns() {
-        List<Position> allyList = new ArrayList<>();
-        if (currentPlayer == RED) {
-            for (Piece piece : board.getBoard()) {
-                if (piece.getType() == Type.RED_KING || piece.getType() == Type.RED_PAWN) {
-                    allyList.add(piece.getPosition());
-                }
-            }
-        } else {
-            for (Piece piece : board.getBoard()) {
-                if (piece.getType() == Type.BLUE_KING || piece.getType() == Type.BLUE_PAWN) {
-                    allyList.add(piece.getPosition());
-                }
-            }
-        }
-        return allyList;
+    public List<Position> allyPositions() {
+        if (currentPlayer == RED)
+            return board.getRedPositions();
+        else
+            return board.getBluePositions();
     }
 
-    public List<Position> enemyPawns() {
+    public List<Position> enemyPositions() {
         if (currentPlayer == BLUE)
             return board.getRedPositions();
         else
@@ -507,8 +573,8 @@ public class GameConfiguration implements Serializable {
         return cards;
     }
 
-    public List<Position> possiblePositions(Piece piece, Card card) {
-        List<Position> allies = allyPawns();
+    public List<Position> possiblePositions(Position piece, Card card) {
+        List<Position> allies = allyPositions();
         List<Movement> curMovement;
         if (currentPlayer == 0)
             curMovement = card.getRedMovement();
@@ -519,8 +585,8 @@ public class GameConfiguration implements Serializable {
         for (Movement movement : curMovement) {
             int deltaRow = movement.getDeltaRow();
             int deltaCol = movement.getDeltaCol();
-            Position possPosition = new Position(piece.getPosition().getI() + deltaRow,
-                    piece.getPosition().getJ() + deltaCol);
+            Position possPosition = new Position(piece.getI() + deltaRow,
+                    piece.getJ() + deltaCol);
             if (0 <= possPosition.i && possPosition.i < 5 &&
                     0 <= possPosition.j && possPosition.j < 5 &&
                     !allies.contains(possPosition))

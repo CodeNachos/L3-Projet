@@ -71,7 +71,7 @@ public class InterfaceTextuelle {
                 System.out.println("As you can see, no marks are found. Therefore, you must change cards!");
                 continue;
             }
-            posPositions = eng.getGameConfiguration().possiblePositions(piece,
+            posPositions = eng.getGameConfiguration().possiblePositions(piece.getPosition(),
                     playCard);
             move = askMove();
             System.out.println("You will play piece (" + piece.getPosition().getI() + "," + piece.getPosition().getJ() + ") with card "
