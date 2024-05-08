@@ -123,29 +123,11 @@ public class Engine {
      * Return: void
      */
     public void playTurn(Piece piece, Card playCard, Piece move) {
-        //past.addFirst(gameConfig.copyConfig());
-        //futur.clear();
         hist.getPast().addFirst(gameConfig.copyConfig());
         hist.getFutur().clear();
         turn = new Turn(playCard, piece, move);
         gameConfig.updateConfig(turn);
-        //updatePawnList(turn.getPiece(), turn.getMove());
     }
-
-    /* 
-    public void updatePawnList(Position piece, Position newPosition)
-    {
-        List<Position> l;
-        if (player == 0)
-            l = listOfRedPawns;
-        else
-            l = listOfBluePawns;
-        l.remove(piece);
-        l.add(newPosition);
-        return;
-        
-    }
-    */
 
     /*
      * Method: changePlayer
@@ -155,16 +137,6 @@ public class Engine {
     public void changePlayer() {
         gameConfig.changePlayer();
     }
-
-    /* 
-    public boolean canUndo() {
-        return !past.isEmpty();
-    }
-    
-    public boolean canRedo() {
-        return !futur.isEmpty();
-    }
-    */
     /*
      * Method: undo
      * Specs: Undos a turn in the game (if possible)
@@ -172,14 +144,6 @@ public class Engine {
      */
     public void undo() {
         hist.undo();
-        /*
-        if(canUndo())
-        {
-            futur.addFirst(gameConfig.copyConfig());
-            setConfig(past.removeFirst());
-            setPlayer(gameConfig.getCurrentPlayer());
-        }
-        */
         return;
 
     }
@@ -191,14 +155,6 @@ public class Engine {
      */
     public void redo() {
         hist.redo();
-        /*
-        if(canRedo())
-        {
-            past.addFirst(gameConfig.copyConfig());
-            setConfig(futur.removeFirst());
-            setPlayer(gameConfig.getCurrentPlayer());
-        }
-        */
     }
 
     /*

@@ -236,13 +236,37 @@ public class Board {
     
     public boolean checkPosition(Position pos)
     {
-        for(Piece piece: board)
-        {
+        for (Piece piece : board) {
             if (piece.getPosition().equals(pos))
                 return true;
         }
         return false;
     }
+    
+    public List<Piece> redPieces()
+    {
+        List<Piece> red_list = new ArrayList<>();
+        for (Piece piece : board) {
+            if (piece.getType() == Type.RED_PAWN || piece.getType() == Type.RED_KING) {
+                red_list.add(piece);
+            }
+        }
+        return red_list;
+    }
+    
+    public List<Piece> bluePieces()
+    {
+        List<Piece> blue_list = new ArrayList<>();
+        for(Piece piece:board)
+        {
+            if (piece.getType() == Type.BLUE_PAWN || piece.getType() == Type.BLUE_KING) {
+                blue_list.add(piece);
+            }
+        }
+        return blue_list;
+    }
+
+
     
 
 

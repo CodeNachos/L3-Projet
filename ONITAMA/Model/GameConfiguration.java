@@ -533,6 +533,17 @@ public class GameConfiguration implements Serializable {
     /* Start of AI's interface */
     /* Please discuss with Duc if you want to change something */
 
+    public List<Piece> allyPieces()
+    {
+        if(currentPlayer==RED)
+        {
+            return board.redPieces();
+        }
+        else {
+            return board.bluePieces();
+        }
+    }
+
     public List<Position> allyPositions() {
         if (currentPlayer == RED)
             return board.getRedPositions();
