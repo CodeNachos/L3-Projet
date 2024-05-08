@@ -1,7 +1,6 @@
 package JSON;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import ENGINE.*;
+import Model.*;
 public class JsonReader {
     List<Card> jsonCards;
     public JsonReader()
@@ -77,7 +76,6 @@ public class JsonReader {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (org.json.simple.parser.ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return jsonCards;
