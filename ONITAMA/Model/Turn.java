@@ -9,7 +9,7 @@ public class Turn implements Serializable {
     Position piece;
     Position move;
 
-    Turn(Card playCard, Position piece, Position move)
+    public Turn(Card playCard, Position piece, Position move)
     {
         this.playCard = playCard;
         this.piece = piece;
