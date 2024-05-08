@@ -28,8 +28,6 @@ public class Engine {
     PlayerHand ph2;
     GameConfiguration gameConfig;
     Turn turn;
-    private final static Position RED_THRONE = new Position(4, 2);
-    private final static Position BLUE_THRONE = new Position(0, 2);
 
     public Engine(int w, int h) {
         jReader = new JsonReader();
@@ -148,82 +146,6 @@ public class Engine {
         
     }
     */
-
-    /*
-     * Method: gameOver
-     * Specs: Indicates whether the game is over or not
-     * Return: boolean
-     */
-    public boolean gameOver() {
-        return conqueredKing() || capturedKing();
-    }
-
-    /*
-     * Method: ConqueredKing
-     * Specs: Checks whether a red king has conquered the throne of the blue king, and vice versa
-     * Return: boolean
-     */
-    public boolean conqueredKing() {
-        int red_i = RED_THRONE.getI();
-        int red_j = RED_THRONE.getJ();
-        int blue_i = BLUE_THRONE.getI();
-        int blue_j = BLUE_THRONE.getJ();
-        for (Piece piece : board.getBoard())
-        {
-            Type t = piece.getType();
-            Position pos = piece.getPosition();
-            if (t == Type.RED_KING && (pos.getI() == blue_i && pos.getJ() == blue_j)){
-                System.out.println("Player 1 has won!");
-                return true; 
-            }
-            else if (t == Type.BLUE_KING && (pos.getI() == red_i && pos.getJ() == red_j)) {
-                System.out.println("Player 2 has won!");
-                return true;
-            }
-        }
-
-    /* 
-    int red_i = RED_THRONE.getI();
-    int red_j = RED_THRONE.getJ();
-    int blue_i = BLUE_THRONE.getI();
-    int blue_j = BLUE_THRONE.getJ();
-    if (board[red_i][red_j] == BLUE_KING) {
-        System.out.println("Player 2 has won!");
-        return true;
-    } else if (board[blue_i][blue_j] == RED_KING) {
-        System.out.println("Player 1 has won");
-        return true;
-    }
-    */
-    return false;
-    }
-    
-    /*
-    * Method capturedKing
-    * Specs: Checks whether a king has been eaten or not
-    * Return: boolean
-    */
-    public boolean capturedKing() {
-
-        return ((!checkPresence(Type.BLUE_KING) && checkPresence(Type.RED_KING))
-                || (checkPresence(Type.BLUE_KING) && !checkPresence(Type.RED_KING)));
-    }
-
-    /*
-     * Method: checkPresence
-     * Specs: Checks whether a king is still on the board or not
-     * Args: char king
-     * Return: boolean
-     */
-    public boolean checkPresence(Type king) {
-        for (Piece piece : board.getBoard())
-        {
-            Type t = piece.getType();
-            if (t == king)
-                return true;
-        }
-        return false;
-    }
 
     /*
      * Method: changePlayer
