@@ -1,4 +1,4 @@
-package ENGINE;
+package Model;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

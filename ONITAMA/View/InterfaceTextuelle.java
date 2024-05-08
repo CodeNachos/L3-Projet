@@ -1,9 +1,9 @@
-package INTERFACE;
+package View;
 
 import java.util.List;
 import java.util.Scanner;
 
-import ENGINE.*;
+import Model.*;
 import GLOBAL.*;
 
 public class InterfaceTextuelle {

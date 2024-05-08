@@ -1,4 +1,4 @@
-package ENGINE;
+package Model;
 
 import java.io.Serializable;
 import java.util.Objects;

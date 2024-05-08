@@ -1,6 +1,6 @@
 package Controller;
 
-import ENGINE.Turn;
+import Model.Turn;
 
 /**
  * Human

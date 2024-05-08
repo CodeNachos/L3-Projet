@@ -1,6 +1,6 @@
-import ENGINE.Engine;
+import Model.Engine;
 import GLOBAL.Configurations;
-import INTERFACE.InterfaceTextuelle;
+import View.InterfaceTextuelle;
 
 public class Onitama {
     public static void main(String[] args) throws Exception {
