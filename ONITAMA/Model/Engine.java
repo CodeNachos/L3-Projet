@@ -20,8 +20,6 @@ import JSON.*;
 public class Engine {
     List<Card> listOfCards;
     List<Card> gameCards;
-    //LinkedList<GameConfiguration> past;
-    //LinkedList<GameConfiguration> futur;
     History hist;
     JsonReader jReader;
     Board board;
@@ -29,7 +27,6 @@ public class Engine {
     PlayerHand ph1;
     PlayerHand ph2;
     GameConfiguration gameConfig;
-    List<Position> posPositions;
     Turn turn;
     private final static Position RED_THRONE = new Position(4, 2);
     private final static Position BLUE_THRONE = new Position(0, 2);
