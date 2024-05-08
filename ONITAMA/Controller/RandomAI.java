@@ -20,11 +20,11 @@ public class RandomAI implements Player {
     @Override
     public Turn play() {
         GameConfiguration config = engine.getGameConfiguration();
-        
+
         List<Card> cards = config.availableCards();
         Card chosenCard = cards.get(random.nextInt(cards.size()));
 
-        List<Position> pawns = config.allyPawns();
+        List<Position> pawns = config.allyPieces();
         Position chosenPawn = pawns.get(random.nextInt(pawns.size()));
 
         List<Position> moves = config.possiblePositions(chosenPawn, chosenCard);

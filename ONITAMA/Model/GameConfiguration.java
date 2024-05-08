@@ -372,7 +372,7 @@ public class GameConfiguration implements Serializable {
     /* Start of AI's interface */
     /* Please discuss with Duc if you want to change something */
 
-    public List<Position> allyPawns()
+    public List<Position> allyPieces()
     {
         if (currentPlayer == RED)
             return listOfRedPawns;
@@ -380,7 +380,7 @@ public class GameConfiguration implements Serializable {
             return listOfBluePawns;
     }
 
-    public List<Position> enemyPawns()
+    public List<Position> enemyPieces()
     {
         if (currentPlayer == BLUE)
             return listOfRedPawns;
@@ -419,7 +419,7 @@ public class GameConfiguration implements Serializable {
 
     public List<Position> possiblePositions(Position piece, Card card)
     {
-        List<Position> allies = allyPawns();
+        List<Position> allies = allyPieces();
         List<Movement> curMovement;
         if (currentPlayer == 0)
             curMovement = card.getRedMovement();
