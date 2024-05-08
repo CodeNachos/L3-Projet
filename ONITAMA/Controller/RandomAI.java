@@ -24,11 +24,12 @@ public class RandomAI implements Player {
         List<Card> cards = config.availableCards();
         Card chosenCard = cards.get(random.nextInt(cards.size()));
 
-        List<Position> pawns = config.allyPositions();
-        Position chosenPawn = pawns.get(random.nextInt(pawns.size()));
+        List<Piece> pawns = config.allyPieces();
+        Piece chosenPawn = pawns.get(random.nextInt(pawns.size()));
 
-        List<Position> moves = config.possiblePositions(chosenPawn, chosenCard);
-        Position chosenMove = moves.get(random.nextInt(moves.size()));
+        List<Position> positions = config.possiblePositions(chosenPawn.getPosition(), chosenCard);
+        Position chosenPosition = positions.get(random.nextInt(positions.size()));
+        Piece chosenMove = new Piece(chosenPawn.getType(), chosenPosition);
 
         return new Turn(chosenCard, chosenPawn, chosenMove);
     }
