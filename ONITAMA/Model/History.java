@@ -29,7 +29,6 @@ public class History {
         if (canUndo()) {
             futur.addFirst(eng.getGameConfiguration().copyConfig());
             eng.setConfig(past.removeFirst());
-            eng.setPlayer(eng.getGameConfiguration().getCurrentPlayer());
         }
         return;
     }
@@ -39,7 +38,6 @@ public class History {
         if (canRedo()) {
             past.addFirst(eng.getGameConfiguration().copyConfig());
             eng.setConfig(futur.removeFirst());
-            eng.setPlayer(eng.getGameConfiguration().getCurrentPlayer());
         }
     }
     

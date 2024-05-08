@@ -14,13 +14,16 @@ public class InterfaceTextuelle {
     int secondNumber;
     Scanner scanner;
     List<Position> posPositions;
-    Position piece;
+    Piece piece;
     Card playCard;
-    Position move;
+    Piece move;
+    Type t;
+    /* 
     private final static char BLUE_PAWN = 'b';
     private final static char RED_PAWN = 'r';
     private final static char BLUE_KING = 'B';
     private final static char RED_KING = 'R';
+    */
 
     public InterfaceTextuelle(Configurations conf, Engine eng)
     {
@@ -37,7 +40,7 @@ public class InterfaceTextuelle {
                 askPlayer();
                 break;
             case "AI":
-                if(eng.getPlayer()==0) // if player == 0 -> human
+                if(eng.getGameConfiguration().getCurrentPlayer()==0) // if player == 0 -> human
                 {
                     askPlayer();
                 }
@@ -59,10 +62,10 @@ public class InterfaceTextuelle {
             eng.getGameConfiguration().displayConfig();
             piece = askPlayerPiece();
             playCard = askPlayerCard();
-            System.out.println("You want to play piece (" + piece.getI() + "," + piece.getJ() + ") with card "
+            System.out.println("You want to play piece (" + piece.getPosition().getI() + "," + piece.getPosition().getJ() + ") with card "
                     + playCard.getName());
             System.out.println("These are the possibilities:");
-            eng.getGameConfiguration().displayMark(eng.getPlayer(), piece, playCard);
+            eng.getGameConfiguration().displayMark(piece, playCard);
             boolean mark = eng.getGameConfiguration().getMarked();
             if (!mark) {
                 System.out.println("As you can see, no marks are found. Therefore, you must change cards!");
@@ -71,17 +74,17 @@ public class InterfaceTextuelle {
             posPositions = eng.getGameConfiguration().possiblePositions(piece,
                     playCard);
             move = askMove();
-            System.out.println("You will play piece (" + piece.getI() + "," + piece.getJ() + ") with card "
-                    + playCard.getName() + " at spot (" + move.getI() + "," + move.getJ() + ")");
+            System.out.println("You will play piece (" + piece.getPosition().getI() + "," + piece.getPosition().getJ() + ") with card "
+                    + playCard.getName() + " at spot (" + move.getPosition().getI() + "," + move.getPosition().getJ() + ")");
             eng.getGameConfiguration().setMarked(false);
             System.out.println("Confirm move?: (type Confirm)");
             ans = scanner.nextLine();
         }
         return;
     }
-    public Position askPlayerPiece()
+    public Piece askPlayerPiece()
     {
-        if (eng.getPlayer() == 0) {
+        if (eng.getGameConfiguration().getCurrentPlayer() == 0) {
             System.out.println("Choose a red pawn in the table (enter i,j)");
         } else {
             System.out.println("Choose a blue pawn in the table (enter i,j)");
@@ -93,7 +96,8 @@ public class InterfaceTextuelle {
             input = scanner.nextLine();
             parse(input);
         }
-        Position piece = new Position(firstNumber, secondNumber);
+        Position pos = new Position(firstNumber, secondNumber);
+        Piece piece = new Piece(t, pos);
         return piece;
     }
         
@@ -118,11 +122,12 @@ public class InterfaceTextuelle {
     }
     public boolean validPiece(int i, int j)
     {
-        char[][] board = eng.getGameConfiguration().getBoard();
-        char c = board[i][j];
-        if (eng.getPlayer() == 0 && (c == RED_PAWN || c == RED_KING))
+        Board board = eng.getGameConfiguration().getBoard();
+        Position pos = new Position(i, j);
+        t = board.giveType(pos);
+        if (eng.getGameConfiguration().getCurrentPlayer() == 0 && (t == Type.RED_PAWN || t == Type.RED_KING))
             return true;
-        else if (eng.getPlayer()== 1 && (c == BLUE_PAWN || c == BLUE_KING))
+        else if (eng.getGameConfiguration().getCurrentPlayer()== 1 && (t == Type.BLUE_PAWN || t == Type.BLUE_KING))
             return true;
         return false;
     }
@@ -130,7 +135,7 @@ public class InterfaceTextuelle {
     public Card askPlayerCard()
     {
         PlayerHand ph;
-        if (eng.getPlayer() == 0)
+        if (eng.getGameConfiguration().getCurrentPlayer() == 0)
             ph = eng.getGameConfiguration().getPlayer1Hand();
         else
             ph = eng.getGameConfiguration().getPlayer2Hand();
@@ -147,7 +152,7 @@ public class InterfaceTextuelle {
 
     }
     
-    public Position askMove()
+    public Piece askMove()
     {
         System.out.println("Choose a marked spot: (i,j)");
         String move = scanner.nextLine();
@@ -157,7 +162,8 @@ public class InterfaceTextuelle {
             move = scanner.nextLine();
             parse(move);
         }
-        return new Position(firstNumber, secondNumber);
+
+        return new Piece(t,new Position(firstNumber, secondNumber));
 
     }
     
@@ -171,7 +177,7 @@ public class InterfaceTextuelle {
 
     }
 
-    public Position getPiece()
+    public Piece getPiece()
     {
         return piece;
     }
@@ -181,7 +187,7 @@ public class InterfaceTextuelle {
         return playCard;
     }
 
-    public Position getMove()
+    public Piece getMove()
     {
         return move;
     }

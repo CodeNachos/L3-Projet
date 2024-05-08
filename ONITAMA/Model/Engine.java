@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -23,101 +22,55 @@ public class Engine {
     List<Card> gameCards;
     //LinkedList<GameConfiguration> past;
     //LinkedList<GameConfiguration> futur;
-    List<Position> listOfRedPawns;
-    List<Position> listOfBluePawns;
     History hist;
     JsonReader jReader;
-    char[][] board;
-    int rows;
-    int cols;
-    int firstNumber;
-    int secondNumber;
+    Board board;
     Random random;
-    int player;
     PlayerHand ph1;
     PlayerHand ph2;
-    Position RED_KINGPOS;
-    Position BLUE_KINGPOS;
-    Scanner scanner;
     GameConfiguration gameConfig;
     List<Position> posPositions;
     Turn turn;
-    private final static char BLUE_PAWN = 'b';
-    private final static char RED_PAWN = 'r';
-    private final static char BLUE_KING = 'B';
-    private final static char RED_KING = 'R';
     private final static Position RED_THRONE = new Position(4, 2);
     private final static Position BLUE_THRONE = new Position(0, 2);
 
     public Engine(int w, int h) {
         jReader = new JsonReader();
         listOfCards = jReader.readJson();
-        board = new char[w][h];
+        board = new Board();
         //past = new LinkedList<>();
         //futur = new LinkedList<>();
-        this.rows = w;
-        this.cols = h;
         gameCards = new ArrayList<>();
         random = new Random();
-        scanner = new Scanner(System.in);
         hist = new History(this);
-        listOfBluePawns = new ArrayList<>();
-        listOfRedPawns = new ArrayList<>();
-        RED_KINGPOS = new Position(4, 2);
-        BLUE_KINGPOS = new Position(0, 2);
         turn = null;
-        player = 0;
         initialiseGame();
     }
 
     private void initialiseGame() {
         initBoard();
-        initPawnPositions();
         chooseCards();
         assignCards();
         Card standby = gameCards.get(4);
         //Initial game config
-        gameConfig = new GameConfiguration(board, ph1, ph2, standby, player, listOfBluePawns, listOfRedPawns, RED_KINGPOS, BLUE_KINGPOS);
+        gameConfig = new GameConfiguration(board, ph1, ph2, standby);
     }
 
+    /*
+     * Method: InitBoard
+     * Specs: Initializes the game board (Shouldn't be called elsewhere...)
+     * Returns: void
+     */
     private void initBoard() {
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                if (i == 0) {
-                    if (j == 2)
-                        board[i][j] = BLUE_KING;
-                    else
-                        board[i][j] = BLUE_PAWN;
-                } else if (i == 4) {
-                    if (j == 2)
-                        board[i][j] = RED_KING;
-                    else
-                        board[i][j] = RED_PAWN;
-                } else
-                    board[i][j] = '.';
-            }
-        }
-
+        board.initialiseBoard();
         return;
     }
 
-    private void initPawnPositions()
-    {
-
-        for(int i = 0; i<cols;++i)
-        {
-            Position position = new Position(0, i);
-            listOfBluePawns.add(position);
-        }
-
-        for(int i = 0; i<cols;++i)
-        {
-            Position position = new Position(4, i);
-            listOfRedPawns.add(position);
-        }
-        return;
-    }
-
+    /*
+     * Method chooseCards
+     * Specs: Given a list of cards (16), this method chooses 5 cards (randomly) among the 16
+     * Return: void
+     */
     private void chooseCards() {
         Set<Integer> set = new HashSet<>();
         int i = 0;
@@ -133,7 +86,11 @@ public class Engine {
         return;
     }
 
-    //Could potentially randomise this further but for now it's good enough (it's already random...)
+    /*
+     * Method: assignCards
+     * Specs: Given a list of game cards (5), assign 2 cards to player 1, 2 cards to player 2.
+     * Return: void
+     */
     private void assignCards() {
         Card player1Card1 = gameCards.get(0);
         Card player1Card2 = gameCards.get(1);
@@ -143,6 +100,11 @@ public class Engine {
         ph2 = new PlayerHand(1, player2Card1, player2Card2);
     }
 
+    /*
+     * Method: printCards
+     * Specs: Prints all the cards and how they move their respective pawns
+     * Return: void
+     */
     public void printCards() {
         for (Card card : listOfCards) {
             System.out.println("Card name is: " + card.getName());
@@ -158,16 +120,24 @@ public class Engine {
         }
     }
 
-    public void playTurn(Position piece, Card playCard, Position move) {
+    /*
+     * Method: PlayTurn
+     * Specs: Given a piece, a card that will be played and the new position (move), moves the piece to its
+     * new position according to the card played. (Simulates a turn)
+     * Args: Position piece, Card playCard, Position move
+     * Return: void
+     */
+    public void playTurn(Piece piece, Card playCard, Piece move) {
         //past.addFirst(gameConfig.copyConfig());
         //futur.clear();
         hist.getPast().addFirst(gameConfig.copyConfig());
         hist.getFutur().clear();
         turn = new Turn(playCard, piece, move);
         gameConfig.updateConfig(turn);
-        updatePawnList(turn.getPiece(), turn.getMove());
+        //updatePawnList(turn.getPiece(), turn.getMove());
     }
 
+    /* 
     public void updatePawnList(Position piece, Position newPosition)
     {
         List<Position> l;
@@ -180,61 +150,91 @@ public class Engine {
         return;
         
     }
+    */
 
+    /*
+     * Method: gameOver
+     * Specs: Indicates whether the game is over or not
+     * Return: boolean
+     */
     public boolean gameOver() {
         return conqueredKing() || capturedKing();
     }
 
+    /*
+     * Method: ConqueredKing
+     * Specs: Checks whether a red king has conquered the throne of the blue king, and vice versa
+     * Return: boolean
+     */
     public boolean conqueredKing() {
         int red_i = RED_THRONE.getI();
         int red_j = RED_THRONE.getJ();
         int blue_i = BLUE_THRONE.getI();
         int blue_j = BLUE_THRONE.getJ();
-        if (board[red_i][red_j] == BLUE_KING) {
-            System.out.println("Player 2 has won!");
-            return true;
-        } else if (board[blue_i][blue_j] == RED_KING) {
-            System.out.println("Player 1 has won");
-            return true;
-        }
-        return false;
-    }
-
-    public boolean capturedKing() {
-
-        return ((!checkPresence(BLUE_KING) && checkPresence(RED_KING))
-                || (checkPresence(BLUE_KING) && !checkPresence(RED_KING)));
-    }
-
-    public boolean checkPresence(char king) {
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                if (board[i][j] == king)
-                    return true;
+        for (Piece piece : board.getBoard())
+        {
+            Type t = piece.getType();
+            Position pos = piece.getPosition();
+            if (t == Type.RED_KING && (pos.getI() == blue_i && pos.getJ() == blue_j)){
+                System.out.println("Player 1 has won!");
+                return true; 
+            }
+            else if (t == Type.BLUE_KING && (pos.getI() == red_i && pos.getJ() == red_j)) {
+                System.out.println("Player 2 has won!");
+                return true;
             }
         }
+
+    /* 
+    int red_i = RED_THRONE.getI();
+    int red_j = RED_THRONE.getJ();
+    int blue_i = BLUE_THRONE.getI();
+    int blue_j = BLUE_THRONE.getJ();
+    if (board[red_i][red_j] == BLUE_KING) {
+        System.out.println("Player 2 has won!");
+        return true;
+    } else if (board[blue_i][blue_j] == RED_KING) {
+        System.out.println("Player 1 has won");
+        return true;
+    }
+    */
+    return false;
+    }
+    
+    /*
+    * Method capturedKing
+    * Specs: Checks whether a king has been eaten or not
+    * Return: boolean
+    */
+    public boolean capturedKing() {
+
+        return ((!checkPresence(Type.BLUE_KING) && checkPresence(Type.RED_KING))
+                || (checkPresence(Type.BLUE_KING) && !checkPresence(Type.RED_KING)));
+    }
+
+    /*
+     * Method: checkPresence
+     * Specs: Checks whether a king is still on the board or not
+     * Args: char king
+     * Return: boolean
+     */
+    public boolean checkPresence(Type king) {
+        for (Piece piece : board.getBoard())
+        {
+            Type t = piece.getType();
+            if (t == king)
+                return true;
+        }
         return false;
     }
 
-    public GameConfiguration getGameConfiguration() {
-        return gameConfig;
-    }
-
-    public int getPlayer() {
-        return player;
-    }
-
+    /*
+     * Method: changePlayer
+     * Specs: Changes the player for a new turn
+     * Return: void
+     */
     public void changePlayer() {
-        this.player = (this.player + 1) % 2;
-        gameConfig.setCurrentPlayer(player);
-    }
-
-    public int nextPlayer() {
-        return (this.player + 1) % 2;
-    }
-
-    public void setPlayer(int player) {
-        this.player = player;
+        gameConfig.changePlayer();
     }
 
     /* 
@@ -246,22 +246,30 @@ public class Engine {
         return !futur.isEmpty();
     }
     */
-    
-    public void undo()
-    {
-        hist.undo();
     /*
+     * Method: undo
+     * Specs: Undos a turn in the game (if possible)
+     * Return: void
+     */
+    public void undo() {
+        hist.undo();
+        /*
         if(canUndo())
         {
             futur.addFirst(gameConfig.copyConfig());
             setConfig(past.removeFirst());
             setPlayer(gameConfig.getCurrentPlayer());
         }
-    */
-    return;
+        */
+        return;
 
-}
+    }
 
+    /*
+     * Method: redo
+     * Specs: Redoes a turn in the game (if possible)
+     * Return: void
+     */
     public void redo() {
         hist.redo();
         /*
@@ -274,10 +282,12 @@ public class Engine {
         */
     }
 
-    public void setConfig(GameConfiguration gc) {
-        this.gameConfig = gc;
-    }
-
+    /*
+     * Method: save
+     * Specs: saves the game in a specified file
+     * Args: String file
+     * Return: void
+     */
     public void save(String file) throws Exception {
 
         try (FileOutputStream fileOut = new FileOutputStream(file);
@@ -289,6 +299,12 @@ public class Engine {
         }
     }
 
+    /*
+     * Method: load
+     * Specs: Loads a game from a specified file
+     * Args: String file
+     * Return: void
+     */
     public void load(String file) throws Exception {
         try (FileInputStream fileIn = new FileInputStream(file);
                 GZIPInputStream gzipIn = new GZIPInputStream(new BufferedInputStream(fileIn));
@@ -299,10 +315,19 @@ public class Engine {
             @SuppressWarnings("unchecked")
             LinkedList<GameConfiguration> redoStack = (LinkedList<GameConfiguration>) in.readObject();
             setConfig(gc_cpy);
-            setPlayer(gc_cpy.getCurrentPlayer());
             hist.setPast(undoStack);
             hist.setFutur(redoStack);
             return;
         }
+    }
+
+    /*Getter for GameConfiguration */
+    public GameConfiguration getGameConfiguration() {
+        return gameConfig;
+    }
+
+    /*Setter for GameConfiguration */
+    public void setConfig(GameConfiguration gc) {
+        this.gameConfig = gc;
     }
 }

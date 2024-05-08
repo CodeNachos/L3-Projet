@@ -6,10 +6,10 @@ import java.io.Serializable;
 
 public class Turn implements Serializable {
     Card playCard;
-    Position piece;
-    Position move;
+    Piece piece;
+    Piece move;
 
-    Turn(Card playCard, Position piece, Position move)
+    Turn(Card playCard, Piece piece, Piece move)
     {
         this.playCard = playCard;
         this.piece = piece;
@@ -21,12 +21,12 @@ public class Turn implements Serializable {
         return playCard;
     }
 
-    public Position getPiece()
+    public Piece getPiece()
     {
         return piece;
     }
 
-    public Position getMove()
+    public Piece getMove()
     {
         return move;
     }
