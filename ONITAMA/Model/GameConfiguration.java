@@ -274,69 +274,6 @@ public class GameConfiguration implements Serializable {
         applyMove(turn.getPiece(), turn.getMove());
         exchangeCards(turn.getCard());
     }
-
-    /*
-    public void updatePawnList(Position piece, Position newPosition)
-    {
-    List<Position> l;
-    if (currentPlayer == 0)
-        l = listOfRedPawns;
-    else
-        l = listOfBluePawns;
-    l.remove(piece);
-    l.add(newPosition);
-    return;
-    }
-    
-    public void updateKings(Position piece, Position move)
-    {
-    if (piece.getI() == RED_KINGPOS.getI() && piece.getJ() == RED_KINGPOS.getJ()) {
-        RED_KINGPOS.setI(move.getI());
-        RED_KINGPOS.setJ(move.getJ());
-    } else if (piece.getI() == BLUE_KINGPOS.getI() && piece.getJ() == RED_KINGPOS.getJ()) {
-        BLUE_KINGPOS.setI(move.getI());
-        BLUE_KINGPOS.setJ(move.getJ());
-    }
-    }
-    */
-
-    //Method overload
-    /*
-    public void updateKings(Position new_RED, Position new_BLUE, Position piece, Position move)
-    {
-    if(piece.getI() == RED_KINGPOS.getI() && piece.getJ() == RED_KINGPOS.getJ())
-    {
-        new_RED.setI(move.getI());
-        new_RED.setJ(move.getJ());
-    }
-    else if(piece.getI()==BLUE_KINGPOS.getI() && piece.getJ() == RED_KINGPOS.getJ())
-    {
-        new_BLUE.setI(move.getI());
-        new_BLUE.setJ(move.getJ());
-    }
-    }
-    
-    //Method Overload
-    public void updatePawnList(List<Position>l_blue,List<Position> l_red,Position piece, Position newPosition)
-    {
-    List<Position> l;
-    if (currentPlayer == 0)
-        l = l_red;
-    else
-        l = l_blue;
-    l.remove(piece);
-    l.add(newPosition);
-    return;
-    }
-    
-    public void copyList(List<Position> l, List<Position>l_cpy)
-    {
-    for(Position pos: l)
-    {
-        l_cpy.add(pos);
-    }
-    }
-    */
     
     public void exchangeCards(Card playerCard)
     {

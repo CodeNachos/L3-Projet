@@ -1,10 +1,11 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Board {
+public class Board implements Serializable {
     List<Piece> board;
 
     public Board()

@@ -1,8 +1,9 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Piece {
+public class Piece implements Serializable {
     Type t;
     Position piece_position;
 

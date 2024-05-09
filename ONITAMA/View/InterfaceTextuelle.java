@@ -3,6 +3,7 @@ package View;
 import java.util.List;
 import java.util.Scanner;
 
+import Controller.RandomAI;
 import Model.*;
 import GLOBAL.*;
 
@@ -17,6 +18,7 @@ public class InterfaceTextuelle {
     Piece piece;
     Card playCard;
     Piece move;
+    RandomAI rAi;
     Type t;
     /* 
     private final static char BLUE_PAWN = 'b';
@@ -25,11 +27,12 @@ public class InterfaceTextuelle {
     private final static char RED_KING = 'R';
     */
 
-    public InterfaceTextuelle(Configurations conf, Engine eng)
+    public InterfaceTextuelle(Configurations conf, Engine eng, RandomAI rAi)
     {
         this.config = conf;
         this.eng = eng;
         scanner = new Scanner(System.in);
+        this.rAi = rAi;
     }
 
     public void display()
@@ -40,12 +43,15 @@ public class InterfaceTextuelle {
                 askPlayer();
                 break;
             case "AI":
-                if(eng.getGameConfiguration().getCurrentPlayer()==0) // if player == 0 -> human
+                if(eng.getCurrentPlayer()==0) // if player == 0 -> human
                 {
                     askPlayer();
                 }
                 else {
-                    //To be implemented
+                    Turn turn = rAi.play();
+                    piece = turn.getPiece();
+                    playCard = turn.getCard();
+                    move = turn.getMove();
                 }
             case "Automatic":
                 //To be implemented

@@ -1,5 +1,6 @@
 package Model;
 
+
 public enum Type {
     RED_KING,
     BLUE_KING,

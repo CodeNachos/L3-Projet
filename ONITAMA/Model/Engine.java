@@ -201,6 +201,12 @@ public class Engine {
         return gameConfig.gameOver();
     }
 
+    /*Returns current player of the game */
+    public int getCurrentPlayer()
+    {
+        return gameConfig.getCurrentPlayer();
+    }
+
     /*Getter for GameConfiguration */
     public GameConfiguration getGameConfiguration() {
         return gameConfig;
