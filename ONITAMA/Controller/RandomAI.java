@@ -1,5 +1,6 @@
 package Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -21,16 +22,19 @@ public class RandomAI implements Player {
     public Turn play() {
         GameConfiguration config = engine.getGameConfiguration();
 
-        List<Card> cards = config.availableCards();
-        Card chosenCard = cards.get(random.nextInt(cards.size()));
+        List<Turn> turns = possibleTurns(config);
 
-        List<Piece> pawns = config.allyPieces();
-        Piece chosenPawn = pawns.get(random.nextInt(pawns.size()));
+        return turns.get(random.nextInt(turns.size()));
+    }
 
-        List<Position> positions = config.possiblePositions(chosenPawn.getPosition(), chosenCard);
-        Position chosenPosition = positions.get(random.nextInt(positions.size()));
-        Piece chosenMove = new Piece(chosenPawn.getType(), chosenPosition);
-
-        return new Turn(chosenCard, chosenPawn, chosenMove);
+    private List<Turn> possibleTurns(GameConfiguration config) {
+        List<Turn> result = new ArrayList<>();
+        for (Card card : config.availableCards())
+            for (Piece piece : config.allyPieces())
+                for (Position position : config.possiblePositions(piece.getPosition(), card)) {
+                    Piece move = new Piece(piece.getType(), position);
+                    result.add(new Turn(card, piece, move));
+                }
+        return result;
     }
 }

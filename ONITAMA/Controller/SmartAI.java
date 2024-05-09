@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import Model.Card;
 import Model.Engine;
 import Model.GameConfiguration;
+import Model.Piece;
+import Model.Position;
 import Model.Turn;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
@@ -80,7 +83,14 @@ public class SmartAI implements Player {
     }
 
     private List<Turn> possibleTurns(GameConfiguration config) {
-        return null;
+        List<Turn> result = new ArrayList<>();
+        for (Card card : config.availableCards())
+            for (Piece piece : config.allyPieces())
+                for (Position position : config.possiblePositions(piece.getPosition(), card)) {
+                    Piece move = new Piece(piece.getType(), position);
+                    result.add(new Turn(card, piece, move));
+                }
+        return result;
     }
 
     //private int distance(Position first, Position second) {

@@ -7,8 +7,9 @@ public class Onitama {
     public static void main(String[] args) throws Exception {
         Engine eng = new Engine(5, 5);
         Configurations config = new Configurations();
-        RandomAI Ai = new RandomAI(eng);
-        InterfaceTextuelle it = new InterfaceTextuelle(config, eng,Ai);
+        RandomAI Ai1 = new RandomAI(eng);
+        RandomAI Ai2 = new RandomAI(eng);
+        InterfaceTextuelle it = new InterfaceTextuelle(config, eng, Ai1, Ai2);
         
         //eng.printCards();
 
@@ -61,6 +62,7 @@ public class Onitama {
             eng.playTurn(it.getPiece(), it.getCard(), it.getMove());
             eng.changePlayer();
         }
+        eng.getGameConfiguration().displayConfig();
         /*
         eng.getGameConfiguration().displayConfig();
         eng.playTurn();

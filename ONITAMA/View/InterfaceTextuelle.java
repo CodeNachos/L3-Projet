@@ -18,7 +18,8 @@ public class InterfaceTextuelle {
     Piece piece;
     Card playCard;
     Piece move;
-    RandomAI rAi;
+    RandomAI rAi1;
+    RandomAI rAi2;
     Type t;
     /* 
     private final static char BLUE_PAWN = 'b';
@@ -27,12 +28,13 @@ public class InterfaceTextuelle {
     private final static char RED_KING = 'R';
     */
 
-    public InterfaceTextuelle(Configurations conf, Engine eng, RandomAI rAi)
+    public InterfaceTextuelle(Configurations conf, Engine eng, RandomAI rAi1, RandomAI rAi2)
     {
         this.config = conf;
         this.eng = eng;
         scanner = new Scanner(System.in);
-        this.rAi = rAi;
+        this.rAi1 = rAi1;
+        this.rAi2 = rAi2;
     }
 
     public void display()
@@ -48,13 +50,25 @@ public class InterfaceTextuelle {
                     askPlayer();
                 }
                 else {
-                    Turn turn = rAi.play();
+                    Turn turn = rAi1.play();
                     piece = turn.getPiece();
                     playCard = turn.getCard();
                     move = turn.getMove();
                 }
             case "Automatic":
-                //To be implemented
+                eng.getGameConfiguration().displayConfig();
+                if (eng.getCurrentPlayer()==0) {
+                    Turn turn = rAi1.play();
+                    piece = turn.getPiece();
+                    playCard = turn.getCard();
+                    move = turn.getMove();
+                } else {
+                    Turn turn = rAi1.play();
+                    piece = turn.getPiece();
+                    playCard = turn.getCard();
+                    move = turn.getMove();
+                }
+
             default:
                 break;
         }
