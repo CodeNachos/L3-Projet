@@ -54,19 +54,49 @@ public class InterfaceTextuelle {
                     piece = turn.getPiece();
                     playCard = turn.getCard();
                     move = turn.getMove();
+                    eng.getGameConfiguration().displayConfig();
+                    System.out.println("Ai will play piece :(" + piece.getPosition().getI() + ","
+                            + piece.getPosition().getJ() + ")");
+                    System.out.println("With card: " + playCard.getName());
+                    System.out.println("At new position :(" + move.getPosition().getI() + "," + move.getPosition().getJ()+")");
                 }
+                break;
             case "Automatic":
-                eng.getGameConfiguration().displayConfig();
+                //eng.getGameConfiguration().displayConfig();
                 if (eng.getCurrentPlayer()==0) {
                     Turn turn = rAi1.play();
                     piece = turn.getPiece();
                     playCard = turn.getCard();
                     move = turn.getMove();
+                    eng.getGameConfiguration().displayConfig();
+                    System.out.println("Ai1 will play piece :(" + piece.getPosition().getI() + ","
+                            + piece.getPosition().getJ() + ")");
+                    System.out.println("With card: " + playCard.getName());
+                    System.out.println(
+                            "At new position :(" + move.getPosition().getI() + "," + move.getPosition().getJ() + ")");
+                    try {
+                        Thread.sleep(6000);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 } else {
-                    Turn turn = rAi1.play();
+                    Turn turn = rAi2.play();
                     piece = turn.getPiece();
                     playCard = turn.getCard();
                     move = turn.getMove();
+                    eng.getGameConfiguration().displayConfig();
+                    System.out.println("Ai2 will play piece :(" + piece.getPosition().getI() + ","
+                            + piece.getPosition().getJ() + ")");
+                    System.out.println("With card: " + playCard.getName());
+                    System.out.println(
+                            "At new position :(" + move.getPosition().getI() + "," + move.getPosition().getJ() + ")");
+                    try {
+                        Thread.sleep(6000);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
 
             default:
