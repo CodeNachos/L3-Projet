@@ -12,6 +12,7 @@ import Model.Position;
 import Model.Turn;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
+import static java.lang.Math.abs;
 
 /**
  * SmartAI
@@ -21,12 +22,14 @@ public class SmartAI implements Player {
     Random random;
     Engine engine;
     int difficulty;
+    int player;
 
-    public SmartAI(Engine engine, int difficulty) {
+    public SmartAI(Engine engine, int difficulty, int player) {
         this.winners = new ArrayList<>();
         this.random = new Random();
         this.engine = engine;
         this.difficulty = difficulty;
+        this.player = player;
     }
 
     @Override
@@ -79,7 +82,15 @@ public class SmartAI implements Player {
     }
 
     private int heuristic(GameConfiguration config) {
-        return 0;
+        List<Position> allies = config.allyPositions();
+        List<Position> enemies = config.enemyPositions(); 
+        int pieceNumber = allies.size() - enemies.size();
+        int throneDistance = distance(config.allyKing(), config.allyGoal()) - distance(config.enemyGoal(), config.enemyKing());
+        int eval = pieceNumber + throneDistance; 
+        if (config.getCurrentPlayer() == player)
+            return eval;
+        else
+            return -eval;
     }
 
     private List<Turn> possibleTurns(GameConfiguration config) {
@@ -93,7 +104,7 @@ public class SmartAI implements Player {
         return result;
     }
 
-    //private int distance(Position first, Position second) {
-    //    return abs(first.getI() - second.getI()) + abs(first.getJ() - second.getJ());
-    //}
+    private int distance(Position first, Position second) {
+        return abs(first.getI() - second.getI()) + abs(first.getJ() - second.getJ());
+    }
 }

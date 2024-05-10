@@ -1,5 +1,7 @@
 import Model.Engine;
-import Controller.RandomAI;
+import Model.GameConfiguration;
+import Controller.Player;
+import Controller.SmartAI;
 import GLOBAL.Configurations;
 import View.InterfaceTextuelle;
 
@@ -7,8 +9,8 @@ public class Onitama {
     public static void main(String[] args) throws Exception {
         Engine eng = new Engine(5, 5);
         Configurations config = new Configurations();
-        RandomAI Ai1 = new RandomAI(eng);
-        RandomAI Ai2 = new RandomAI(eng);
+        Player Ai1 = new SmartAI(eng, 3, GameConfiguration.RED);
+        Player Ai2 = new SmartAI(eng, 3, GameConfiguration.BLUE);
         InterfaceTextuelle it = new InterfaceTextuelle(config, eng, Ai1, Ai2);
         
         //eng.printCards();

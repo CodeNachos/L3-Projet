@@ -3,7 +3,7 @@ package View;
 import java.util.List;
 import java.util.Scanner;
 
-import Controller.RandomAI;
+import Controller.Player;
 import Model.*;
 import GLOBAL.*;
 
@@ -18,8 +18,8 @@ public class InterfaceTextuelle {
     Piece piece;
     Card playCard;
     Piece move;
-    RandomAI rAi1;
-    RandomAI rAi2;
+    Player rAi1;
+    Player rAi2;
     Type t;
     /* 
     private final static char BLUE_PAWN = 'b';
@@ -28,7 +28,7 @@ public class InterfaceTextuelle {
     private final static char RED_KING = 'R';
     */
 
-    public InterfaceTextuelle(Configurations conf, Engine eng, RandomAI rAi1, RandomAI rAi2)
+    public InterfaceTextuelle(Configurations conf, Engine eng, Player rAi1, Player rAi2)
     {
         this.config = conf;
         this.eng = eng;
@@ -75,9 +75,8 @@ public class InterfaceTextuelle {
                     System.out.println(
                             "At new position :(" + move.getPosition().getI() + "," + move.getPosition().getJ() + ")");
                     try {
-                        Thread.sleep(6000);
+                        Thread.sleep(600);
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 } else {
@@ -92,9 +91,8 @@ public class InterfaceTextuelle {
                     System.out.println(
                             "At new position :(" + move.getPosition().getI() + "," + move.getPosition().getJ() + ")");
                     try {
-                        Thread.sleep(6000);
+                        Thread.sleep(600);
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }

@@ -10,8 +10,8 @@ import java.util.List;
 public class GameConfiguration implements Serializable {
     static final Position RED_THRONE = new Position(4, 2);
     static final Position BLUE_THRONE = new Position(0, 2);
-    static final int RED = 0;
-    static final int BLUE = 1;
+    public static final int RED = 0;
+    public static final int BLUE = 1;
 
     Board board;
     PlayerHand player1Hand;
@@ -241,7 +241,7 @@ public class GameConfiguration implements Serializable {
 
     //Method overload
     public Board applyMove(Board cpy, Piece piece, Piece move) {
-        board.updateBoard(cpy, piece, piece);
+        board.updateBoard(cpy, piece, move);
         /*
         int i = piece.getI();
         int j = piece.getJ();
@@ -500,6 +500,20 @@ public class GameConfiguration implements Serializable {
             return board.getRedKing();
         else
             return board.getBlueKing();
+    }
+
+    public Position allyGoal() {
+        if (currentPlayer == RED)
+            return GameConfiguration.RED_THRONE;
+        else
+            return GameConfiguration.BLUE_THRONE;
+    }
+
+    public Position enemyGoal() {
+        if (currentPlayer == BLUE)
+            return GameConfiguration.RED_THRONE;
+        else
+            return GameConfiguration.BLUE_THRONE;
     }
 
     public Position enemyKing() {
