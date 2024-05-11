@@ -392,8 +392,8 @@ public class GameConfiguration implements Serializable {
         
         for (Vector2D movement : curMovement) {
             Vector2D possPosition = new Vector2D(
-                piece.getIntY() + movement.getIntX(),
-                piece.getIntX() + movement.getIntY()
+                piece.getIntX() + movement.getIntY(),
+                piece.getIntY() + movement.getIntX()
             );
             if (possPosition.getIntX() < 5 && possPosition.getIntY() < 5 &&
                 possPosition.getIntX() >= 0 && possPosition.getIntY() >= 0  &&
@@ -402,6 +402,7 @@ public class GameConfiguration implements Serializable {
                 newPossiblePos.add(possPosition);
             }
         }
+
         return newPossiblePos;
     }
 
