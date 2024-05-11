@@ -88,6 +88,17 @@ public class TileMap extends GameObject {
     }
 
     /**
+     * Removes all tiles from the map.
+     */
+    public void clearMap() {
+        for (int l = 0; l < mapDimension.height; l++) {
+            for (int c = 0; c < mapDimension.width; c++) {
+                gridmap[l][c] = null;
+            }
+        }
+    }
+
+    /**
      * Recuperates the tile at coordinates (l,c)
      * @param l The line (row) index of the tile
      * @param c The column index of the tile

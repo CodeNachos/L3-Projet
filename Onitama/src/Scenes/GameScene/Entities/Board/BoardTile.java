@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 import Engine.Entities.TileMap.Tile;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Structures.Sprite;
-import Onitama.src.Scenes.GameScene.Scripts.Match;
+import Onitama.src.Scenes.GameScene.GameScene;
 
 public class BoardTile extends Tile {
     private boolean highlighted = false;
@@ -54,26 +54,26 @@ public class BoardTile extends Tile {
     }
 
     private void toggleSelected() {
-        Piece tilePiece = ((Board)parentMap).pieces.getPiece(getLine(), getColumn());
+        PieceVisual tilePiece = ((Board)parentMap).pieces.getPiece(getLine(), getColumn());
         
         if (highlighted) {
             if (!isSelectedAction()) {
-                Match.setSelectedAction(mapPosition);
+                GameScene.game.setSelectedAction(mapPosition);
             } else {
-                Match.setSelectedAction(null);
+                GameScene.game.setSelectedAction(null);
             }
 
         }
 
         else if (tilePiece != null && 
-            (Match.getCurrentPlayer() == Match.PLAYER1 && tilePiece.isRed() ||
-            Match.getCurrentPlayer() == Match.PLAYER2 && tilePiece.isBlue())
+            (GameScene.game.getCurrentPlayer() == GameScene.game.PLAYER1 && tilePiece.isRed() ||
+            GameScene.game.getCurrentPlayer() == GameScene.game.PLAYER2 && tilePiece.isBlue())
         ) {
             
             if (!isSelectedPiece()) {
-                Match.setSelectedPiece(mapPosition);
+                GameScene.game.setSelectedPiece(mapPosition);
             } else {
-                Match.setSelectedPiece(null);
+                GameScene.game.setSelectedPiece(null);
             }
             
         } 
@@ -84,15 +84,15 @@ public class BoardTile extends Tile {
     }
 
     private boolean isSelectedPiece() {
-        if (!Match.isPieceSelected())
+        if (!GameScene.game.isPieceSelected())
             return false;
-        return Match.getSelectedPiece().equals(mapPosition);
+        return GameScene.game.getSelectedPiece().equals(mapPosition);
     }
 
     private boolean isSelectedAction() {
-        if (!Match.isActionSelected())
+        if (!GameScene.game.isActionSelected())
             return false;
-        return Match.getSelectedAction().equals(mapPosition);
+        return GameScene.game.getSelectedAction().equals(mapPosition);
     }
     
     

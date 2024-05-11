@@ -11,6 +11,12 @@ public class PlayerHand {
         this.card2 = card2;
     }
 
+    public PlayerHand(int player) {
+        this.player = player;
+        this.card1 = null;
+        this.card2 = null;
+    }
+
     public void printInfo() {
         if (player == 0) {
             System.out.println("Red currently has cards: " + card1.getName() + " and " + card2.getName());
@@ -41,5 +47,11 @@ public class PlayerHand {
 
     public CardInfo getSecondCard() {
         return card2;
+    }
+
+    @Override
+    public PlayerHand clone() {
+        PlayerHand clone = new PlayerHand(player, card1, card2);
+        return clone;
     }
 }

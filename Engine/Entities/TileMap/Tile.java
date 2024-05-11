@@ -35,15 +35,15 @@ public class Tile extends GameObject {
             sprite
         );
         parentMap = map; // Set reference to parent tile map
-        mapPosition = new Vector2D(line, column); // Set position of the tile in the map grid
+        mapPosition = new Vector2D(column, line); // Set position of the tile in the map grid
     }
 
     public int getLine() {
-        return mapPosition.getIntX();
+        return mapPosition.getIntY();
     }
 
     public int getColumn() {
-        return mapPosition.getIntY();
+        return mapPosition.getIntX();
     }
 
     /**

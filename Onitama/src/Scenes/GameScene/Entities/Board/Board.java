@@ -8,7 +8,8 @@ import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
-import Onitama.src.Scenes.GameScene.Scripts.Match;
+import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 
 public class Board extends TileMap{
 
@@ -73,9 +74,9 @@ public class Board extends TileMap{
 
     @Override
     public void process(double delta) {
-        if (Match.isPieceSelected() && Match.isCardSelected()) {
+        if (GameScene.game.isPieceSelected() && GameScene.game.isCardSelected()) {
             clearHightlighting();
-            highlightMoves(Match.getSelectedCard());
+            highlightMoves(GameScene.game.getSelectedCard());
         } else if (highlighting) {
             clearHightlighting();
         }
@@ -83,20 +84,24 @@ public class Board extends TileMap{
 
     public void highlightMoves(String card) {
         List<Vector2D> moves;
-        moves = Match.getCurrentPlayer() == Match.PLAYER1 ? Match.gameCards.get(card).getRedMovement() : Match.gameCards.get(card).getBlueMovement(); 
+        moves = GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER1 ? GameScene.game.gameCards.get(card).getRedMovement() : GameScene.game.gameCards.get(card).getBlueMovement(); 
         
         Vector2D actionPos;
         for (Vector2D m : moves) {
-            actionPos = Match.getSelectedPiece().add(m);
+            actionPos = new Vector2D(
+                GameScene.game.getSelectedPiece().getIntY() + m.getIntX(),
+                GameScene.game.getSelectedPiece().getIntX() + m.getIntY()
+            );
+            
             if (!isValidTile(actionPos))
                 continue;
 
-            Piece pieceAtAction =  ((Piece)pieces.getTile(actionPos.getIntX(), actionPos.getIntY()));
+            PieceVisual pieceAtAction =  ((PieceVisual)pieces.getTile(actionPos.getIntX(), actionPos.getIntY()));
             if (pieceAtAction == null) {
                 ((BoardTile)getTile(actionPos.getIntX(), actionPos.getIntY())).setHighlighted(true);
             } else {
-                if ((Match.getCurrentPlayer() == Match.PLAYER1 && pieceAtAction.isBlue()) || 
-                    (Match.getCurrentPlayer() == Match.PLAYER2 && pieceAtAction.isRed())
+                if ((GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER1 && pieceAtAction.isBlue()) || 
+                    (GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER2 && pieceAtAction.isRed())
                 ) {
                     ((BoardTile)getTile(actionPos.getIntX(), actionPos.getIntY())).setHighlighted(true);
                 }

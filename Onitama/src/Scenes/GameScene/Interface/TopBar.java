@@ -1,6 +1,8 @@
 package Onitama.src.Scenes.GameScene.Interface;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -11,7 +13,7 @@ import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
-import Onitama.src.Scenes.GameScene.Scripts.Match;
+import Onitama.src.Scenes.GameScene.GameScene;
 
 public class TopBar extends MenuFrame {
     FlatButton validateButton;
@@ -52,6 +54,13 @@ public class TopBar extends MenuFrame {
         validateButton.setCurvature(20, 20);
         validateButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
+        validateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GameScene.updateMatch();
+            }
+        });
+
         add(validateButton);
     }
 
@@ -72,7 +81,7 @@ public class TopBar extends MenuFrame {
     }
 
     private String getPlayerName() {
-        if (Match.getCurrentPlayer() == Match.PLAYER1) {
+        if (GameScene.game.getCurrentPlayer() == GameScene.game.PLAYER1) {
             return "RED";
         } else {
             return "BLUE";
@@ -82,7 +91,7 @@ public class TopBar extends MenuFrame {
     @Override
     public void process(double delta) {
         playerLabel.setText(getPlayerName());
-        if (Match.getCurrentPlayer() == Match.PLAYER1) {
+        if (GameScene.game.getCurrentPlayer() == GameScene.game.PLAYER1) {
             playerLabel.setForeground(Main.Palette.red);
         } else {
             playerLabel.setForeground(Main.Palette.highlight);
@@ -102,7 +111,7 @@ public class TopBar extends MenuFrame {
     }
 
     private boolean isValidTurn() {
-        return (Match.isCardSelected() && Match.isPieceSelected() && Match.isActionSelected());
+        return (GameScene.game.isCardSelected() && GameScene.game.isPieceSelected() && GameScene.game.isActionSelected());
     }
     
 }

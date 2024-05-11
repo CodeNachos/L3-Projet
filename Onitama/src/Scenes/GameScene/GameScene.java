@@ -1,7 +1,6 @@
 package Onitama.src.Scenes.GameScene;
 
 import java.awt.Dimension;
-import java.util.Iterator;
 
 import Engine.Core.Renderer.Scene;
 import Engine.Entities.UI.ColorArea;
@@ -13,9 +12,14 @@ import Onitama.src.Scenes.GameScene.Entities.Board.Board;
 import Onitama.src.Scenes.GameScene.Entities.Board.PieceSet;
 import Onitama.src.Scenes.GameScene.Entities.Cards.Card;
 import Onitama.src.Scenes.GameScene.Interface.TopBar;
-import Onitama.src.Scenes.GameScene.Scripts.Match;
+import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
+import Onitama.src.Scenes.GameScene.Scripts.Piece.Piece;
 
 public class GameScene extends Scene {
+
+    // Game
+    public static GameConfiguration game;
+
     // Game board
     public static PieceSet gamePieces;
     public static Board gameBoard;
@@ -27,16 +31,14 @@ public class GameScene extends Scene {
     public static Sprite selectedCardSprite;
 
     // Card Positions -> [p1:c1, p1:c2, p2:c1, p2:c2, stand by]
-    Vector2D[] cardPositions;
+    static Vector2D[] cardPositions;
     // Cards -> [p1:c1, p1:c2, p2:c1, p2:c2, stand by]
-    Card[] cards;
-
-    Card selectedCard;
+    static Card[] cards;
 
 
     public GameScene() {
-        // Create Match
-        Match.initialise();
+        // Create game
+        game = new GameConfiguration();
 
         // Instantiate game entities
         // Add Board to scene
@@ -45,7 +47,9 @@ public class GameScene extends Scene {
         createCards();
         
         // Instantiate GUI
+
         // Add gui to scene
+        
         // Dimension for top bar
         Dimension topBarArea = new Dimension(
             Main.engine.getResolution().width/3,
@@ -152,36 +156,36 @@ public class GameScene extends Scene {
 
         // Initiate player 1 card 1
         cards[0] = new Card(
-            Match.player1Hand.getFirstCard().getName(),
+            game.player1Hand.getFirstCard().getName(),
             cardPositions[0],
             idleCardSprite,
-            Match.player1Hand
+            game.player1Hand
         );
 
         // Initiate player 1 card 2
         cards[1] = new Card(
-            Match.player1Hand.getSecondCard().getName(),
+            game.player1Hand.getSecondCard().getName(),
             cardPositions[1],
             idleCardSprite,
-            Match.player1Hand
+            game.player1Hand
         );
         // Initiate player 2 card 1
         cards[2] = new Card(
-            Match.player2Hand.getFirstCard().getName(),
+            game.player2Hand.getFirstCard().getName(),
             cardPositions[2],
             idleCardSprite,
-            Match.player2Hand
+            game.player2Hand
         );
         // Initiate player 2 card 2
         cards[3] = new Card(
-            Match.player2Hand.getSecondCard().getName(),
+            game.player2Hand.getSecondCard().getName(),
             cardPositions[3],
             idleCardSprite,
-            Match.player2Hand
+            game.player2Hand
         );
         // Initiate stand by card
         cards[4] = new Card(
-            Match.standByCard.getName(),
+            game.standByCard.getName(),
             cardPositions[4],
             idleCardSprite,
             null
@@ -192,4 +196,44 @@ public class GameScene extends Scene {
         }
     }
     
+    public static void updateMatch() {
+        if (game.checkPresence(game.getSelectedAction())) {
+            for (Piece p : game.getPlayerPieces(game.getNextPlayer())) {
+                if (p.getPosition().equals(game.getSelectedAction())) {
+                    game.getPlayerPieces(game.getNextPlayer()).remove(p);
+                    break;
+                }
+            }
+        }
+
+        gamePieces.getPiece(game.getSelectedPiece().getIntY(), game.getSelectedPiece().getIntX()).getPiece().setPosition(new Vector2D(
+            game.getSelectedAction().getIntX(),
+            game.getSelectedAction().getIntY()
+        ));
+        gamePieces.updatePieces();
+
+        game.exchangeCards(); 
+        updateCards();
+
+
+        game.setSelectedAction(null);
+        game.setSelectedCard("");
+        game.setSelectedPiece(null);
+    
+        game.changePlayer();
+
+        if (game.gameOver()) {
+            Main.engine.stop();
+        }
+    }
+
+    private static void updateCards() {
+        cards[0].setName(game.player1Hand.getFirstCard().getName());
+        cards[1].setName(game.player1Hand.getSecondCard().getName());
+        cards[2].setName(game.player2Hand.getFirstCard().getName());
+        cards[3].setName(game.player2Hand.getSecondCard().getName());
+
+        cards[4].setName(game.getSelectedCard());
+    }
+
 }

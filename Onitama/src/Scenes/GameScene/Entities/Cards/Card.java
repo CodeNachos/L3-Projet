@@ -15,7 +15,7 @@ import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.GameScene;
-import Onitama.src.Scenes.GameScene.Scripts.Match;
+import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 import Onitama.src.Scenes.GameScene.Scripts.Card.PlayerHand;
 
 public class Card extends GameObject {
@@ -50,6 +50,8 @@ public class Card extends GameObject {
 
     public void setName(String name) {
         this.name = name;
+        ((JLabel)cardLabel.getComponent(0)).setText(name);
+        updateCard();
     }
 
     public String getName() {
@@ -116,7 +118,7 @@ public class Card extends GameObject {
 
     @Override
     public void process(double delta) {
-        if (Match.getSelectedCard().compareTo(this.name) == 0) {
+        if (GameScene.game.getSelectedCard().compareTo(this.name) == 0) {
             if (sprite != GameScene.selectedCardSprite)
                 sprite = GameScene.selectedCardSprite;
         } else if (sprite != GameScene.idleCardSprite) {
@@ -126,14 +128,14 @@ public class Card extends GameObject {
 
     public void toggleSelected() {
 
-        if (Match.currentPlayer != hand.getPlayer())
+        if (GameScene.game.currentPlayer != hand.getPlayer())
             return;
 
         if (sprite == GameScene.idleCardSprite) {
-            Match.setSelectedCard(this.name);
+            GameScene.game.setSelectedCard(this.name);
             sprite = GameScene.selectedCardSprite;
         } else {
-            Match.setSelectedCard("");
+            GameScene.game.setSelectedCard("");
             sprite = GameScene.idleCardSprite;
         }
     }
@@ -178,7 +180,7 @@ public class Card extends GameObject {
 
     public void updateCard() {
         if (hand == null)
-            cardMap.populateActions(name, Match.PLAYER1);
+            cardMap.populateActions(name, GameConfiguration.PLAYER1);
         else 
             cardMap.populateActions(name, hand.getPlayer());
     }
