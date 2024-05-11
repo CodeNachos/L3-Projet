@@ -1,4 +1,4 @@
-package Onitama.src.Scenes.GameScene.Scripts.Bots;
+package Onitama.src.Scenes.GameScene.Scripts.AI;
 
 import java.util.*;
 

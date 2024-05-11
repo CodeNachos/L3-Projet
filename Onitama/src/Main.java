@@ -20,6 +20,7 @@ public class Main {
         //Settings.resolution = screenSize;
         Settings.resolution = new Dimension((int)(aspectRatio*600),600);
         Settings.stretch = false;
+        Settings.resizable = false;
 
         // create engine
         engine = new GameEngine();

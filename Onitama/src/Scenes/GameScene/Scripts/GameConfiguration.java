@@ -11,7 +11,6 @@ import java.util.Set;
 
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
-import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 import Onitama.src.Scenes.GameScene.Scripts.Card.PlayerHand;
 import Onitama.src.Scenes.GameScene.Scripts.Piece.Piece;
@@ -35,7 +34,7 @@ public class GameConfiguration implements Serializable {
     public final int CARD_COUNT = 16; 
 
     // Card Deck
-    public List<CardInfo> listOfCards;
+    public static List<CardInfo> listOfCards;
 
 
     // Game State
@@ -280,12 +279,17 @@ public class GameConfiguration implements Serializable {
 
     private boolean conqueredKing() {
         for (Piece p : player1Pieces) {
-            if (p.getType() == PieceType.RED_KING && p.getPosition().equals(BLUE_THRONE) ||
-                p.getType() == PieceType.BLUE_KING && p.getPosition().equals(RED_THRONE)
-            ) {
+            if (p.getType() == PieceType.RED_KING && p.getPosition().equals(BLUE_THRONE)) {
                 return true;
             }
         }
+
+        for (Piece p : player2Pieces) {
+            if (p.getType() == PieceType.BLUE_KING && p.getPosition().equals(RED_THRONE)) {
+                return true;
+            }
+        }
+
 
         return false;
     }
@@ -355,17 +359,44 @@ public class GameConfiguration implements Serializable {
     }
 
     public Vector2D allyKing() {
+        Vector2D king = null;
         if (currentPlayer == GameConfiguration.PLAYER1)
-            return getKing(GameConfiguration.PLAYER1);
+            king = getKing(GameConfiguration.PLAYER1);
         else
-            return getKing(GameConfiguration.PLAYER2);
+            king = getKing(GameConfiguration.PLAYER2);
+        
+        if (king == null) {
+            king = new Vector2D(-100,-100);
+        }
+
+        return king;
     }
 
     public Vector2D enemyKing() {
+        Vector2D king = null;
         if (currentPlayer == GameConfiguration.PLAYER1)
-            return getKing(GameConfiguration.PLAYER2);
+            king = getKing(GameConfiguration.PLAYER2);
         else
-            return getKing(GameConfiguration.PLAYER1);
+            king = getKing(GameConfiguration.PLAYER1);
+
+        if (king == null) {
+            king = new Vector2D(100,100);
+        }
+        return king;
+    }
+
+    public Vector2D allyGoal() {
+        if (currentPlayer == PLAYER1)
+            return GameConfiguration.RED_THRONE;
+        else
+            return GameConfiguration.BLUE_THRONE;
+    }
+
+    public Vector2D enemyGoal() {
+        if (currentPlayer == PLAYER2)
+            return GameConfiguration.RED_THRONE;
+        else
+            return GameConfiguration.BLUE_THRONE;
     }
 
     public List<CardInfo> availableCards() {
@@ -409,6 +440,12 @@ public class GameConfiguration implements Serializable {
     public GameConfiguration nextConfig(Turn turn) {
         GameConfiguration next = new GameConfiguration(player1Hand, player2Hand, standByCard, player1Pieces, player2Pieces, currentPlayer);
         
+        next.gameCards = gameCards;
+        
+        next.setSelectedPiece(turn.getPiece().getPosition());
+        next.setSelectedCard(turn.getCard().getName());
+        next.setSelectedAction(turn.move);
+
         if (next.checkPresence(turn.getMove())) {
             for (Piece p : next.getPlayerPieces(next.getNextPlayer())) {
                 if (p.getPosition().equals(next.getSelectedAction())) {

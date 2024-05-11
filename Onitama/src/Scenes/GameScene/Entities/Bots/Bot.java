@@ -4,8 +4,9 @@ import Engine.Entities.GameObject;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 import Onitama.src.Scenes.GameScene.Scripts.Turn;
-import Onitama.src.Scenes.GameScene.Scripts.Bots.Player;
-import Onitama.src.Scenes.GameScene.Scripts.Bots.RandomAI;
+import Onitama.src.Scenes.GameScene.Scripts.AI.Player;
+import Onitama.src.Scenes.GameScene.Scripts.AI.RandomAI;
+import Onitama.src.Scenes.GameScene.Scripts.AI.SmartAI;
 
 public class Bot extends GameObject {
     Player bot;
@@ -13,7 +14,7 @@ public class Bot extends GameObject {
     int counter;
 
     public Bot() {
-        bot = new RandomAI();
+        bot = new SmartAI(5, GameConfiguration.PLAYER2);
     }
 
     @Override
