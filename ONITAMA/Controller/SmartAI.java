@@ -41,7 +41,12 @@ public class SmartAI implements Player {
 
     private int minmax(GameConfiguration config, boolean isMaximizing, 
                                        int depth, int alpha, int beta) {
-        if (config.gameOver() || depth == 0)
+        if (config.gameOver()) {
+            if (config.getCurrentPlayer() == player)
+                return Integer.MIN_VALUE;
+            else
+                return Integer.MAX_VALUE;
+        } else if (depth == 0)
             return heuristic(config);
 
         int eval, maxEval, minEval;
