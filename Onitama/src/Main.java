@@ -33,7 +33,7 @@ public class Main {
         engine.start();
     } 
     
-    public class Palette {
+    public static class Palette {
         public static Color background = new Color(40,42,54,255);
         public static Color selection = new Color(68,71,90,255);
         public static Color foreground = new Color(248,248,242,255);

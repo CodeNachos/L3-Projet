@@ -2,7 +2,6 @@ package Engine.Core.Engines;
 
 import Engine.Core.Renderer.GameFrame;
 import Engine.Core.Renderer.Scene;
-import Engine.Entities.GameObject;
 import Engine.Global.Settings;
 import Engine.Global.Util;
 

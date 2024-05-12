@@ -4,7 +4,6 @@ package Onitama.src.Scenes.GameScene.Scripts.Card;
 import java.util.*;
 
 import Engine.Structures.Vector2D;
-import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 
 public class CardInfo {
     String name;

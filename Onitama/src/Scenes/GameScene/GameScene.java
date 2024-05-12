@@ -67,7 +67,7 @@ public class GameScene extends Scene {
         ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
         addComponent(background);
 
-        //addComponent(new Bot());
+        addComponent(new Bot());
     }
 
 
@@ -93,7 +93,7 @@ public class GameScene extends Scene {
         addComponent(gamePieces);
         addComponent(gameBoard);
 
-        addComponent(new Bot());
+        //addComponent(new Bot());
     }
 
     private void createCards() {

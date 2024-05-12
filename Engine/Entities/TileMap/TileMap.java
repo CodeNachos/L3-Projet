@@ -122,14 +122,6 @@ public class TileMap extends GameObject {
         //updateSize(); // Update size based on scale
     }
 
-    private void updateSize() {
-        this.setSize(
-            (int)(initialArea.width * scale.x), // Set width based on initial area width and scale
-            (int)(initialArea.height * scale.y) // Set height based on initial area height and scale
-        );
-        
-    }
-
     @Override
     public void resize(Vector2D ratio) {
         Vector2D updatedValues = new Vector2D();

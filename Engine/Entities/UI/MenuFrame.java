@@ -3,7 +3,6 @@ package Engine.Entities.UI;
 import java.awt.*;
 import javax.swing.*;
 
-import Engine.Global.Settings;
 import Engine.Structures.Vector2D;
 
 /**

@@ -6,6 +6,7 @@ import Engine.Entities.TileMap.Tile;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Structures.Sprite;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 
 public class BoardTile extends Tile {
     private boolean highlighted = false;
@@ -66,8 +67,8 @@ public class BoardTile extends Tile {
         }
 
         else if (tilePiece != null && 
-            (GameScene.game.getCurrentPlayer() == GameScene.game.PLAYER1 && tilePiece.isRed() ||
-            GameScene.game.getCurrentPlayer() == GameScene.game.PLAYER2 && tilePiece.isBlue())
+            (GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER1 && tilePiece.isRed() ||
+            GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER2 && tilePiece.isBlue())
         ) {
             
             if (!isSelectedPiece()) {

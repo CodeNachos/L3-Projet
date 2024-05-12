@@ -14,6 +14,7 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 
 public class TopBar extends MenuFrame {
     FlatButton validateButton;
@@ -81,7 +82,7 @@ public class TopBar extends MenuFrame {
     }
 
     private String getPlayerName() {
-        if (GameScene.game.getCurrentPlayer() == GameScene.game.PLAYER1) {
+        if (GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER1) {
             return "RED";
         } else {
             return "BLUE";
@@ -91,7 +92,7 @@ public class TopBar extends MenuFrame {
     @Override
     public void process(double delta) {
         playerLabel.setText(getPlayerName());
-        if (GameScene.game.getCurrentPlayer() == GameScene.game.PLAYER1) {
+        if (GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER1) {
             playerLabel.setForeground(Main.Palette.red);
         } else {
             playerLabel.setForeground(Main.Palette.highlight);

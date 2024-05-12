@@ -5,7 +5,6 @@ import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 import Onitama.src.Scenes.GameScene.Scripts.Turn;
 import Onitama.src.Scenes.GameScene.Scripts.AI.Player;
-import Onitama.src.Scenes.GameScene.Scripts.AI.RandomAI;
 import Onitama.src.Scenes.GameScene.Scripts.AI.SmartAI;
 
 public class Bot extends GameObject {
