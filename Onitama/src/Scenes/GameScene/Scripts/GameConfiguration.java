@@ -11,11 +11,11 @@ import java.util.Set;
 
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
+import Onitama.src.JsonReader;
 import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 import Onitama.src.Scenes.GameScene.Scripts.Card.PlayerHand;
 import Onitama.src.Scenes.GameScene.Scripts.Piece.Piece;
 import Onitama.src.Scenes.GameScene.Scripts.Piece.PieceType;
-import Onitama.src.lib.json.JsonReader;
 
 public class GameConfiguration implements Serializable {    
     // JSON file reader
