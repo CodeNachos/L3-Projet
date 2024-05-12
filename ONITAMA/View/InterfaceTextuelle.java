@@ -57,8 +57,11 @@ public class InterfaceTextuelle {
                     eng.getGameConfiguration().displayConfig();
                     System.out.println("Ai will play piece :(" + piece.getPosition().getI() + ","
                             + piece.getPosition().getJ() + ")");
+                    System.err.println("Of type:" + piece.getType());
                     System.out.println("With card: " + playCard.getName());
-                    System.out.println("At new position :(" + move.getPosition().getI() + "," + move.getPosition().getJ()+")");
+                    System.out.println(
+                            "At new position :(" + move.getPosition().getI() + "," + move.getPosition().getJ() + ")");
+                    System.err.println("Type is:" + move.getType());
                 }
                 break;
             case "Automatic":
@@ -71,11 +74,13 @@ public class InterfaceTextuelle {
                     eng.getGameConfiguration().displayConfig();
                     System.out.println("Ai1 will play piece :(" + piece.getPosition().getI() + ","
                             + piece.getPosition().getJ() + ")");
+                            System.err.println("Of type:" + piece.getType());
                     System.out.println("With card: " + playCard.getName());
                     System.out.println(
                             "At new position :(" + move.getPosition().getI() + "," + move.getPosition().getJ() + ")");
+                    System.out.println("Type is:" + move.getType());
                     try {
-                        Thread.sleep(600);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -87,11 +92,13 @@ public class InterfaceTextuelle {
                     eng.getGameConfiguration().displayConfig();
                     System.out.println("Ai2 will play piece :(" + piece.getPosition().getI() + ","
                             + piece.getPosition().getJ() + ")");
+                    System.err.println("Of type:" + piece.getType());
                     System.out.println("With card: " + playCard.getName());
                     System.out.println(
                             "At new position :(" + move.getPosition().getI() + "," + move.getPosition().getJ() + ")");
+                    System.out.println("Type is:" + move.getType());
                     try {
-                        Thread.sleep(600);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

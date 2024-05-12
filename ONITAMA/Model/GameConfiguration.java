@@ -80,7 +80,7 @@ public class GameConfiguration implements Serializable {
                                 break;
                             default:
                                 if (j == COLS - 1) {
-                                    System.out.print("b");
+                                    System.out.print("B");
                                 } else {
                                     System.out.print("B ");
                                 }
