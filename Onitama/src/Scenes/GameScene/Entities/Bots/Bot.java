@@ -11,9 +11,11 @@ public class Bot extends GameObject {
     Player bot;
     Turn botTurn;
     int counter;
+    int player;
 
-    public Bot() {
-        bot = new SmartAI(5, GameConfiguration.PLAYER2);
+    public Bot(int player) {
+        this.player = player;
+        bot = new SmartAI(5, this.player);
     }
 
     @Override
@@ -27,12 +29,12 @@ public class Bot extends GameObject {
             botTurn = null;
         }
 
-        if (GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER2) {
+        if (GameScene.game.getCurrentPlayer() == this.player) {
             botTurn = bot.play();
             GameScene.game.setSelectedPiece(botTurn.getPiece().getPosition());
             GameScene.game.setSelectedCard(botTurn.getCard().getName());
             GameScene.game.setSelectedAction(botTurn.getMove());
-            counter = 25;
+            counter = 60;
             return;
             
         } else {
