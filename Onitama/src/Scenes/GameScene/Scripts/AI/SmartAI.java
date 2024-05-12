@@ -20,13 +20,12 @@ import Onitama.src.Scenes.GameScene.Scripts.Piece.Piece;
  * SmartAI
  */
 public class SmartAI implements Player {
-    List<Turn> winners;
+    Turn best;
     Random random;
     int difficulty;
     int player;
 
     public SmartAI(int difficulty, int player) {
-        this.winners = new ArrayList<>();
         this.random = new Random();
         this.difficulty = difficulty;
         this.player = player;
@@ -36,12 +35,17 @@ public class SmartAI implements Player {
     public Turn play() {
         minmax(GameScene.game, true, difficulty, 
                Integer.MIN_VALUE, Integer.MAX_VALUE);
-        return winners.get(random.nextInt(winners.size()));
+        return best;
     }
 
     private int minmax(GameConfiguration config, boolean isMaximizing, 
                                        int depth, int alpha, int beta) {
-        if (config.gameOver() || depth == 0)
+        if (config.gameOver()) {
+            if (config.getCurrentPlayer() == player)
+                return Integer.MIN_VALUE;
+            else
+                return Integer.MAX_VALUE;
+        } else if (depth == 0)
             return heuristic(config);
 
         int eval, maxEval, minEval;
@@ -53,17 +57,15 @@ public class SmartAI implements Player {
                               depth-1, alpha, beta);
                 // if at root, track winning moves
                 if (depth == difficulty) { 
-                    if (eval >= maxEval) {
-                        if (eval > maxEval)
-                            winners.clear();
-                        winners.add(turn);
-                    }
+                    if (eval >= maxEval)
+                        best = turn;
                 }
                 maxEval = max(maxEval, eval);
                 alpha = max(alpha, eval);
                 if (beta <= alpha)
                     break;
             }
+            System.err.println("Max eval " + maxEval + " at depth" + (difficulty-depth));
             return maxEval;
         } 
         
@@ -77,6 +79,7 @@ public class SmartAI implements Player {
                 if (beta <= alpha)
                     break;
             }
+            System.err.println("Min eval " + minEval + " at depth" + (difficulty-depth));
             return minEval;
         }
     }
