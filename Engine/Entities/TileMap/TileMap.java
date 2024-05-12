@@ -2,10 +2,10 @@ package Engine.Entities.TileMap;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 
 import Engine.Entities.GameObject;
 import Engine.Global.Util;
+import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 
 /**
@@ -64,7 +64,7 @@ public class TileMap extends GameObject {
      * @param c The column index of the tile
      * @param sprite The sprite image of the tile
      */
-    public void addTile(int l, int c, Image sprite) {
+    public void addTile(int l, int c, Sprite sprite) {
         gridmap[l][c] = new Tile(this, l, c, sprite); // Create a new Tile instance and add it to the grid
     }
 
@@ -87,23 +87,39 @@ public class TileMap extends GameObject {
         gridmap[l][c] = null; // Remove the tile at the specified position
     }
 
+    /**
+     * Removes all tiles from the map.
+     */
+    public void clearMap() {
+        for (int l = 0; l < mapDimension.height; l++) {
+            for (int c = 0; c < mapDimension.width; c++) {
+                gridmap[l][c] = null;
+            }
+        }
+    }
+
+    /**
+     * Recuperates the tile at coordinates (l,c)
+     * @param l The line (row) index of the tile
+     * @param c The column index of the tile
+     * @return Tile at coordinates (l,c), null if empty
+     */
+    public Tile getTile(int l, int c) {
+        return gridmap[l][c];
+    }
+
     @Override
-    public void setSprite(Image sprite) {
+    public void setSprite(Sprite sprite) {
         Util.printError("Unsupported operation: Updates to come.");
     }
 
     @Override
     public void setScale(Vector2D newscale) {
-        scale.x = newscale.x; // Set scale x-coordinate
-        scale.y = newscale.y; // Set scale y-coordinate
-        updateSize(); // Update size based on scale
-    }
-
-    private void updateSize() {
-        this.setSize(
-            (int)(initialArea.width * scale.x), // Set width based on initial area width and scale
-            (int)(initialArea.height * scale.y) // Set height based on initial area height and scale
-        );
+        Vector2D ratio = new Vector2D(newscale.x / scale.x, newscale.y/scale.y);
+        resize(ratio);
+        //scale.x = newscale.x; // Set scale x-coordinate
+        //scale.y = newscale.y; // Set scale y-coordinate
+        //updateSize(); // Update size based on scale
     }
 
     @Override
@@ -114,7 +130,13 @@ public class TileMap extends GameObject {
         setPos(updatedValues);
         // set relative scaling
         updatedValues.setCoord(scale.x * ratio.x, scale.y * ratio.y);
-        setScale(updatedValues);
+        scale.x = updatedValues.x; // Set scale x-coordinate
+        scale.y = updatedValues.y; // Set scale y-coordinate
+        // Update size based on scale
+        this.setSize(
+            (int)(initialArea.width * scale.x), // Set width based on initial area width and scale
+            (int)(initialArea.height * scale.y) // Set height based on initial area height and scale
+        );
 
         // recalculate tile dimensions
         tileDimension = new Dimension(
@@ -144,6 +166,23 @@ public class TileMap extends GameObject {
             for (int c = 0; c < mapDimension.width; c++) {
                 if (gridmap[l][c] != null) {
                     gridmap[l][c].paintComponent(g); // Paint the tile
+                }
+            }
+        }
+    }
+
+    /**
+     * Updates tile map by updating every tile.
+     * 
+     * @param delta The time since the last update in seconds
+     */
+    public void update(double delta) {
+        this.process(delta);
+
+        for (int l = 0; l < mapDimension.height; l++) {
+            for (int c = 0; c < mapDimension.width; c++) {
+                if (gridmap[l][c] != null) {
+                    gridmap[l][c].process(delta);
                 }
             }
         }

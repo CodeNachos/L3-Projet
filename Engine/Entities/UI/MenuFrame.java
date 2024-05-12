@@ -2,6 +2,7 @@ package Engine.Entities.UI;
 
 import java.awt.*;
 import javax.swing.*;
+
 import Engine.Structures.Vector2D;
 
 /**
@@ -9,6 +10,8 @@ import Engine.Structures.Vector2D;
  * It extends UIObject to provide customized appearance and behavior.
  */
 public class MenuFrame extends UIObject {
+
+    int borderWidth = 3;
 
     private Color mainColor = new Color(255, 255, 255, 255); // Main color of the menu frame
     private Color accentColor = new Color(255, 255, 255, 255); // Accent color of the menu frame (border color)
@@ -59,6 +62,10 @@ public class MenuFrame extends UIObject {
         curvature.height = arcHeight; // Set arc height of the curvature
     }
 
+    public void setBorderWidth(int width) {
+        borderWidth = width;
+    }   
+
     /**
      * Overrides the paintComponent method to customize the menu frame's appearance.
      * @param g The Graphics context used for painting
@@ -69,7 +76,7 @@ public class MenuFrame extends UIObject {
         // set stroke
         Graphics2D g2d = (Graphics2D) g;
         Stroke defaultStroke = g2d.getStroke();
-        g2d.setStroke(new BasicStroke(3));
+        g2d.setStroke(new BasicStroke(borderWidth));
 
         // paint background
         g2d.setColor(mainColor);

@@ -27,6 +27,7 @@ public class Main {
     public static Color whiteColor = new Color(255,255,255,255);
     public static Color blackColor = new Color(0,0,0,255);
 
+
     /**
      * The main method of the WaffleGame application.
      * Initializes the engine and starts the main game scene.

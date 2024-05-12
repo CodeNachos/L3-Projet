@@ -1,11 +1,11 @@
 package Engine.Entities;
 
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.*;
 
 import javax.swing.JComponent;
 
+import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 
 /**
@@ -13,11 +13,12 @@ import Engine.Structures.Vector2D;
  * It provides functionalities for position, scaling, sprite handling, and event handling.
  */
 public abstract class GameObject extends JComponent {
+    public boolean cursorIn = false;
 
     // Object attributes
     public Vector2D position = new Vector2D(0, 0); // Position of the object
     public Vector2D scale = new Vector2D(1, 1); // Scale of the object
-    public Image sprite = null; // Sprite of the object
+    public Sprite sprite = null; // Sprite of the object
 
     /**
      * Constructs a new GameObject instance with default attributes.
@@ -47,12 +48,23 @@ public abstract class GameObject extends JComponent {
     }
 
     /**
+     * Constructs a new GameObject instance with the given position, and sprite.
+     * @param position The position of the object
+     * @param sprite The sprite of the object
+     */
+    public GameObject(Vector2D position, Sprite sprite) {
+        this.position = position.clone(); // Set position
+        this.sprite = sprite; // Set sprite
+        updateVisuals(); // Update visuals based on attributes
+    }
+
+    /**
      * Constructs a new GameObject instance with the given position, scale, and sprite.
      * @param position The position of the object
      * @param scale The scale of the object
      * @param sprite The sprite of the object
      */
-    public GameObject(Vector2D position, Vector2D scale, Image sprite) {
+    public GameObject(Vector2D position, Vector2D scale, Sprite sprite) {
         this.position = position.clone(); // Set position
         this.scale = scale.clone(); // Set scale
         this.sprite = sprite; // Set sprite
@@ -110,7 +122,7 @@ public abstract class GameObject extends JComponent {
      * Sets the sprite of the object.
      * @param sprite The sprite to set
      */
-    public void setSprite(Image sprite) {
+    public void setSprite(Sprite sprite) {
         this.sprite = sprite; // Set sprite
         updateSize(); // Update component size based on sprite
     }
@@ -119,7 +131,7 @@ public abstract class GameObject extends JComponent {
      * Gets the sprite of the object.
      * @return The sprite of the object
      */
-    public Image getSprite() {
+    public Sprite getSprite() {
         return sprite; // Return the sprite of the object
     }
 
@@ -154,8 +166,8 @@ public abstract class GameObject extends JComponent {
     private void updateSize() {
         if (sprite != null) { // If a sprite is set
             this.setSize(
-                (int)Math.ceil(sprite.getWidth(null) * scale.x), // Set width based on sprite width and scale
-                (int)Math.ceil(sprite.getHeight(null) * scale.y) // Set height based on sprite height and scale
+                (int)Math.ceil(sprite.getWidth() * scale.x), // Set width based on sprite width and scale
+                (int)Math.ceil(sprite.getHeight() * scale.y) // Set height based on sprite height and scale
             );
         } else {
             this.setSize(0, 0); // Set size to zero if no sprite is set
@@ -178,7 +190,7 @@ public abstract class GameObject extends JComponent {
         super.paintComponent(g); // Call superclass's paintComponent method
         
         if (sprite != null) // If a sprite is set
-            g.drawImage(sprite, getLocation().x, getLocation().y, getSize().width, getSize().height, null); // Draw the sprite
+           sprite.drawSprite(g, 0, 0, getSize().width, getSize().height); // Draw the sprite
     }
 
     /**
