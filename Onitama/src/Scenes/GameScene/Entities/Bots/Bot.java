@@ -2,13 +2,12 @@ package Onitama.src.Scenes.GameScene.Entities.Bots;
 
 import Engine.Entities.GameObject;
 import Onitama.src.Scenes.GameScene.GameScene;
-import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 import Onitama.src.Scenes.GameScene.Scripts.Turn;
-import Onitama.src.Scenes.GameScene.Scripts.AI.Player;
+import Onitama.src.Scenes.GameScene.Scripts.AI.AI;
 import Onitama.src.Scenes.GameScene.Scripts.AI.SmartAI;
 
 public class Bot extends GameObject {
-    Player bot;
+    AI bot;
     Turn botTurn;
     int counter;
     int player;

@@ -12,20 +12,18 @@ import static java.lang.Math.abs;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 import Onitama.src.Scenes.GameScene.Scripts.Turn;
-import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
-import Onitama.src.Scenes.GameScene.Scripts.Piece.Piece;
-
 
 /**
  * SmartAI
  */
-public class SmartAI implements Player {
-    Turn best;
+public class SmartAI extends AI {
+    List<Turn> winners;
     Random random;
     int difficulty;
     int player;
 
     public SmartAI(int difficulty, int player) {
+        this.winners = new ArrayList<>();
         this.random = new Random();
         this.difficulty = difficulty;
         this.player = player;
@@ -33,9 +31,10 @@ public class SmartAI implements Player {
 
     @Override
     public Turn play() {
+        winners.clear();
         minmax(GameScene.game, true, difficulty, 
                Integer.MIN_VALUE, Integer.MAX_VALUE);
-        return best;
+        return winners.get(random.nextInt(winners.size()));
     }
 
     private int minmax(GameConfiguration config, boolean isMaximizing, 
@@ -57,15 +56,17 @@ public class SmartAI implements Player {
                               depth-1, alpha, beta);
                 // if at root, track winning moves
                 if (depth == difficulty) { 
-                    if (eval >= maxEval)
-                        best = turn;
+                    if (eval >= maxEval) {
+                        if (eval > maxEval)
+                            winners.clear();
+                        winners.add(turn);
+                    }
                 }
                 maxEval = max(maxEval, eval);
                 alpha = max(alpha, eval);
                 if (beta <= alpha)
                     break;
             }
-            System.err.println("Max eval " + maxEval + " at depth" + (difficulty-depth));
             return maxEval;
         } 
         
@@ -79,7 +80,6 @@ public class SmartAI implements Player {
                 if (beta <= alpha)
                     break;
             }
-            System.err.println("Min eval " + minEval + " at depth" + (difficulty-depth));
             return minEval;
         }
     }
@@ -94,16 +94,6 @@ public class SmartAI implements Player {
             return eval;
         else
             return -eval;
-    }
-
-    private List<Turn> possibleTurns(GameConfiguration config) {
-        List<Turn> result = new ArrayList<>();
-        for (CardInfo card : config.availableCards())
-            for (Piece piece : config.allyPieces())
-                for (Vector2D position : config.possiblePositions(piece.getPosition(), card)) {
-                    result.add(new Turn(card, piece, position));
-                }
-        return result;
     }
 
     private int distance(Vector2D first, Vector2D second) {
