@@ -1,6 +1,8 @@
 package Onitama.src.Scenes.GameScene.Scripts.Card;
 
-public class PlayerHand {
+import java.io.Serializable;
+
+public class PlayerHand implements Serializable {
     int player;
     CardInfo card1;
     CardInfo card2;

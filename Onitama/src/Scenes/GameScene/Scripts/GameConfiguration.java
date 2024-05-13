@@ -1,5 +1,7 @@
 package Onitama.src.Scenes.GameScene.Scripts;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,12 +19,11 @@ import Onitama.src.Scenes.GameScene.Scripts.Card.PlayerHand;
 import Onitama.src.Scenes.GameScene.Scripts.Piece.Piece;
 import Onitama.src.Scenes.GameScene.Scripts.Piece.PieceType;
 
-public class GameConfiguration implements Serializable {    
-    // JSON file reader
-    public JsonReader jReader;
+public class GameConfiguration implements Serializable {
 
-    
     // Game constants
+
+    public static final String DEFAULT_SAVE_FILE = "save";
 
     static final Vector2D RED_THRONE = new Vector2D(2, 4);
     static final Vector2D BLUE_THRONE = new Vector2D(2, 0);
@@ -30,14 +31,19 @@ public class GameConfiguration implements Serializable {
     // Player ID's
     public static final int PLAYER1 = 0; // red
     public static final int PLAYER2 = 1; // blue
-    
-    public final int CARD_COUNT = 16; 
+
+    public final int CARD_COUNT = 16;
 
     // Card Deck
     public static List<CardInfo> listOfCards;
 
-
     // Game State
+
+    // stack of already played moves
+    private ArrayList<Play> played = new ArrayList<>();
+
+    // stack of undoed moves. It is cleared when we make a move.
+    private ArrayList<Play> undoed = new ArrayList<>();
 
     // Cards picked for the match -> [p1:c1, p1:c2, p2:c1, p2:c2, stand by]
     public HashMap<String, CardInfo> gameCards;
@@ -50,9 +56,8 @@ public class GameConfiguration implements Serializable {
 
     // Players pieces
     public ArrayList<Piece> player1Pieces;
-    public ArrayList<Piece> player2Pieces; 
+    public ArrayList<Piece> player2Pieces;
 
-    
     // Turn Info
     public int currentPlayer = PLAYER1;
     public CardInfo selectedCard = null; // current player hand selected card
@@ -60,10 +65,12 @@ public class GameConfiguration implements Serializable {
     public Vector2D selectedAction = null; // current player selected action tile
 
     public GameConfiguration() {
+
         // Load all game cards
+        JsonReader jReader;
         jReader = new JsonReader();
         listOfCards = jReader.readJson("Onitama/res/Cards/cards.json");
-        
+
         // Pick game cards
         chooseCards();
 
@@ -75,13 +82,12 @@ public class GameConfiguration implements Serializable {
     }
 
     public GameConfiguration(
-        PlayerHand ph1, 
-        PlayerHand ph2, 
-        CardInfo stb, 
-        ArrayList<Piece> p1p,
-        ArrayList<Piece> p2p,
-        int currentPlayer
-    ) {
+            PlayerHand ph1,
+            PlayerHand ph2,
+            CardInfo stb,
+            ArrayList<Piece> p1p,
+            ArrayList<Piece> p2p,
+            int currentPlayer) {
         this.player1Hand = ph1.clone();
         this.player2Hand = ph2.clone();
 
@@ -99,9 +105,8 @@ public class GameConfiguration implements Serializable {
 
         Random random = new Random();
 
-        int i = 0;  
-        while (i<5)
-        {
+        int i = 0;
+        while (i < 5) {
             int cardIndex = random.nextInt(16);
             if (!set.contains(cardIndex)) {
                 CardInfo card = listOfCards.get(cardIndex);
@@ -116,38 +121,36 @@ public class GameConfiguration implements Serializable {
     private void assignCards() {
         // iterate trough card game names
         Iterator<String> cardIter = gameCards.keySet().iterator();
-        
+
         // initiate player's 1 hand
         player1Hand = new PlayerHand(
-            PLAYER1, 
-            gameCards.get(cardIter.next()), 
-            gameCards.get(cardIter.next())
-        );
+                PLAYER1,
+                gameCards.get(cardIter.next()),
+                gameCards.get(cardIter.next()));
         // initiate player's 2 hand
         player2Hand = new PlayerHand(
-            PLAYER2, 
-            gameCards.get(cardIter.next()), 
-            gameCards.get(cardIter.next())
-        );
-        
+                PLAYER2,
+                gameCards.get(cardIter.next()),
+                gameCards.get(cardIter.next()));
+
         // set extra card
         standByCard = gameCards.get(cardIter.next());
     }
 
     private void initiatePieces() {
         player1Pieces = new ArrayList<>();
-        player1Pieces.add(new Piece(PieceType.RED_PAWN, new Vector2D(0,4)));
-        player1Pieces.add(new Piece(PieceType.RED_PAWN, new Vector2D(1,4)));
-        player1Pieces.add(new Piece(PieceType.RED_KING, new Vector2D(2,4)));
-        player1Pieces.add(new Piece(PieceType.RED_PAWN, new Vector2D(3,4)));
-        player1Pieces.add(new Piece(PieceType.RED_PAWN, new Vector2D(4,4)));
+        player1Pieces.add(new Piece(PieceType.RED_PAWN, new Vector2D(0, 4)));
+        player1Pieces.add(new Piece(PieceType.RED_PAWN, new Vector2D(1, 4)));
+        player1Pieces.add(new Piece(PieceType.RED_KING, new Vector2D(2, 4)));
+        player1Pieces.add(new Piece(PieceType.RED_PAWN, new Vector2D(3, 4)));
+        player1Pieces.add(new Piece(PieceType.RED_PAWN, new Vector2D(4, 4)));
 
         player2Pieces = new ArrayList<>();
-        player2Pieces.add(new Piece(PieceType.BLUE_PAWN, new Vector2D(0,0)));
-        player2Pieces.add(new Piece(PieceType.BLUE_PAWN, new Vector2D(1,0)));
-        player2Pieces.add(new Piece(PieceType.BLUE_KING, new Vector2D(2,0)));
-        player2Pieces.add(new Piece(PieceType.BLUE_PAWN, new Vector2D(3,0)));
-        player2Pieces.add(new Piece(PieceType.BLUE_PAWN, new Vector2D(4,0)));
+        player2Pieces.add(new Piece(PieceType.BLUE_PAWN, new Vector2D(0, 0)));
+        player2Pieces.add(new Piece(PieceType.BLUE_PAWN, new Vector2D(1, 0)));
+        player2Pieces.add(new Piece(PieceType.BLUE_KING, new Vector2D(2, 0)));
+        player2Pieces.add(new Piece(PieceType.BLUE_PAWN, new Vector2D(3, 0)));
+        player2Pieces.add(new Piece(PieceType.BLUE_PAWN, new Vector2D(4, 0)));
 
     }
 
@@ -164,8 +167,8 @@ public class GameConfiguration implements Serializable {
     public PlayerHand getPlayerHand(int player) {
         PlayerHand hand = null;
 
-        if (player == PLAYER1) { 
-            hand = player1Hand;    
+        if (player == PLAYER1) {
+            hand = player1Hand;
         } else if (player == PLAYER2) {
             hand = player2Hand;
         } else {
@@ -212,9 +215,9 @@ public class GameConfiguration implements Serializable {
     }
 
     public Vector2D getSelectedPiece() {
-        if (selectedPiece == null) 
+        if (selectedPiece == null)
             return null;
-        
+
         return selectedPiece.clone();
     }
 
@@ -227,9 +230,9 @@ public class GameConfiguration implements Serializable {
     }
 
     public Vector2D getSelectedAction() {
-        if (selectedAction == null) 
+        if (selectedAction == null)
             return null;
-        
+
         return selectedAction.clone();
     }
 
@@ -261,23 +264,22 @@ public class GameConfiguration implements Serializable {
         PlayerHand hand = getPlayerHand(currentPlayer);
         if (getSelectedCard().equals(hand.getFirstCard().getName())) {
             hand.setFirstCard(gameCards.get(tmp));
-            
+
         } else {
             hand.setSecondCard(gameCards.get(tmp));
         }
-        
+
     }
 
-    public void exchangeCards(PlayerHand ph1, PlayerHand ph2, CardInfo selectedCard, CardInfo standBy)  {
-        
-        
+    public void exchangeCards(PlayerHand ph1, PlayerHand ph2, CardInfo selectedCard, CardInfo standBy) {
+
     }
 
-    public boolean gameOver() {
-        return conqueredKing() || capturedKing();
+    public boolean isGameOver() {
+        return isKingConquered() || iskingCaptured();
     }
 
-    private boolean conqueredKing() {
+    private boolean isKingConquered() {
         for (Piece p : player1Pieces) {
             if (p.getType() == PieceType.RED_KING && p.getPosition().equals(BLUE_THRONE)) {
                 return true;
@@ -290,11 +292,10 @@ public class GameConfiguration implements Serializable {
             }
         }
 
-
         return false;
     }
 
-    private boolean capturedKing() {
+    private boolean iskingCaptured() {
 
         return ((!checkPresence(PieceType.BLUE_KING) && checkPresence(PieceType.RED_KING))
                 || (checkPresence(PieceType.BLUE_KING) && !checkPresence(PieceType.RED_KING)));
@@ -303,13 +304,13 @@ public class GameConfiguration implements Serializable {
     public boolean checkPresence(PieceType type) {
         for (Piece p : player1Pieces) {
             if (p.getType() == type) {
-                 return true;
+                return true;
             }
         }
 
         for (Piece p : player2Pieces) {
             if (p.getType() == type) {
-                 return true;
+                return true;
             }
         }
 
@@ -319,30 +320,74 @@ public class GameConfiguration implements Serializable {
     public boolean checkPresence(Vector2D position) {
         for (Piece p : player1Pieces) {
             if (p.getPosition().equals(position)) {
-                 return true;
+                return true;
             }
         }
 
         for (Piece p : player2Pieces) {
             if (p.getPosition().equals(position)) {
-                 return true;
+                return true;
             }
         }
 
         return false;
     }
 
+    public Piece getPeiceAt(Vector2D at) {
+
+        for (Piece p : player1Pieces) {
+            if (p.position.equals(at)) {
+                return p;
+            }
+        }
+
+        for (Piece p : player2Pieces) {
+            if (p.position.equals(at)) {
+                return p;
+            }
+        }
+
+        return null;
+    }
+
+    public void play() {
+        played.addLast(generatePlay());
+        undoed.clear();
+        applyTurn();
+    }
+
+    private void applyTurn() {
+
+        // remove the peice at the action location if exist
+        if (checkPresence(getSelectedAction())) {
+            for (Piece p : getPlayerPieces(getNextPlayer())) {
+                if (p.getPosition().equals(getSelectedAction())) {
+                    getPlayerPieces(getNextPlayer()).remove(p);
+                    break;
+                }
+            }
+        }
+
+        // change the location of the selected peice
+        getPeiceAt(selectedPiece).setPosition(new Vector2D(
+                getSelectedAction().getIntX(),
+                getSelectedAction().getIntY()));
+
+        exchangeCards();
+        changePlayer();
+
+        setSelectedAction(null);
+        setSelectedCard("");
+        setSelectedPiece(null);
+    }
 
     /* Start of AI's interface */
     /* Please discuss with Duc if you want to change something */
 
-    public List<Piece> allyPieces()
-    {
-        if(currentPlayer== GameConfiguration.PLAYER1)
-        {
+    public List<Piece> allyPieces() {
+        if (currentPlayer == GameConfiguration.PLAYER1) {
             return copyPieces(player1Pieces);
-        }
-        else {
+        } else {
             return copyPieces(player2Pieces);
         }
     }
@@ -364,9 +409,9 @@ public class GameConfiguration implements Serializable {
             king = getKing(GameConfiguration.PLAYER1);
         else
             king = getKing(GameConfiguration.PLAYER2);
-        
+
         if (king == null) {
-            king = new Vector2D(-100,-100);
+            king = new Vector2D(-100, -100);
         }
 
         return king;
@@ -380,7 +425,7 @@ public class GameConfiguration implements Serializable {
             king = getKing(GameConfiguration.PLAYER1);
 
         if (king == null) {
-            king = new Vector2D(100,100);
+            king = new Vector2D(100, 100);
         }
         return king;
     }
@@ -420,16 +465,14 @@ public class GameConfiguration implements Serializable {
             curMovement = card.getBlueMovement();
 
         List<Vector2D> newPossiblePos = new ArrayList<>();
-        
+
         for (Vector2D movement : curMovement) {
             Vector2D possPosition = new Vector2D(
-                piece.getIntX() + movement.getIntY(),
-                piece.getIntY() + movement.getIntX()
-            );
+                    piece.getIntX() + movement.getIntY(),
+                    piece.getIntY() + movement.getIntX());
             if (possPosition.getIntX() < 5 && possPosition.getIntY() < 5 &&
-                possPosition.getIntX() >= 0 && possPosition.getIntY() >= 0  &&
-                !allies.contains(possPosition)   
-            ) {
+                    possPosition.getIntX() >= 0 && possPosition.getIntY() >= 0 &&
+                    !allies.contains(possPosition)) {
                 newPossiblePos.add(possPosition);
             }
         }
@@ -438,10 +481,11 @@ public class GameConfiguration implements Serializable {
     }
 
     public GameConfiguration nextConfig(Turn turn) {
-        GameConfiguration next = new GameConfiguration(player1Hand, player2Hand, standByCard, player1Pieces, player2Pieces, currentPlayer);
-        
+        GameConfiguration next = new GameConfiguration(player1Hand, player2Hand, standByCard, player1Pieces,
+                player2Pieces, currentPlayer);
+
         next.gameCards = gameCards;
-        
+
         next.setSelectedPiece(turn.getPiece().getPosition());
         next.setSelectedCard(turn.getCard().getName());
         next.setSelectedAction(turn.move);
@@ -515,4 +559,121 @@ public class GameConfiguration implements Serializable {
 
         return newPieces;
     }
+
+    /*
+     * History
+     * 
+     */
+
+    public boolean canRedo() {
+        return !undoed.isEmpty();
+    }
+
+    public boolean canUndo() {
+        return !played.isEmpty();
+    }
+
+    public void redo() {
+        Play play = undoed.removeLast();
+        played.addLast(play);
+
+        setSelectedPiece(play.dep);
+        setSelectedCard(play.card);
+        setSelectedAction(play.arr);
+
+        applyTurn();
+
+    }
+
+    private void revertExchangeCards(int player, String previousStandbyCard) {
+        String tmp = standByCard.getName();
+
+        standByCard = gameCards.get(previousStandbyCard);
+
+        PlayerHand hand = getPlayerHand(player);
+        if (previousStandbyCard.equals(hand.getFirstCard().getName())) {
+            hand.setFirstCard(gameCards.get(tmp));
+
+        } else {
+            hand.setSecondCard(gameCards.get(tmp));
+        }
+
+    }
+
+    public void undo() {
+
+        save();
+
+        Play play = played.removeLast();
+        undoed.addLast(play);
+
+        changePlayer();
+        revertExchangeCards(play.player, play.standbyCard);
+
+        setSelectedAction(null);
+        setSelectedCard("");
+        setSelectedPiece(null);
+
+        getPeiceAt(play.arr).setPosition(play.dep);
+
+        if (play.arrBefore != null) {
+            Piece previousPeice = new Piece(play.arrBefore, play.arr);
+            if (play.player == PLAYER1) {
+                player2Pieces.add(previousPeice);
+            } else {
+                player1Pieces.add(previousPeice);
+            }
+        }
+
+    }
+
+    private Play generatePlay() {
+
+        Play p = new Play();
+        p.player = currentPlayer;
+        p.dep = selectedPiece;
+        p.arr = selectedAction;
+
+        p.card = selectedCard.getName();
+        p.standbyCard = standByCard.getName();
+
+        p.pieceMoved = getPeiceAt(selectedPiece).getType();
+
+        Piece maybePeice = getPeiceAt(selectedAction);
+        if (maybePeice != null) {
+            p.arrBefore = maybePeice.getType();
+        }
+        return p;
+    }
+
+    public void save() {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(DEFAULT_SAVE_FILE);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(this);
+            objectOutputStream.flush();
+            objectOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
+
+class Play implements Serializable {
+
+    int player;
+    Vector2D dep;
+    Vector2D arr;
+
+    String card;
+
+    String standbyCard;
+
+    PieceType pieceMoved;
+    PieceType arrBefore;
+}
+
+/**
+ * 
+ * History: end
+ */

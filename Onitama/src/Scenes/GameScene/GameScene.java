@@ -2,6 +2,8 @@ package Onitama.src.Scenes.GameScene;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 import Engine.Core.Renderer.Scene;
 import Engine.Entities.UI.ColorArea;
@@ -59,8 +61,8 @@ public class GameScene extends Scene {
         ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
         addComponent(background);
 
-        addComponent(new Bot(GameConfiguration.PLAYER1, 5));
-        addComponent(new Bot(GameConfiguration.PLAYER2, 1));
+        //addComponent(new Bot(GameConfiguration.PLAYER1, 5));
+        //addComponent(new Bot(GameConfiguration.PLAYER2, 1));
     }
 
 
@@ -235,33 +237,61 @@ public class GameScene extends Scene {
         addComponent(gui); 
     }
     
-    public static void updateMatch() {
-        if (game.checkPresence(game.getSelectedAction())) {
-            for (Piece p : game.getPlayerPieces(game.getNextPlayer())) {
-                if (p.getPosition().equals(game.getSelectedAction())) {
-                    game.getPlayerPieces(game.getNextPlayer()).remove(p);
-                    break;
-                }
-            }
+
+    public static boolean canUndo() {
+        return game.canUndo();
+    }
+
+    public static boolean canRedo() {
+        return game.canRedo();
+    }
+
+    public static void undo() {
+        game.undo();
+        updateCards();
+        gamePieces.updatePieces();
+    }
+
+    public static void redo() {
+        game.redo();
+        updateCards();
+        gamePieces.updatePieces();
+    }
+
+    public static void save() {
+        game.save();
+    }
+
+    public static void loadSave(String saveFile) {
+        
+        if (saveFile == null) {
+            saveFile = GameConfiguration.DEFAULT_SAVE_FILE;
         }
 
-        gamePieces.getPiece(game.getSelectedPiece().getIntY(), game.getSelectedPiece().getIntX()).getPiece().setPosition(new Vector2D(
-            game.getSelectedAction().getIntX(),
-            game.getSelectedAction().getIntY()
-        ));
-        gamePieces.updatePieces();
+        try {
 
-        game.exchangeCards(); 
+            FileInputStream fileInputStream = new FileInputStream(saveFile);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            game = (GameConfiguration) objectInputStream.readObject();
+            
+            updateCards();
+            gamePieces.updatePieces();
+
+            objectInputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+    }
+
+    public static void updateMatch() {
+
+        game.play();
+
+        gamePieces.updatePieces();
         updateCards();
 
-
-        game.setSelectedAction(null);
-        game.setSelectedCard("");
-        game.setSelectedPiece(null);
-    
-        game.changePlayer();
-
-        if (game.gameOver()) {
+        if (game.isGameOver()) {
             System.out.println("Player " + (game.getNextPlayer() == GameConfiguration.PLAYER1 ? "RED" : "BLUE") + " won");
             Main.engine.forceRefresh();
             Main.engine.pause();
@@ -274,7 +304,9 @@ public class GameScene extends Scene {
         cards[2].setName(game.player2Hand.getFirstCard().getName());
         cards[3].setName(game.player2Hand.getSecondCard().getName());
 
-        cards[4].setName(game.getSelectedCard());
+        
+        // cards[4].setName(game.getSelectedCard());
+        cards[4].setName(game.standByCard.getName());
     }
 
 }

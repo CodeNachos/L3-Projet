@@ -1,6 +1,8 @@
 package Engine.Structures;
 
-public class Vector2D {
+import java.io.Serializable;
+
+public class Vector2D implements Serializable {
     public double x;
     public double y;
 
