@@ -12,9 +12,9 @@ public class Bot extends GameObject {
     int counter;
     int player;
 
-    public Bot(int player) {
+    public Bot(int player, int difficulty) {
         this.player = player;
-        bot = new SmartAI(5, this.player);
+        bot = new SmartAI(difficulty, this.player);
     }
 
     @Override
