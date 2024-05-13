@@ -153,8 +153,6 @@ public class GameEngine implements Runnable {
                 ups = 0; // Reset updates per second counter
             }
         }
-
-        System.exit(0); // Exit the program
     }
 
     /**
@@ -168,7 +166,16 @@ public class GameEngine implements Runnable {
      * Pauses the game loop.
      */
     public void pause() {
-        running = false; // Pause the game loop
+        running = false; // Stop the game loop
+    }
+
+    /**
+     * Continues the game loop after paused.
+     */
+    public void resume() {
+        running = true; // Continue the game loop
+        run();
+
     }
 
     /**
@@ -194,6 +201,13 @@ public class GameEngine implements Runnable {
     */
     public void setIcon(Image appicon) {
         gframe.setIconImage(appicon);
+    }
+
+    /**
+     * Forces frame refresh
+     */
+    public void forceRefresh() {
+        gframe.refresh();
     }
 
     /**
