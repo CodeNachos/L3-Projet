@@ -544,6 +544,8 @@ public class GameConfiguration implements Serializable {
 
 
     public void play() {
+
+        System.err.println("play");
         played.addLast(generatePlay());
         undoed.clear();
     }
@@ -580,16 +582,15 @@ public class GameConfiguration implements Serializable {
     // stack of already played moves
     private ArrayList<Play> played = new ArrayList<>();
 
-    // stack of undoed moves. It is clear when we make a move.
+    // stack of undoed moves. It is cleared when we make a move.
     private ArrayList<Play> undoed = new ArrayList<>();
 
 
-    public boolean can_redo() {
-        
+    public boolean canRedo() {
         return !undoed.isEmpty();
     }
 
-    public boolean can_undo() {
+    public boolean canUndo() {
         return !played.isEmpty();
     }
 

@@ -235,10 +235,27 @@ public class GameScene extends Scene {
         addComponent(gui); 
     }
     
+
+    public static boolean canUndo() {
+        return game.canUndo();
+    }
+
+    public static boolean canRedo() {
+        return game.canRedo();
+    }
+
+    public static void undo() {
+        game.undo();
+    }
+
+    public static void redo() {
+        game.redo();
+    }
+
     public static void updateMatch() {
 
         game.play();
-        
+
         if (game.checkPresence(game.getSelectedAction())) {
             for (Piece p : game.getPlayerPieces(game.getNextPlayer())) {
                 if (p.getPosition().equals(game.getSelectedAction())) {

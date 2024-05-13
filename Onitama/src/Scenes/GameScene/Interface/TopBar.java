@@ -18,6 +18,10 @@ import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 
 public class TopBar extends MenuFrame {
     FlatButton validateButton;
+    
+    FlatButton undoButton;
+    FlatButton redoButton;
+
     JLabel timerLabel;
     JLabel playerLabel;
     
@@ -44,6 +48,10 @@ public class TopBar extends MenuFrame {
         createTimerLabel();
 
         add(Box.createHorizontalGlue()); // Add glue to right-align components
+
+        createUndoButton();
+
+        createRedoButton();
     }
 
     private void createValidateButton() {
@@ -63,6 +71,46 @@ public class TopBar extends MenuFrame {
         });
 
         add(validateButton);
+    }
+
+    private void createUndoButton() {
+        undoButton = new FlatButton("Undo");
+        undoButton.setFont(new Font("Arial", Font.BOLD, 16));
+        undoButton.setForeground(Main.Palette.background);
+        undoButton.setMainColor(Main.Palette.orange);
+        undoButton.setAccentColor(Main.Palette.orange);
+        undoButton.setCurvature(20, 20);
+        undoButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        undoButton.setEnabled(GameScene.canUndo());
+        undoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GameScene.undo();
+            }
+        });
+
+        add(undoButton);
+    }
+
+    private void createRedoButton() {
+        redoButton = new FlatButton("Redo");
+        redoButton.setFont(new Font("Arial", Font.BOLD, 16));
+        redoButton.setForeground(Main.Palette.background);
+        redoButton.setMainColor(Main.Palette.orange);
+        redoButton.setAccentColor(Main.Palette.orange);
+        redoButton.setCurvature(20, 20);
+        redoButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        redoButton.setEnabled(GameScene.canRedo());
+        redoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GameScene.redo();
+            }
+        });
+
+        add(redoButton);
     }
 
     private void createTimerLabel() {
@@ -108,7 +156,8 @@ public class TopBar extends MenuFrame {
             validateButton.setEnabled(false);
         }
 
-
+        redoButton.setEnabled(GameScene.canRedo());
+        undoButton.setEnabled(GameScene.canUndo());
     }
 
     private boolean isValidTurn() {
