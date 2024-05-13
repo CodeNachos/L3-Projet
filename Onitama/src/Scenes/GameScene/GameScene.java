@@ -74,7 +74,7 @@ public class GameScene extends Scene {
 
         );
         Vector2D boardPos = new Vector2D(
-            (Main.engine.getResolution().width/2) - (boardArea.width/2),
+             (Main.engine.getResolution().width/2) - (boardArea.width/2),
             (Main.engine.getResolution().height / 2.5) - (boardArea.height/2.3)
         );
 
