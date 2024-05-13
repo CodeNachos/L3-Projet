@@ -9,9 +9,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import javax.swing.text.Position;
+
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.JsonReader;
+import Onitama.src.Scenes.GameScene.Entities.Cards.Card;
 import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 import Onitama.src.Scenes.GameScene.Scripts.Card.PlayerHand;
 import Onitama.src.Scenes.GameScene.Scripts.Piece.Piece;
@@ -515,4 +518,156 @@ public class GameConfiguration implements Serializable {
 
         return newPieces;
     }
+    
+
+    /*
+     * History
+     * 
+     */
+
+    public Piece getPeiceAt(Vector2D at) {
+
+        for (Piece p: player1Pieces) {
+            if (p.position.equals(at)) {
+                return p;
+            }
+        }
+
+        for (Piece p: player2Pieces) {
+            if (p.position.equals(at)) {
+                return p;
+            }
+        }
+
+        return null;
+    }
+
+
+    public void play() {
+        played.addLast(generatePlay());
+        undoed.clear();
+    }
+
+
+    private void applyTurn() {
+
+        // remove the peice at the action location if exist
+        if (checkPresence(getSelectedAction())) {
+            for (Piece p : getPlayerPieces(getNextPlayer())) {
+                if (p.getPosition().equals(getSelectedAction())) {
+                    getPlayerPieces(getNextPlayer()).remove(p);
+                    break;
+                }
+            }
+        }
+
+        // change the location of the selected peice
+        getPeiceAt(selectedPiece).setPosition(new Vector2D(
+            getSelectedAction().getIntX(),
+            getSelectedAction().getIntY()
+        ));
+
+        exchangeCards(); 
+        changePlayer();
+
+        setSelectedAction(null);
+        setSelectedCard("");
+        setSelectedPiece(null);
+    }
+
+
+
+    // stack of already played moves
+    private ArrayList<Play> played = new ArrayList<>();
+
+    // stack of undoed moves. It is clear when we make a move.
+    private ArrayList<Play> undoed = new ArrayList<>();
+
+
+    public boolean can_redo() {
+        
+        return !undoed.isEmpty();
+    }
+
+    public boolean can_undo() {
+        return !played.isEmpty();
+    }
+
+    public void redo() {
+        Play play = undoed.removeLast();
+        played.addLast(play);
+        
+        setSelectedPiece(play.dep);
+        setSelectedCard(play.card);
+        setSelectedAction(play.arr);
+
+        applyTurn();
+           
+    }
+
+    public void undo() {
+
+        
+        Play play = played.removeLast();
+        undoed.addLast(play);  
+
+
+        // todo: it is as simple ?
+        exchangeCards();
+        changePlayer();
+
+        setSelectedAction(null);
+        setSelectedCard("");
+        setSelectedPiece(null);
+        
+        getPeiceAt(play.arr).setPosition(play.dep);
+
+        if (play.arrBefore != null) {
+            Piece previousPeice = new Piece(play.arrBefore, play.arr);
+            if (play.player == PLAYER1) {
+                player2Pieces.add(previousPeice);
+            } else {
+                player1Pieces.add(previousPeice);
+            }
+        }
+                 
+    }
+
+    private Play generatePlay() {
+
+        Play p = new Play();
+        p.player = currentPlayer;
+        p.dep = selectedPiece;
+        p.arr = selectedAction;
+
+        p.card = selectedCard.getName();
+
+        p.pieceMoved = getPeiceAt(selectedPiece).getType();
+
+        Piece maybePeice = getPeiceAt(selectedAction);
+        if (maybePeice != null) {
+            p.arrBefore = maybePeice.getType();
+        }
+        return p;
+    }
 }
+
+
+
+class Play {
+
+    int player;
+    Vector2D dep;
+    Vector2D arr;
+
+    String card;
+
+    PieceType pieceMoved;
+    PieceType arrBefore;
+}
+
+
+/**
+ * 
+ * History: end
+ */

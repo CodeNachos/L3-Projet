@@ -59,7 +59,7 @@ public class GameScene extends Scene {
         ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
         addComponent(background);
 
-        addComponent(new Bot(GameConfiguration.PLAYER1, 5));
+        //addComponent(new Bot(GameConfiguration.PLAYER1, 5));
         addComponent(new Bot(GameConfiguration.PLAYER2, 1));
     }
 
@@ -236,6 +236,9 @@ public class GameScene extends Scene {
     }
     
     public static void updateMatch() {
+
+        game.play();
+        
         if (game.checkPresence(game.getSelectedAction())) {
             for (Piece p : game.getPlayerPieces(game.getNextPlayer())) {
                 if (p.getPosition().equals(game.getSelectedAction())) {
