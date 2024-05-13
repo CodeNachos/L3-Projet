@@ -60,6 +60,7 @@ public class BoardTile extends Tile {
         if (highlighted) {
             if (!isSelectedAction()) {
                 GameScene.game.setSelectedAction(mapPosition);
+                GameScene.updateMatch();
             } else {
                 GameScene.game.setSelectedAction(null);
             }

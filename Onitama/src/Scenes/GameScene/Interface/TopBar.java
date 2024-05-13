@@ -40,47 +40,34 @@ public class TopBar extends MenuFrame {
         createPlayerLabel();
 
         add(Box.createHorizontalGlue());
-
-        createValidateButton();
-
-        add(Box.createHorizontalGlue());
         
         createTimerLabel();
 
         add(Box.createHorizontalGlue()); // Add glue to right-align components
 
         createUndoButton();
+        
+        add(Box.createHorizontalStrut(10));
 
         createRedoButton();
     }
 
-    private void createValidateButton() {
-        validateButton = new FlatButton("End Turn");
-        validateButton.setFont(new Font("Arial", Font.BOLD, 16));
-        validateButton.setForeground(Main.Palette.background);
-        validateButton.setMainColor(Main.Palette.orange);
-        validateButton.setAccentColor(Main.Palette.orange);
-        validateButton.setCurvature(20, 20);
-        validateButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
-        validateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GameScene.updateMatch();
-            }
-        });
-
-        add(validateButton);
+    
+    private FlatButton createBaseButton(String content) {
+        FlatButton button = new FlatButton(content);
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setForeground(Main.Palette.background);
+        button.setMainColor(Main.Palette.orange);
+        button.setAccentColor(Main.Palette.orange);
+        button.setCurvature(20, 20);
+        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        button.setSize(20, 20);
+        return button;
     }
 
     private void createUndoButton() {
-        undoButton = new FlatButton("Undo");
-        undoButton.setFont(new Font("Arial", Font.BOLD, 16));
-        undoButton.setForeground(Main.Palette.background);
-        undoButton.setMainColor(Main.Palette.orange);
-        undoButton.setAccentColor(Main.Palette.orange);
-        undoButton.setCurvature(20, 20);
-        undoButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        undoButton = createBaseButton("Undo");
 
         undoButton.setEnabled(GameScene.canUndo());
         undoButton.addActionListener(new ActionListener() {
@@ -94,13 +81,8 @@ public class TopBar extends MenuFrame {
     }
 
     private void createRedoButton() {
-        redoButton = new FlatButton("Redo");
-        redoButton.setFont(new Font("Arial", Font.BOLD, 16));
-        redoButton.setForeground(Main.Palette.background);
-        redoButton.setMainColor(Main.Palette.orange);
-        redoButton.setAccentColor(Main.Palette.orange);
-        redoButton.setCurvature(20, 20);
-        redoButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        
+        redoButton = createBaseButton("Redo");
 
         redoButton.setEnabled(GameScene.canRedo());
         redoButton.addActionListener(new ActionListener() {
@@ -146,22 +128,9 @@ public class TopBar extends MenuFrame {
             playerLabel.setForeground(Main.Palette.highlight);
         }
 
-        if (isValidTurn()) {
-            validateButton.setMainColor(Main.Palette.orange);
-            validateButton.setAccentColor(Main.Palette.orange);
-            validateButton.setEnabled(true);
-        } else {
-            validateButton.setMainColor(Main.Palette.selection);
-            validateButton.setAccentColor(Main.Palette.selection.brighter());
-            validateButton.setEnabled(false);
-        }
-
         redoButton.setEnabled(GameScene.canRedo());
         undoButton.setEnabled(GameScene.canUndo());
     }
 
-    private boolean isValidTurn() {
-        return (GameScene.game.isCardSelected() && GameScene.game.isPieceSelected() && GameScene.game.isActionSelected());
-    }
     
 }
