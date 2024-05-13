@@ -288,32 +288,10 @@ public class GameScene extends Scene {
 
         game.play();
 
-        if (game.checkPresence(game.getSelectedAction())) {
-            for (Piece p : game.getPlayerPieces(game.getNextPlayer())) {
-                if (p.getPosition().equals(game.getSelectedAction())) {
-                    game.getPlayerPieces(game.getNextPlayer()).remove(p);
-                    break;
-                }
-            }
-        }
-
-        gamePieces.getPiece(game.getSelectedPiece().getIntY(), game.getSelectedPiece().getIntX()).getPiece().setPosition(new Vector2D(
-            game.getSelectedAction().getIntX(),
-            game.getSelectedAction().getIntY()
-        ));
         gamePieces.updatePieces();
-
-        game.exchangeCards(); 
         updateCards();
 
-
-        game.setSelectedAction(null);
-        game.setSelectedCard("");
-        game.setSelectedPiece(null);
-    
-        game.changePlayer();
-
-        if (game.gameOver()) {
+        if (game.isGameOver()) {
             System.out.println("Player " + (game.getNextPlayer() == GameConfiguration.PLAYER1 ? "RED" : "BLUE") + " won");
             Main.engine.forceRefresh();
             Main.engine.pause();
