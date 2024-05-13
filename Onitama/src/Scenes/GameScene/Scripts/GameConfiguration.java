@@ -602,8 +602,6 @@ public class GameConfiguration implements Serializable {
 
     public void undo() {
 
-        save();
-
         Play play = played.removeLast();
         undoed.addLast(play);
 
