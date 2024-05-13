@@ -36,7 +36,7 @@ public class Engine {
         //past = new LinkedList<>();
         //futur = new LinkedList<>();
         gameCards = new ArrayList<>();
-        random = new Random();
+        random = new Random(423040);
         hist = new History(this);
         turn = null;
         initialiseGame();

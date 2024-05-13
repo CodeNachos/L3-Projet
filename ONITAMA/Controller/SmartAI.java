@@ -26,7 +26,7 @@ public class SmartAI implements Player {
 
     public SmartAI(Engine engine, int difficulty, int player) {
         this.winners = new ArrayList<>();
-        this.random = new Random();
+        this.random = new Random(213193);
         this.engine = engine;
         this.difficulty = difficulty;
         this.player = player;
@@ -34,6 +34,7 @@ public class SmartAI implements Player {
 
     @Override
     public Turn play() {
+        winners.clear();
         minmax(engine.getGameConfiguration(), true, difficulty, 
                Integer.MIN_VALUE, Integer.MAX_VALUE);
         return winners.get(random.nextInt(winners.size()));

@@ -80,7 +80,7 @@ public class InterfaceTextuelle {
                             "At new position :(" + move.getPosition().getI() + "," + move.getPosition().getJ() + ")");
                     System.out.println("Type is:" + move.getType());
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(300);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -98,7 +98,7 @@ public class InterfaceTextuelle {
                             "At new position :(" + move.getPosition().getI() + "," + move.getPosition().getJ() + ")");
                     System.out.println("Type is:" + move.getType());
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(300);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
