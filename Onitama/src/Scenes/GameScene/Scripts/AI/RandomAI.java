@@ -19,9 +19,7 @@ public class RandomAI extends AI {
     @Override
     public Turn play() {
         GameConfiguration config = GameScene.game;
-
         List<Turn> turns = possibleTurns(config);
-
         return turns.get(random.nextInt(turns.size()));
     }
 }

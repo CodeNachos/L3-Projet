@@ -17,40 +17,42 @@ import Onitama.src.Scenes.GameScene.Scripts.Turn;
  * SmartAI
  */
 public class SmartAI extends AI {
+    private static final int minusINF = Integer.MIN_VALUE;
+    private static final int plusINF = Integer.MAX_VALUE;
     List<Turn> winners;
     Random random;
     int difficulty;
-    int player;
+    int selfID;
 
     public SmartAI(int difficulty, int player) {
         this.winners = new ArrayList<>();
         this.random = new Random();
         this.difficulty = difficulty;
-        this.player = player;
+        this.selfID = player;
     }
 
     @Override
     public Turn play() {
         winners.clear();
         minmax(GameScene.game, true, difficulty, 
-               Integer.MIN_VALUE, Integer.MAX_VALUE);
+               minusINF, plusINF);
         return winners.get(random.nextInt(winners.size()));
     }
 
     private int minmax(GameConfiguration config, boolean isMaximizing, 
                                        int depth, int alpha, int beta) {
         if (config.gameOver()) {
-            if (config.getCurrentPlayer() == player)
-                return Integer.MIN_VALUE;
-            else
-                return Integer.MAX_VALUE;
+            if (config.getCurrentPlayer() == selfID) // gameover for the AI
+                return minusINF;
+            else // gameover for the enemy
+                return plusINF;
         } else if (depth == 0)
             return heuristic(config);
 
         int eval, maxEval, minEval;
 
         if (isMaximizing) {
-            maxEval = Integer.MIN_VALUE;
+            maxEval = minusINF;
             for (Turn turn : possibleTurns(config)) {
                 eval = minmax(config.nextConfig(turn), false, 
                               depth-1, alpha, beta);
@@ -71,7 +73,7 @@ public class SmartAI extends AI {
         } 
         
         else { // minimizing
-            minEval = Integer.MAX_VALUE;
+            minEval = plusINF;
             for (Turn turn : possibleTurns(config)) {
                 eval = minmax(config.nextConfig(turn), true,
                               depth-1, alpha, beta);
@@ -88,9 +90,10 @@ public class SmartAI extends AI {
         List<Vector2D> allies = config.allyPositions();
         List<Vector2D> enemies = config.enemyPositions(); 
         int pieceNumber = allies.size() - enemies.size();
-        int throneDistance = distance(config.allyKing(), config.allyGoal()) - distance(config.enemyGoal(), config.enemyKing());
+        int throneDistance = distance(config.allyKing(), config.allyGoal()) - 
+                             distance(config.enemyGoal(), config.enemyKing());
         int eval = pieceNumber + throneDistance; 
-        if (config.getCurrentPlayer() == player)
+        if (config.getCurrentPlayer() == selfID)
             return eval;
         else
             return -eval;

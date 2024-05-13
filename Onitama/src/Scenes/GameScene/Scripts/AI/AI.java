@@ -10,7 +10,7 @@ import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 import Onitama.src.Scenes.GameScene.Scripts.Piece.Piece;
 
 /**
- * Player
+ * AI
  */
 public abstract class AI {
     public abstract Turn play();
@@ -19,9 +19,8 @@ public abstract class AI {
         List<Turn> result = new ArrayList<>();
         for (CardInfo card : config.availableCards())
             for (Piece piece : config.allyPieces())
-                for (Vector2D position : config.possiblePositions(piece.getPosition(), card)) {
+                for (Vector2D position : config.possiblePositions(piece.getPosition(), card))
                     result.add(new Turn(card, piece, position));
-                }
         return result;
     }
 }
