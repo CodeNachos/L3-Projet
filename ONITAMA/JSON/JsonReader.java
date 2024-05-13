@@ -1,6 +1,7 @@
 package JSON;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import Model.*;
-public class JsonReader {
+public class JsonReader implements Serializable {
     List<Card> jsonCards;
     public JsonReader()
     {

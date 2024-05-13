@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -17,7 +18,7 @@ import java.util.zip.GZIPOutputStream;
 
 import JSON.*;
 
-public class Engine {
+public class Engine implements Serializable {
     List<Card> listOfCards;
     List<Card> gameCards;
     History hist;
@@ -29,7 +30,7 @@ public class Engine {
     GameConfiguration gameConfig;
     Turn turn;
 
-    public Engine(int w, int h) {
+    public Engine() {
         jReader = new JsonReader();
         listOfCards = jReader.readJson();
         board = new Board();

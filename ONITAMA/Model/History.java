@@ -1,8 +1,9 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class History {
+public class History implements Serializable {
     LinkedList<GameConfiguration> past;
     LinkedList<GameConfiguration> futur;
     Engine eng;

@@ -135,7 +135,7 @@ public class GameConfiguration implements Serializable {
                                 break;
                             default:
                                 if (j == COLS - 1) {
-                                    System.out.print("b");
+                                    System.out.print("B");
                                 } else {
                                     System.out.print("B ");
                                 }
@@ -415,11 +415,11 @@ public class GameConfiguration implements Serializable {
             Type t = piece.getType();
             Position pos = piece.getPosition();
             if (t == Type.RED_KING && (pos.getI() == blue_i && pos.getJ() == blue_j)){
-                System.out.println("Player 1 has won!");
+                //System.out.println("Player 1 has won!");
                 return true; 
             }
             else if (t == Type.BLUE_KING && (pos.getI() == red_i && pos.getJ() == red_j)) {
-                System.out.println("Player 2 has won!");
+                //System.out.println("Player 2 has won!");
                 return true;
             }
         }

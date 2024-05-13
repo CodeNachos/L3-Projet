@@ -7,7 +7,7 @@ import View.InterfaceTextuelle;
 
 public class Onitama {
     public static void main(String[] args) throws Exception {
-        Engine eng = new Engine(5, 5);
+        Engine eng = new Engine();
         Configurations config = new Configurations();
         Player Ai1 = new SmartAI(eng, 3, GameConfiguration.RED);
         Player Ai2 = new SmartAI(eng, 3, GameConfiguration.BLUE);
