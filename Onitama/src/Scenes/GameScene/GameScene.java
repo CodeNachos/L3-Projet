@@ -60,7 +60,7 @@ public class GameScene extends Scene {
         addComponent(background);
 
         //addComponent(new Bot(GameConfiguration.PLAYER1, 5));
-        addComponent(new Bot(GameConfiguration.PLAYER2, 1));
+        //addComponent(new Bot(GameConfiguration.PLAYER2, 1));
     }
 
 
@@ -246,10 +246,14 @@ public class GameScene extends Scene {
 
     public static void undo() {
         game.undo();
+        updateCards();
+        gamePieces.updatePieces();
     }
 
     public static void redo() {
         game.redo();
+        updateCards();
+        gamePieces.updatePieces();
     }
 
     public static void updateMatch() {
@@ -294,7 +298,9 @@ public class GameScene extends Scene {
         cards[2].setName(game.player2Hand.getFirstCard().getName());
         cards[3].setName(game.player2Hand.getSecondCard().getName());
 
-        cards[4].setName(game.getSelectedCard());
+        
+        // cards[4].setName(game.getSelectedCard());
+        cards[4].setName(game.standByCard.getName());
     }
 
 }

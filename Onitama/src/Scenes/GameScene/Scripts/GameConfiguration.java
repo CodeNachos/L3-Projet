@@ -606,16 +606,29 @@ public class GameConfiguration implements Serializable {
            
     }
 
+    private void revertExchangeCards(int player, String previousStandbyCard) {
+        String tmp = standByCard.getName();
+
+        standByCard = gameCards.get(previousStandbyCard);
+
+        PlayerHand hand = getPlayerHand(player);
+        if (previousStandbyCard.equals(hand.getFirstCard().getName())) {
+            hand.setFirstCard(gameCards.get(tmp));
+            
+        } else {
+            hand.setSecondCard(gameCards.get(tmp));
+        }
+        
+    }
+
     public void undo() {
 
         
         Play play = played.removeLast();
         undoed.addLast(play);  
 
-
-        // todo: it is as simple ?
-        exchangeCards();
         changePlayer();
+        revertExchangeCards(play.player, play.standbyCard);
 
         setSelectedAction(null);
         setSelectedCard("");
@@ -642,6 +655,8 @@ public class GameConfiguration implements Serializable {
         p.arr = selectedAction;
 
         p.card = selectedCard.getName();
+        p.standbyCard = standByCard.getName();
+
 
         p.pieceMoved = getPeiceAt(selectedPiece).getType();
 
@@ -662,6 +677,8 @@ class Play {
     Vector2D arr;
 
     String card;
+
+    String standbyCard;
 
     PieceType pieceMoved;
     PieceType arrBefore;
