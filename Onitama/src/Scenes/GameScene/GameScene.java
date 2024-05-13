@@ -1,9 +1,11 @@
 package Onitama.src.Scenes.GameScene;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import Engine.Core.Renderer.Scene;
 import Engine.Entities.UI.ColorArea;
+import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
@@ -47,43 +49,33 @@ public class GameScene extends Scene {
         // Add cards to scene
         createCards();
         
-        // Instantiate GUI
-
-        // Add gui to scene
+        // Add GUI
+        createGUI();
         
-        // Dimension for top bar
-        Dimension topBarArea = new Dimension(
-            Main.engine.getResolution().width/3,
-            (int) (Main.engine.getResolution().height /10)
-        );
-        Vector2D topBarPos = new Vector2D(
-            (int)(Main.engine.getResolution().width/3),
-            0
-        );
-        TopBar gui = new TopBar(topBarArea, topBarPos);
-        addComponent(gui);
+        
+        
 
         // Add background
         ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
         addComponent(background);
 
         addComponent(new Bot(GameConfiguration.PLAYER1));
-        addComponent(new Bot(GameConfiguration.PLAYER2));
+        //addComponent(new Bot(GameConfiguration.PLAYER2));
     }
 
 
 
-    public void createBoard() {
+    private void createBoard() {
 
         // Compute board position and area
         Dimension boardArea = new Dimension(
-            2 * Main.engine.getResolution().height / 4,
-            2 * Main.engine.getResolution().height / 4
+            (int)(2.3 * Main.engine.getResolution().height / 4),
+            (int)(2.3 * Main.engine.getResolution().height / 4)
 
         );
         Vector2D boardPos = new Vector2D(
             (Main.engine.getResolution().width/2) - (boardArea.width/2),
-            (Main.engine.getResolution().height / 2.5) - (boardArea.height/2)
+            (Main.engine.getResolution().height / 2.5) - (boardArea.height/2.3)
         );
 
         // Create game pieces
@@ -94,7 +86,6 @@ public class GameScene extends Scene {
         addComponent(gamePieces);
         addComponent(gameBoard);
 
-        //addComponent(new Bot());
     }
 
     private void createCards() {
@@ -125,13 +116,13 @@ public class GameScene extends Scene {
         // Compute player 2 card 1 positon
         Vector2D card1Pos = new Vector2D(
             (int)(gameBoard.getPos().getIntX()/2) - (int)(idleCardTexture.getWidth()/2),
-            (int)(gameBoard.getPos().getIntY())
+            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) - (1.1*idleCardTexture.getHeight()))
         );
         // Compute player 2 card 2 positon
         cardPositions[2] = card1Pos.clone();
         Vector2D card2Pos = new Vector2D(
             (int)(gameBoard.getPos().getIntX()/2) - (int)(idleCardTexture.getWidth()/2),
-            (int)(gameBoard.getPos().getIntY() + gameBoard.getSize().height) - (int)(idleCardTexture.getHeight())
+            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) + (0.1*idleCardTexture.getHeight()))
         );
         cardPositions[3] = card2Pos.clone();
 
@@ -140,20 +131,20 @@ public class GameScene extends Scene {
         // Compute player 1 card 1 positon
         card1Pos = new Vector2D(
             (int)(card1Pos.getIntX() + gameBoard.getPos().getIntX() + gameBoard.getSize().height),
-            (int)(gameBoard.getPos().getIntY())
+            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) - (1.1*idleCardTexture.getHeight()))
         );
         cardPositions[0] = card1Pos.clone();
         // Compute player 1 card 2 positon
         card2Pos = new Vector2D(
             (int)(card2Pos.getIntX() + gameBoard.getPos().getIntX() + gameBoard.getSize().height),
-            (int)(gameBoard.getPos().getIntY() + gameBoard.getSize().height) - (int)(idleCardTexture.getHeight())
+            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) + (0.1*idleCardTexture.getHeight()))
         );
         cardPositions[1] = card2Pos.clone();
 
         // Compute stand by card position
         Vector2D cardPos = new Vector2D(
             (Main.engine.getResolution().width/2) - (int)(idleCardTexture.getWidth()/2),
-            (int)(Main.engine.getResolution().height) -(int)(1.5*idleCardTexture.getHeight())
+            (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardTexture.getHeight())
         );
         cardPositions[4] = cardPos.clone();
 
@@ -201,6 +192,48 @@ public class GameScene extends Scene {
             cards[c].addCardToScene(this);
         }
     }
+
+    private void createGUI() {
+        Dimension sideDimension = new Dimension(
+            (int)(Main.engine.getResolution().width /4),
+            (int)(5 * Main.engine.getResolution().height / 8)
+        );
+        Vector2D sideOffset = new Vector2D(
+            (int)(0),
+            (int)(Main.engine.getResolution().height / 8)
+        );
+        MenuFrame blueSide = new MenuFrame(sideDimension, sideOffset);
+        blueSide.setMainColor(new Color(139,233,253,70));
+        blueSide.setAccentColor(new Color(139,233,253,100));
+        blueSide.setCurvature(5, 5);
+        blueSide.setBorderWidth(5);
+    
+        addComponent(blueSide);
+
+        sideOffset = new Vector2D(
+            (int)(Main.engine.getResolution().width - sideDimension.width),
+            (int)(Main.engine.getResolution().height / 8)
+        );
+        MenuFrame redSide = new MenuFrame(sideDimension, sideOffset);
+        redSide.setMainColor(new Color(255, 85, 85,70));
+        redSide.setAccentColor(new Color(255, 85, 85,100));
+        redSide.setCurvature(5, 5);
+        redSide.setBorderWidth(5);
+
+        addComponent(redSide);
+        
+        // Dimension for top bar
+        Dimension topBarArea = new Dimension(
+            Main.engine.getResolution().width/3,
+            (int) (Main.engine.getResolution().height /10)
+        );
+        Vector2D topBarPos = new Vector2D(
+            (int)(Main.engine.getResolution().width/2 - (topBarArea.width/2)),
+            0
+        );
+        TopBar gui = new TopBar(topBarArea, topBarPos);
+        addComponent(gui); 
+    }
     
     public static void updateMatch() {
         if (game.checkPresence(game.getSelectedAction())) {
@@ -229,7 +262,9 @@ public class GameScene extends Scene {
         game.changePlayer();
 
         if (game.gameOver()) {
-            Main.engine.stop();
+            System.out.println("Player " + (game.getNextPlayer() == GameConfiguration.PLAYER1 ? "RED" : "BLUE") + " won");
+            Main.engine.forceRefresh();
+            Main.engine.pause();
         }
     }
 
