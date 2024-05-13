@@ -1,8 +1,10 @@
 package Onitama.src.Scenes.GameScene.Scripts.Piece;
 
+import java.io.Serializable;
+
 import Engine.Structures.Vector2D;
 
-public class Piece {
+public class Piece implements Serializable {
     
     public PieceType type;
     public Vector2D position;

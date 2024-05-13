@@ -1,5 +1,8 @@
 package Onitama.src.Scenes.GameScene.Scripts;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,12 +23,12 @@ import Onitama.src.Scenes.GameScene.Scripts.Card.PlayerHand;
 import Onitama.src.Scenes.GameScene.Scripts.Piece.Piece;
 import Onitama.src.Scenes.GameScene.Scripts.Piece.PieceType;
 
-public class GameConfiguration implements Serializable {    
-    // JSON file reader
-    public JsonReader jReader;
+public class GameConfiguration implements Serializable {
 
     
     // Game constants
+
+    public static final String DEFAULT_SAVE_FILE = "save";
 
     static final Vector2D RED_THRONE = new Vector2D(2, 4);
     static final Vector2D BLUE_THRONE = new Vector2D(2, 0);
@@ -63,8 +66,9 @@ public class GameConfiguration implements Serializable {
     public Vector2D selectedAction = null; // current player selected action tile
 
     public GameConfiguration() {
+
         // Load all game cards
-        jReader = new JsonReader();
+        JsonReader jReader;jReader = new JsonReader();
         listOfCards = jReader.readJson("Onitama/res/Cards/cards.json");
         
         // Pick game cards
@@ -544,8 +548,6 @@ public class GameConfiguration implements Serializable {
 
 
     public void play() {
-
-        System.err.println("play");
         played.addLast(generatePlay());
         undoed.clear();
     }
@@ -623,6 +625,7 @@ public class GameConfiguration implements Serializable {
 
     public void undo() {
 
+        save();
         
         Play play = played.removeLast();
         undoed.addLast(play);  
@@ -666,11 +669,23 @@ public class GameConfiguration implements Serializable {
         }
         return p;
     }
+
+    public void save() {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(DEFAULT_SAVE_FILE);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(this);
+            objectOutputStream.flush();
+            objectOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 
 
-class Play {
+class Play implements Serializable {
 
     int player;
     Vector2D dep;

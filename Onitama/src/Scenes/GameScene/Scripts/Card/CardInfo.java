@@ -1,11 +1,12 @@
 package Onitama.src.Scenes.GameScene.Scripts.Card;
 
 
+import java.io.Serializable;
 import java.util.*;
 
 import Engine.Structures.Vector2D;
 
-public class CardInfo {
+public class CardInfo implements Serializable {
     String name;
     List<Vector2D> blueMovement;
     List<Vector2D> redMovement;

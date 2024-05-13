@@ -2,6 +2,8 @@ package Onitama.src.Scenes.GameScene;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 import Engine.Core.Renderer.Scene;
 import Engine.Entities.UI.ColorArea;
@@ -254,6 +256,32 @@ public class GameScene extends Scene {
         game.redo();
         updateCards();
         gamePieces.updatePieces();
+    }
+
+    public static void save() {
+        game.save();
+    }
+
+    public static void loadSave(String saveFile) {
+        
+        if (saveFile == null) {
+            saveFile = GameConfiguration.DEFAULT_SAVE_FILE;
+        }
+
+        try {
+
+            FileInputStream fileInputStream = new FileInputStream(saveFile);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            game = (GameConfiguration) objectInputStream.readObject();
+            
+            updateCards();
+            gamePieces.updatePieces();
+
+            objectInputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
     }
 
     public static void updateMatch() {
