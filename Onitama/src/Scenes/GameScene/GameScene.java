@@ -67,7 +67,8 @@ public class GameScene extends Scene {
         ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
         addComponent(background);
 
-        addComponent(new Bot());
+        addComponent(new Bot(GameConfiguration.PLAYER1));
+        addComponent(new Bot(GameConfiguration.PLAYER2));
     }
 
 
