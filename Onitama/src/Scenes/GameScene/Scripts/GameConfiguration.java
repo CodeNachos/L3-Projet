@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.Stack;
 
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
@@ -40,10 +41,10 @@ public class GameConfiguration implements Serializable {
     // Game State
 
     // stack of already played moves
-    private ArrayList<Play> played = new ArrayList<>();
+    private Stack<Play> played = new Stack<>();
 
     // stack of undoed moves. It is cleared when we make a move.
-    private ArrayList<Play> undoed = new ArrayList<>();
+    private Stack<Play> undoed = new Stack<>();
 
     // Cards picked for the match -> [p1:c1, p1:c2, p2:c1, p2:c2, stand by]
     public HashMap<String, CardInfo> gameCards;
@@ -351,7 +352,7 @@ public class GameConfiguration implements Serializable {
     }
 
     public void play() {
-        played.addLast(generatePlay());
+        played.add(generatePlay());
         undoed.clear();
         applyTurn();
     }
@@ -574,8 +575,8 @@ public class GameConfiguration implements Serializable {
     }
 
     public void redo() {
-        Play play = undoed.removeLast();
-        played.addLast(play);
+        Play play = undoed.pop();
+        played.add(play);
 
         setSelectedPiece(play.dep);
         setSelectedCard(play.card);
@@ -602,8 +603,8 @@ public class GameConfiguration implements Serializable {
 
     public void undo() {
 
-        Play play = played.removeLast();
-        undoed.addLast(play);
+        Play play = played.pop();
+        undoed.add(play);
 
         changePlayer();
         revertExchangeCards(play.player, play.standbyCard);

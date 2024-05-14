@@ -18,7 +18,6 @@ import Onitama.src.Scenes.GameScene.Entities.Bots.Bot;
 import Onitama.src.Scenes.GameScene.Entities.Cards.Card;
 import Onitama.src.Scenes.GameScene.Interface.TopBar;
 import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
-import Onitama.src.Scenes.GameScene.Scripts.Piece.Piece;
 
 public class GameScene extends Scene {
 
@@ -52,16 +51,13 @@ public class GameScene extends Scene {
         createCards();
         
         // Add GUI
-        createGUI();
-        
-        
-        
+        createGUI();        
 
         // Add background
         ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
         addComponent(background);
 
-        //addComponent(new Bot(GameConfiguration.PLAYER1, 5));
+        addComponent(new Bot(GameConfiguration.PLAYER1, 5));
         //addComponent(new Bot(GameConfiguration.PLAYER2, 1));
     }
 
