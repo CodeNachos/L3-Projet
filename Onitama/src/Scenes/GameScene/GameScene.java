@@ -64,7 +64,7 @@ public class GameScene extends Scene {
         //State s2 = s.nextConfig(new Action(player1.getFirstCard(), player1.getPieces().get(2).getMapPosition(), s.possiblePositions(player1.getPieces().get(2).getMapPosition(), player1.getFirstCard()).get(0)));
         //System.out.println(s2.gameCards.get(4));
 
-        player1.enableAI(5);
+        player1.enableAI(3);
         player2.enableAI(6);
 
         updateIteractableEntities();

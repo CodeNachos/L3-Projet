@@ -121,7 +121,7 @@ public class State implements Serializable {
         
         for (int l = 0; l < 5; l++) {
             for (int c = 0; c < 5; c++) {
-                if (!isPlayerPiece(board[l][c], currentPlayer)) {
+                if (!isPlayerPiece(board[l][c], currentPlayer) && !(board[l][c] == PieceType.EMPTY)) {
                     positions.add(new Vector2D(c, l));
                 }
             }
