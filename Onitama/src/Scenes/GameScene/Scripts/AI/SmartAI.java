@@ -41,7 +41,7 @@ public class SmartAI extends AI {
 
     private int minmax(GameConfiguration config, boolean isMaximizing, 
                                        int depth, int alpha, int beta) {
-        if (config.gameOver()) {
+        if (config.isGameOver()) {
             if (config.getCurrentPlayer() == selfID) // gameover for the AI
                 return minusINF;
             else // gameover for the enemy
@@ -128,5 +128,8 @@ public class SmartAI extends AI {
             return eval;
         else
             return -eval;
+    }
+    private int distance(Vector2D first, Vector2D second) {
+        return abs(first.getIntX() - second.getIntX()) + abs(first.getIntY() - second.getIntY());
     }
 }
