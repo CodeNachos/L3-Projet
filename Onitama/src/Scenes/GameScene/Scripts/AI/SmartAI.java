@@ -2,12 +2,8 @@ package Onitama.src.Scenes.GameScene.Scripts.AI;
 
 import java.util.*;
 
-import Engine.Structures.Vector2D;
-
 import static java.lang.Math.min;
 import static java.lang.Math.max;
-import static java.lang.Math.abs;
-
 
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
@@ -19,35 +15,33 @@ import Onitama.src.Scenes.GameScene.Scripts.Turn;
 public class SmartAI extends AI {
     private static final int minusINF = Integer.MIN_VALUE;
     private static final int plusINF = Integer.MAX_VALUE;
-    List<Turn> winners;
+    List<Turn> bestMoves;
     Random random;
     int difficulty;
     int selfID;
 
+
     public SmartAI(int difficulty, int player) {
-        this.winners = new ArrayList<>();
+        bestMoves = new ArrayList<>();
         this.random = new Random();
         this.difficulty = difficulty;
         this.selfID = player;
     }
 
+
     @Override
     public Turn play() {
-        winners.clear();
-        minmax(GameScene.game, true, difficulty, 
-               minusINF, plusINF);
-        return winners.get(random.nextInt(winners.size()));
+        bestMoves.clear();
+        int eval = minmax(GameScene.game, true, difficulty, 
+                          minusINF, plusINF);
+        System.err.println("Best score found: " + eval);
+        return bestMoves.get(random.nextInt(bestMoves.size()));
     }
 
     private int minmax(GameConfiguration config, boolean isMaximizing, 
                                        int depth, int alpha, int beta) {
-        if (config.isGameOver()) {
-            if (config.getCurrentPlayer() == selfID) // gameover for the AI
-                return minusINF;
-            else // gameover for the enemy
-                return plusINF;
-        } else if (depth == 0)
-            return heuristic(config);
+        if (config.isGameOver() || depth == 0) 
+            return heuristic(config, depth);
 
         int eval, maxEval, minEval;
 
@@ -56,14 +50,12 @@ public class SmartAI extends AI {
             for (Turn turn : possibleTurns(config)) {
                 eval = minmax(config.nextConfig(turn), false, 
                               depth-1, alpha, beta);
-                // if at root, track winning moves
-                if (depth == difficulty) { 
+                if (depth == difficulty)
                     if (eval >= maxEval) {
                         if (eval > maxEval)
-                            winners.clear();
-                        winners.add(turn);
+                            bestMoves.clear();
+                        bestMoves.add(turn);
                     }
-                }
                 maxEval = max(maxEval, eval);
                 alpha = max(alpha, eval);
                 if (beta <= alpha)
@@ -86,20 +78,32 @@ public class SmartAI extends AI {
         }
     }
 
-    private int heuristic(GameConfiguration config) {
-        List<Vector2D> allies = config.allyPositions();
-        List<Vector2D> enemies = config.enemyPositions(); 
-        int pieceNumber = allies.size() - enemies.size();
-        int throneDistance = distance(config.allyKing(), config.allyGoal()) - 
-                             distance(config.enemyGoal(), config.enemyKing());
-        int eval = pieceNumber + throneDistance; 
+
+    private int heuristic(GameConfiguration config, int depth) {
+        int eval; // evaluation for AI
+
+        if (config.isGameOver()) // AI lost
+            eval = -(1000000 + depth);
+        else // ran out of depth, give an estimate
+            eval = pieceNumber(config) + throneDistance(config); 
+
         if (config.getCurrentPlayer() == selfID)
             return eval;
-        else
+        else // enemy is playing, so return the opposite
             return -eval;
     }
 
-    private int distance(Vector2D first, Vector2D second) {
-        return abs(first.getIntX() - second.getIntX()) + abs(first.getIntY() - second.getIntY());
+
+    /* Methods to evaluate a state of the game  */
+
+    private int pieceNumber(GameConfiguration config) {
+        return config.allyPositions().size() - config.enemyPositions().size();
     }
+
+    private int throneDistance(GameConfiguration config) {
+        return distance(config.allyKing(), config.allyGoal()) - 
+               distance(config.enemyGoal(), config.enemyKing());
+    }
+
+    /* End of evaluation methods */
 }
