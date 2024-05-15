@@ -41,7 +41,7 @@ public class SmartAI extends AI {
 
     private int minmax(GameConfiguration config, boolean isMaximizing, 
                                        int depth, int alpha, int beta) {
-        if (config.isGameOver()) {
+        if (config.gameOver()) {
             if (config.getCurrentPlayer() == selfID) // gameover for the AI
                 return minusINF;
             else // gameover for the enemy
@@ -86,7 +86,8 @@ public class SmartAI extends AI {
         }
     }
 
-    private int heuristic(GameConfiguration config) {
+    /* 
+    private int heuristic1(GameConfiguration config) {
         List<Vector2D> allies = config.allyPositions();
         List<Vector2D> enemies = config.enemyPositions(); 
         int pieceNumber = allies.size() - enemies.size();
@@ -101,5 +102,31 @@ public class SmartAI extends AI {
 
     private int distance(Vector2D first, Vector2D second) {
         return abs(first.getIntX() - second.getIntX()) + abs(first.getIntY() - second.getIntY());
+    }
+    */
+
+    private int heuristic(GameConfiguration config) {
+        List<Vector2D> allies = config.allyPositions();
+        List<Vector2D> enemies = config.enemyPositions();
+        
+        // Nombre de pièces alliées et ennemies
+        int pieceNumber = allies.size() - enemies.size();
+        
+        // Distance entre le roi allié et son trône, et entre le roi ennemi et son trône
+        int throneDistance = distance(config.allyKing(), config.allyGoal()) - distance(config.enemyKing(), config.enemyGoal());
+    
+        // facteurs d'évaluation 
+        int kingSafety = 0;
+        Vector2D allyKing = config.allyKing();
+        for (Vector2D enemy : enemies) {
+            kingSafety -= distance(allyKing, enemy); // Plus les ennemis sont proches du roi allié, plus la valeur est négative
+        }
+    
+        int eval = pieceNumber + throneDistance + kingSafety;
+    
+        if (config.getCurrentPlayer() == selfID)
+            return eval;
+        else
+            return -eval;
     }
 }
