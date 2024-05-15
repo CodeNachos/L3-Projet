@@ -15,14 +15,13 @@ import Onitama.src.Scenes.GameScene.Scripts.Turn;
 public class SmartAI extends AI {
     private static final int minusINF = Integer.MIN_VALUE;
     private static final int plusINF = Integer.MAX_VALUE;
-    List<Turn> bestMoves;
+    Turn bestMove;
     Random random;
     int difficulty;
     int selfID;
 
 
     public SmartAI(int difficulty, int player) {
-        bestMoves = new ArrayList<>();
         this.random = new Random();
         this.difficulty = difficulty;
         this.selfID = player;
@@ -31,11 +30,10 @@ public class SmartAI extends AI {
 
     @Override
     public Turn play() {
-        bestMoves.clear();
         int eval = minmax(GameScene.game, true, difficulty, 
                           minusINF, plusINF);
         System.err.println("Best score found: " + eval);
-        return bestMoves.get(random.nextInt(bestMoves.size()));
+        return bestMove;
     }
 
     private int minmax(GameConfiguration config, boolean isMaximizing, 
@@ -50,12 +48,8 @@ public class SmartAI extends AI {
             for (Turn turn : possibleTurns(config)) {
                 eval = minmax(config.nextConfig(turn), false, 
                               depth-1, alpha, beta);
-                if (depth == difficulty)
-                    if (eval >= maxEval) {
-                        if (eval > maxEval)
-                            bestMoves.clear();
-                        bestMoves.add(turn);
-                    }
+                if (depth == difficulty && eval > alpha)
+                    bestMove = turn;
                 maxEval = max(maxEval, eval);
                 alpha = max(alpha, eval);
                 if (beta <= alpha)
