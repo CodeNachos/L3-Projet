@@ -1,5 +1,7 @@
 package Onitama.src.Scenes.GameScene.Scripts.AI;
 
+import static java.lang.Math.abs;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,5 +22,9 @@ public abstract class AI {
                 for (Vector2D position : config.possiblePositions(piece, card))
                     result.add(new Action(card, piece, position));
         return result;
+    }
+
+    int distance(Vector2D first, Vector2D second) {
+        return abs(first.getIntX() - second.getIntX()) + abs(first.getIntY() - second.getIntY());
     }
 }

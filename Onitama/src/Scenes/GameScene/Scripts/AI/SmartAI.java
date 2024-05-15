@@ -2,14 +2,12 @@ package Onitama.src.Scenes.GameScene.Scripts.AI;
 
 import java.util.*;
 
-import Engine.Structures.Vector2D;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.States.Action;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
 
 import static java.lang.Math.min;
 import static java.lang.Math.max;
-import static java.lang.Math.abs;
 
 /**
  * SmartAI
@@ -17,52 +15,41 @@ import static java.lang.Math.abs;
 public class SmartAI extends AI {
     private static final int minusINF = Integer.MIN_VALUE;
     private static final int plusINF = Integer.MAX_VALUE;
-    List<Action> winners;
+    Action bestMove;
     Random random;
     int difficulty;
     int selfID;
 
+
     public SmartAI(int difficulty, int player) {
-        this.winners = new ArrayList<>();
         this.random = new Random();
         this.difficulty = difficulty;
         this.selfID = player;
     }
 
+
     @Override
     public Action play() {
-        winners.clear();
-        minmax(GameScene.getGameState(), true, difficulty, 
-               minusINF, plusINF);
-        return winners.get(random.nextInt(winners.size()));
+        int eval = minmax(GameScene.getGameState(), true, difficulty, 
+                          minusINF, plusINF);
+        System.err.println("Best score found: " + eval);
+        return bestMove;
     }
 
     private int minmax(State config, boolean isMaximizing, 
-                        int depth, int alpha, int beta
-    ) {
-        if (config.gameOver()) {
-            if (config.getCurrentPlayer() == selfID) // gameover for the AI
-                return minusINF;
-            else // gameover for the enemy
-                return plusINF;
-        } else if (depth == 0)
-            return heuristic(config);
+                                       int depth, int alpha, int beta) {
+        if (config.isGameOver() || depth == 0) 
+            return heuristic(config, depth);
 
         int eval, maxEval, minEval;
 
         if (isMaximizing) {
             maxEval = minusINF;
-            for (Action Action : possibleActions(config)) {
-                eval = minmax(config.nextConfig(Action), false, 
+            for (Action turn : possibleActions(config)) {
+                eval = minmax(config.nextConfig(turn), false, 
                               depth-1, alpha, beta);
-                // if at root, track winning moves
-                if (depth == difficulty) { 
-                    if (eval >= maxEval) {
-                        if (eval > maxEval)
-                            winners.clear();
-                        winners.add(Action);
-                    }
-                }
+                if (depth == difficulty && eval > alpha)
+                    bestMove = turn;
                 maxEval = max(maxEval, eval);
                 alpha = max(alpha, eval);
                 if (beta <= alpha)
@@ -73,8 +60,8 @@ public class SmartAI extends AI {
         
         else { // minimizing
             minEval = plusINF;
-            for (Action Action : possibleActions(config)) {
-                eval = minmax(config.nextConfig(Action), true,
+            for (Action turn : possibleActions(config)) {
+                eval = minmax(config.nextConfig(turn), true,
                               depth-1, alpha, beta);
                 minEval = min(minEval, eval);
                 beta = min(beta, eval);
@@ -85,20 +72,32 @@ public class SmartAI extends AI {
         }
     }
 
-    private int heuristic(State config) {
-        List<Vector2D> allies = config.allyPositions();
-        List<Vector2D> enemies = config.enemyPositions(); 
-        int pieceNumber = allies.size() - enemies.size();
-        int throneDistance = distance(config.allyKing(), config.allyGoal()) - 
-                             distance(config.enemyGoal(), config.enemyKing());
-        int eval = pieceNumber + throneDistance; 
+
+    private int heuristic(State config, int depth) {
+        int eval; // evaluation for AI
+
+        if (config.isGameOver()) // AI lost
+            eval = -(1000000 + depth);
+        else // ran out of depth, give an estimate
+            eval = pieceNumber(config) + throneDistance(config); 
+
         if (config.getCurrentPlayer() == selfID)
             return eval;
-        else
+        else // enemy is playing, so return the opposite
             return -eval;
     }
 
-    private int distance(Vector2D first, Vector2D second) {
-        return abs(first.getIntX() - second.getIntX()) + abs(first.getIntY() - second.getIntY());
+
+    /* Methods to evaluate a state of the game  */
+
+    private int pieceNumber(State config) {
+        return config.allyPositions().size() - config.enemyPositions().size();
     }
+
+    private int throneDistance(State config) {
+        return distance(config.allyKing(), config.allyGoal()) - 
+               distance(config.enemyGoal(), config.enemyKing());
+    }
+
+    /* End of evaluation methods */
 }

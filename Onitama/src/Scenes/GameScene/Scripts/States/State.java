@@ -79,7 +79,7 @@ public class State implements Serializable {
         return currentPlayer;
     }
 
-    public boolean gameOver() {
+    public boolean isGameOver() {
         Vector2D ally = allyKing();
         Vector2D enemy = enemyKing();
 
