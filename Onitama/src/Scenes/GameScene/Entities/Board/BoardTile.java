@@ -1,80 +1,95 @@
 package Onitama.src.Scenes.GameScene.Entities.Board;
 
+
 import java.awt.event.MouseEvent;
 
 import Engine.Entities.TileMap.Tile;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Structures.Sprite;
 import Onitama.src.Scenes.GameScene.GameScene;
-import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 
 public class BoardTile extends Tile {
-    private boolean highlighted = false;
+
     private boolean hovering = false;
+    private boolean highlighted = false;
+
+    private boolean interactable = true;
 
     public BoardTile(TileMap map, int line, int column, Sprite sprite) {
         super(map, line, column, sprite);
     }
 
+    public void setIteractable(boolean state) {
+        interactable = state;
+    }
+    
     @Override
     public void input(MouseEvent e) {
+        if (!interactable)
+            return;
+        
         if (e.getID() == MouseEvent.MOUSE_CLICKED) {
             toggleSelected();
         } else if (e.getID() == MouseEvent.MOUSE_ENTERED) {
             hovering = true;
+            ((Board)parentMap).setHoveringTile(mapPosition);
         } else if (e.getID() == MouseEvent.MOUSE_EXITED) {
             hovering = false;
+            if (((Board)parentMap).isHoveredTile(mapPosition)) 
+                ((Board)parentMap).setHoveringTile(null);
         }
     }
 
     @Override
     public void process(double delta) {
-        if (isSelectedAction()) {
+        if (((Board)parentMap).isSelectedAction(mapPosition)) {
             if (hovering) {
                 sprite = ((Board)parentMap).hoverSelectedActionTileSprite;
             } else {
                 sprite = ((Board)parentMap).selectedActionTileSprite;
             }
         } else if (highlighted) {
-            if (hovering) {
+            if (hovering && GameScene.getSelectedCard().getPlayer() == GameScene.getCurrentPlayer() && !GameScene.getSelectedCard().isStandBy()) {
                 sprite = ((Board)parentMap).hoverActionTileSprite;
             } else {
                 sprite = ((Board)parentMap).actionTileSprite;
             }
-        } else if (isSelectedPiece()) {
+        } else if (((Board)parentMap).isSelectedTile(mapPosition)) {
             if (hovering) {
                 sprite = ((Board)parentMap).hoverSelectedTileSprite;
             } else {
                 sprite = ((Board)parentMap).selectedTileSprite;
             }
-        } else if (hovering) {
+        } else if (hovering ) {
             sprite = ((Board)parentMap).hoverTileSprite;
         } else {
             sprite = ((Board)parentMap).tileSprite;
         }
     }
 
-    private void toggleSelected() {
-        PieceVisual tilePiece = ((Board)parentMap).pieces.getPiece(getLine(), getColumn());
-        
-        if (highlighted) {
-            if (!isSelectedAction()) {
-                GameScene.game.setSelectedAction(mapPosition);
+    public void toggleSelected() {
+        Piece tilePiece = GameScene.getPiece(mapPosition);
+
+        if (highlighted && GameScene.getSelectedCard().getPlayer() == GameScene.getCurrentPlayer() && 
+            !(GameScene.getSelectedCard().isStandBy())) {
+            if (!((Board)parentMap).isSelectedAction(mapPosition)) {
+                ((Board)parentMap).setSelectedAction(mapPosition);
+                GameScene.updateMatch();
             } else {
-                GameScene.game.setSelectedAction(null);
+                ((Board)parentMap).setSelectedAction(null);
             }
 
         }
 
-        else if (tilePiece != null && 
-            (GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER1 && tilePiece.isRed() ||
-            GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER2 && tilePiece.isBlue())
+        else if (tilePiece != null &&
+            (GameScene.getCurrentPlayer() == GameScene.PLAYER1 && tilePiece.isRed() ||
+            GameScene.getCurrentPlayer() == GameScene.PLAYER2 && tilePiece.isBlue())
         ) {
             
-            if (!isSelectedPiece()) {
-                GameScene.game.setSelectedPiece(mapPosition);
+            if (!((Board)parentMap).isSelectedTile(mapPosition)) {
+                ((Board)parentMap).setSelectedTile(mapPosition);
             } else {
-                GameScene.game.setSelectedPiece(null);
+                ((Board)parentMap).setSelectedTile(null);
             }
             
         } 
@@ -84,18 +99,17 @@ public class BoardTile extends Tile {
         highlighted = highlight;
     }
 
-    private boolean isSelectedPiece() {
-        if (!GameScene.game.isPieceSelected())
-            return false;
-        return GameScene.game.getSelectedPiece().equals(mapPosition);
-    }
+    public void toggleHovering(boolean hovering) {
+        
+        if (hovering) { 
+            ((Board)parentMap).setHoveringTile(mapPosition);
+        } else {
+            ((Board)parentMap).setHoveringTile(null);
+        }
 
-    private boolean isSelectedAction() {
-        if (!GameScene.game.isActionSelected())
-            return false;
-        return GameScene.game.getSelectedAction().equals(mapPosition);
+        this.hovering = hovering;
+
+
     }
-    
-    
 
 }

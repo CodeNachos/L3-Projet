@@ -1,12 +1,11 @@
-package Onitama.src;
+package Old.src;
 
 import java.awt.*;
 
 import Engine.Core.Engines.GameEngine;
 import Engine.Core.Renderer.Scene;
 import Engine.Global.Settings;
-import Engine.Global.Util;
-import Onitama.src.Scenes.GameScene.GameScene;
+import Old.src.Scenes.GameScene.GameScene;
 
 public class Main {
     public static GameEngine engine;
@@ -22,13 +21,10 @@ public class Main {
         Settings.resolution = new Dimension((int)(aspectRatio*600),600);
         Settings.stretch = false;
         Settings.resizable = false;
-        Settings.applicationName = "Onitama";
 
         // create engine
         engine = new GameEngine();
         engine.setResolution(Settings.resolution);
-
-        engine.setIcon(Util.getImage("Onitama/res/Sprites/redKing.png"));
 
         gameScene = new GameScene();
 

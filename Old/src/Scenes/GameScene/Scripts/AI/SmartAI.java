@@ -1,11 +1,11 @@
-package Onitama.src.Scenes.GameScene.Scripts.AI;
+package Old.src.Scenes.GameScene.Scripts.AI;
 
 import java.util.*;
 
 import Engine.Structures.Vector2D;
-import Onitama.src.Scenes.GameScene.GameScene;
-import Onitama.src.Scenes.GameScene.Scripts.States.Action;
-import Onitama.src.Scenes.GameScene.Scripts.States.State;
+import Old.src.Scenes.GameScene.GameScene;
+import Old.src.Scenes.GameScene.Scripts.GameConfiguration;
+import Old.src.Scenes.GameScene.Scripts.Turn;
 
 import static java.lang.Math.min;
 import static java.lang.Math.max;
@@ -17,7 +17,7 @@ import static java.lang.Math.abs;
 public class SmartAI extends AI {
     private static final int minusINF = Integer.MIN_VALUE;
     private static final int plusINF = Integer.MAX_VALUE;
-    List<Action> winners;
+    List<Turn> winners;
     Random random;
     int difficulty;
     int selfID;
@@ -30,16 +30,15 @@ public class SmartAI extends AI {
     }
 
     @Override
-    public Action play() {
+    public Turn play() {
         winners.clear();
-        minmax(GameScene.getGameState(), true, difficulty, 
+        minmax(GameScene.game, true, difficulty, 
                minusINF, plusINF);
         return winners.get(random.nextInt(winners.size()));
     }
 
-    private int minmax(State config, boolean isMaximizing, 
-                        int depth, int alpha, int beta
-    ) {
+    private int minmax(GameConfiguration config, boolean isMaximizing, 
+                                       int depth, int alpha, int beta) {
         if (config.gameOver()) {
             if (config.getCurrentPlayer() == selfID) // gameover for the AI
                 return minusINF;
@@ -52,15 +51,15 @@ public class SmartAI extends AI {
 
         if (isMaximizing) {
             maxEval = minusINF;
-            for (Action Action : possibleActions(config)) {
-                eval = minmax(config.nextConfig(Action), false, 
+            for (Turn turn : possibleTurns(config)) {
+                eval = minmax(config.nextConfig(turn), false, 
                               depth-1, alpha, beta);
                 // if at root, track winning moves
                 if (depth == difficulty) { 
                     if (eval >= maxEval) {
                         if (eval > maxEval)
                             winners.clear();
-                        winners.add(Action);
+                        winners.add(turn);
                     }
                 }
                 maxEval = max(maxEval, eval);
@@ -73,8 +72,8 @@ public class SmartAI extends AI {
         
         else { // minimizing
             minEval = plusINF;
-            for (Action Action : possibleActions(config)) {
-                eval = minmax(config.nextConfig(Action), true,
+            for (Turn turn : possibleTurns(config)) {
+                eval = minmax(config.nextConfig(turn), true,
                               depth-1, alpha, beta);
                 minEval = min(minEval, eval);
                 beta = min(beta, eval);
@@ -85,7 +84,7 @@ public class SmartAI extends AI {
         }
     }
 
-    private int heuristic(State config) {
+    private int heuristic(GameConfiguration config) {
         List<Vector2D> allies = config.allyPositions();
         List<Vector2D> enemies = config.enemyPositions(); 
         int pieceNumber = allies.size() - enemies.size();

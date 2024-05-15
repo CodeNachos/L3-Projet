@@ -1,4 +1,4 @@
-package Onitama.src.Scenes.GameScene.Interface;
+package Old.src.Scenes.GameScene.Interface;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,16 +12,12 @@ import javax.swing.JLabel;
 import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
-import Onitama.src.Main;
-import Onitama.src.Scenes.GameScene.GameScene;
-
+import Old.src.Main;
+import Old.src.Scenes.GameScene.GameScene;
+import Old.src.Scenes.GameScene.Scripts.GameConfiguration;
 
 public class TopBar extends MenuFrame {
     FlatButton validateButton;
-    
-    FlatButton undoButton;
-    FlatButton redoButton;
-
     JLabel timerLabel;
     JLabel playerLabel;
     
@@ -40,59 +36,33 @@ public class TopBar extends MenuFrame {
         createPlayerLabel();
 
         add(Box.createHorizontalGlue());
+
+        createValidateButton();
+
+        add(Box.createHorizontalGlue());
         
         createTimerLabel();
 
         add(Box.createHorizontalGlue()); // Add glue to right-align components
-
-        createUndoButton();
-        
-        add(Box.createHorizontalStrut(10));
-
-        createRedoButton();
     }
 
-    
-    private FlatButton createBaseButton(String content) {
-        FlatButton button = new FlatButton(content);
-        button.setFont(new Font("Arial", Font.BOLD, 16));
-        button.setForeground(Main.Palette.background);
-        button.setMainColor(Main.Palette.orange);
-        button.setAccentColor(Main.Palette.orange);
-        button.setCurvature(20, 20);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        button.setSize(20, 20);
-        return button;
-    }
+    private void createValidateButton() {
+        validateButton = new FlatButton("End Turn");
+        validateButton.setFont(new Font("Arial", Font.BOLD, 16));
+        validateButton.setForeground(Main.Palette.background);
+        validateButton.setMainColor(Main.Palette.orange);
+        validateButton.setAccentColor(Main.Palette.orange);
+        validateButton.setCurvature(20, 20);
+        validateButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-    private void createUndoButton() {
-
-        undoButton = createBaseButton("Undo");
-
-        //undoButton.setEnabled(GameScene.canUndo());
-        undoButton.addActionListener(new ActionListener() {
+        validateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //GameScene.undo();
+                GameScene.updateMatch();
             }
         });
 
-        add(undoButton);
-    }
-
-    private void createRedoButton() {
-        
-        redoButton = createBaseButton("Redo");
-
-        //redoButton.setEnabled(GameScene.canRedo());
-        redoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // GameScene.redo();
-            }
-        });
-
-        add(redoButton);
+        add(validateButton);
     }
 
     private void createTimerLabel() {
@@ -112,7 +82,7 @@ public class TopBar extends MenuFrame {
     }
 
     private String getPlayerName() {
-        if (GameScene.getCurrentPlayer() == GameScene.PLAYER1) {
+        if (GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER1) {
             return "RED";
         } else {
             return "BLUE";
@@ -122,13 +92,27 @@ public class TopBar extends MenuFrame {
     @Override
     public void process(double delta) {
         playerLabel.setText(getPlayerName());
-        if (GameScene.getCurrentPlayer() == GameScene.PLAYER1) {
+        if (GameScene.game.getCurrentPlayer() == GameConfiguration.PLAYER1) {
             playerLabel.setForeground(Main.Palette.red);
         } else {
             playerLabel.setForeground(Main.Palette.highlight);
         }
 
-        //redoButton.setEnabled(GameScene.canRedo());
-        //undoButton.setEnabled(GameScene.canUndo());
+        if (isValidTurn()) {
+            validateButton.setMainColor(Main.Palette.orange);
+            validateButton.setAccentColor(Main.Palette.orange);
+            validateButton.setEnabled(true);
+        } else {
+            validateButton.setMainColor(Main.Palette.selection);
+            validateButton.setAccentColor(Main.Palette.selection.brighter());
+            validateButton.setEnabled(false);
+        }
+
+
     }
+
+    private boolean isValidTurn() {
+        return (GameScene.game.isCardSelected() && GameScene.game.isPieceSelected() && GameScene.game.isActionSelected());
+    }
+    
 }
