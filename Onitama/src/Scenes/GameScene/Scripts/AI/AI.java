@@ -17,7 +17,7 @@ import Onitama.src.Scenes.GameScene.Scripts.Piece.Piece;
 public abstract class AI {
     public abstract Turn play();
 
-    List<Turn> possibleTurns(GameConfiguration config) {
+    static List<Turn> possibleTurns(GameConfiguration config) {
         List<Turn> result = new ArrayList<>();
         for (CardInfo card : config.availableCards())
             for (Piece piece : config.allyPieces())
@@ -26,7 +26,7 @@ public abstract class AI {
         return result;
     }
 
-    int distance(Vector2D first, Vector2D second) {
+    static int distance(Vector2D first, Vector2D second) {
         return abs(first.getIntX() - second.getIntX()) + abs(first.getIntY() - second.getIntY());
     }
 }
