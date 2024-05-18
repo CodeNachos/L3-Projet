@@ -19,6 +19,8 @@ public class Board extends TileMap {
     Sprite hoverTileSprite;
     Sprite hoverSelectedTileSprite;
     Sprite hoverActionTileSprite;
+    Sprite allowedActionTileSprite;
+    Sprite hoverAllowedActionTileSprite;
     Sprite hoverSelectedActionTileSprite;
 
     private boolean highlighting = false; 
@@ -43,7 +45,7 @@ public class Board extends TileMap {
         actionTileSprite = new Sprite(new Texture(Main.Palette.background.brighter(), tileDimension.width, tileDimension.height,10));
         actionTileSprite.setBorder(5, Main.Palette.selection.brighter(), 10);
 
-        selectedActionTileSprite = new Sprite(new Texture(Main.Palette.background.brighter(), tileDimension.width, tileDimension.height,10));
+        selectedActionTileSprite = new Sprite(new Texture(Main.Palette.background.brighter().brighter(), tileDimension.width, tileDimension.height,10));
         selectedActionTileSprite.setBorder(5, Main.Palette.green, 10);
 
         hoverTileSprite = new Sprite(new Texture(Main.Palette.background.brighter(), tileDimension.width, tileDimension.height,10));
@@ -53,7 +55,13 @@ public class Board extends TileMap {
         hoverSelectedTileSprite.setBorder(5, Main.Palette.highlight.brighter(), 10);
 
         hoverActionTileSprite = new Sprite(new Texture(Main.Palette.background.brighter().brighter(), tileDimension.width, tileDimension.height,10));
-        hoverActionTileSprite.setBorder(5, Main.Palette.orange, 10);
+        hoverActionTileSprite.setBorder(5, Main.Palette.highlight, 10);
+
+        allowedActionTileSprite = new Sprite(new Texture(Main.Palette.background.brighter().brighter(), tileDimension.width, tileDimension.height,10));
+        allowedActionTileSprite.setBorder(5, Main.Palette.orange, 10);
+
+        hoverAllowedActionTileSprite = new Sprite(new Texture(Main.Palette.orange, tileDimension.width, tileDimension.height,10));
+        hoverAllowedActionTileSprite.setBorder(5, Main.Palette.orange.brighter(), 10);
 
         hoverSelectedActionTileSprite = new Sprite(new Texture(Main.Palette.background.brighter(), tileDimension.width, tileDimension.height,10));
         hoverSelectedActionTileSprite.setBorder(5, Main.Palette.green.brighter(), 10);

@@ -6,7 +6,6 @@ import java.util.List;
 
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
-import Old.src.Scenes.GameScene.Scripts.GameConfiguration;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece;
@@ -183,7 +182,7 @@ public class State implements Serializable {
     public List<Vector2D> possiblePositions(Vector2D piece, String card) {
         List<Vector2D> allies = allyPositions();
         List<Vector2D> curMovement;
-        if (currentPlayer == GameConfiguration.PLAYER1)
+        if (currentPlayer == GameScene.PLAYER1)
             curMovement = GameScene.getGameCards().get(card).getRedMovement();
         else
             curMovement = GameScene.getGameCards().get(card).getBlueMovement();

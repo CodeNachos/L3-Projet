@@ -3,6 +3,7 @@ package Onitama.src.Scenes.GameScene.Entities.Board;
 
 import java.awt.event.MouseEvent;
 
+import Engine.Core.Engines.GameEngine;
 import Engine.Entities.TileMap.Tile;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Structures.Sprite;
@@ -49,10 +50,36 @@ public class BoardTile extends Tile {
                 sprite = ((Board)parentMap).selectedActionTileSprite;
             }
         } else if (highlighted) {
-            if (hovering && GameScene.getSelectedCard().getPlayer() == GameScene.getCurrentPlayer() && !GameScene.getSelectedCard().isStandBy()) {
-                sprite = ((Board)parentMap).hoverActionTileSprite;
+            boolean pieceOwned;
+            Piece tilePiece;
+            
+            if (hovering) {
+                if (GameScene.getSelectedCard().getPlayer() == GameScene.getCurrentPlayer() && !GameScene.getSelectedCard().isStandBy()) {
+                    sprite = ((Board)parentMap).selectedActionTileSprite; 
+                } else {
+                    sprite = ((Board)parentMap).hoverActionTileSprite;
+                }
             } else {
-                sprite = ((Board)parentMap).actionTileSprite;
+                tilePiece = ((Board)parentMap).getSelectedTile() == null ? 
+                    ((Board)parentMap).getHoveringTile() == null ? 
+                        null : 
+                        GameScene.getPiece(((Board)parentMap).getHoveringTile().getIntY(), ((Board)parentMap).getHoveringTile().getIntX()) : 
+                    GameScene.getPiece(((Board)parentMap).getSelectedTile().getIntY(), ((Board)parentMap).getSelectedTile().getIntX());
+                
+                if (tilePiece == null) {
+                    pieceOwned = false;
+                } else { 
+                    pieceOwned = (
+                        (GameScene.getCurrentPlayer() == GameScene.PLAYER1 && tilePiece.isRed()) ||
+                        (GameScene.getCurrentPlayer() == GameScene.PLAYER2 && tilePiece.isBlue())
+                    );
+                }
+                
+                if (pieceOwned && GameScene.getSelectedCard().getPlayer() == GameScene.getCurrentPlayer() && !GameScene.getSelectedCard().isStandBy()) {
+                    sprite = ((Board)parentMap).allowedActionTileSprite; 
+                } else {
+                    sprite = ((Board)parentMap).hoverActionTileSprite;
+                }
             }
         } else if (((Board)parentMap).isSelectedTile(mapPosition)) {
             if (hovering) {

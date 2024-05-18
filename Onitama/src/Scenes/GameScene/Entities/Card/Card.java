@@ -72,6 +72,7 @@ public class Card extends GameObject {
 
     public void setPlayer(Player player) {
         this.player = player;
+        updateCard();
     }
 
     public int getPlayer() {
@@ -81,8 +82,14 @@ public class Card extends GameObject {
     @Override
     public void process(double delta) {
         if (GameScene.isCardSelected() && GameScene.getSelectedCard() == this) {
-            if (sprite != player.selectedCardSprite)
+            if (player.getStandByCard() == this) {
+                sprite = player.selectedStandBySprite;
+            }
+            else if (sprite != player.selectedCardSprite)
                 sprite = player.selectedCardSprite;
+        } else if (player.getStandByCard() == this) {
+            if (sprite != player.standBySprite) 
+                sprite = player.standBySprite;
         } else if (sprite != player.idleCardSprite) {
             sprite = player.idleCardSprite;
         }

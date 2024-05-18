@@ -7,11 +7,13 @@ import Engine.Core.Renderer.Scene;
 import Engine.Global.Settings;
 import Engine.Global.Util;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class Main {
     public static GameEngine engine;
 
-    public static Scene gameScene;
+    public static GameScene gameScene;
+    public static Scene newGameMenu;
 
     public static void main(String[] args) {
 
@@ -30,12 +32,12 @@ public class Main {
 
         engine.setIcon(Util.getImage("Onitama/res/Sprites/redKing.png"));
 
-        gameScene = new GameScene();
+        newGameMenu = new NewGameMenuScene();
 
         // start engine
-        engine.setMainScene(gameScene);
+        engine.setMainScene(newGameMenu);
         engine.start();
-    } 
+    }
     
     public static class Palette {
         public static Color background = new Color(40,42,54,255);

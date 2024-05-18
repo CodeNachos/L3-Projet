@@ -43,4 +43,8 @@ public class Util {
         double y = (299 * color.getRed() + 587 * color.getGreen() + 114 * color.getBlue()) / 1000;
         return y >= 128 ? Color.black : Color.white;
     }
+
+    public static Color setColorOppacity(Color original, int alpha) {
+        return new Color(original.getRed(), original.getGreen(), original.getBlue(), alpha);
+    }
 }

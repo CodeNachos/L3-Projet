@@ -10,7 +10,9 @@ import Engine.Entities.UI.ColorArea;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
+import Onitama.src.Scenes.GameScene.Interface.StandByArrow;
 import Onitama.src.Scenes.GameScene.Interface.TopBar;
+import Onitama.src.Scenes.GameScene.Interface.TurnLabel;
 import Onitama.src.JsonReader;
 import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 import Onitama.src.Scenes.GameScene.Scripts.States.Action;
@@ -38,6 +40,15 @@ public class GameScene extends Scene {
 
     public static HashMap<String, CardInfo> gameCards;
 
+    public static TurnLabel leftTurnLabel;
+    public static TurnLabel rightTurnLabel;
+
+    public static StandByArrow leftArrow;
+    public static StandByArrow rightArrow;
+
+    public static ColorArea leftPlayerFade;
+    public static ColorArea rightPlayerFade;
+
     public GameScene() {
         // Create game
         
@@ -47,6 +58,7 @@ public class GameScene extends Scene {
         // Instantiate game entities
         createBoard();
         createPlayers();
+        createPlayersFade();
 
         player1.addToScene(this);
         player2.addToScene(this);
@@ -59,15 +71,7 @@ public class GameScene extends Scene {
         ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
         addComponent(background);
 
-        //State s = getGameState();
-        //System.out.println(s.gameCards.get(0));
-        //State s2 = s.nextConfig(new Action(player1.getFirstCard(), player1.getPieces().get(2).getMapPosition(), s.possiblePositions(player1.getPieces().get(2).getMapPosition(), player1.getFirstCard()).get(0)));
-        //System.out.println(s2.gameCards.get(4));
-
-        player1.enableAI(3);
-        player2.enableAI(6);
-
-        updateIteractableEntities();
+        updateGUI();
     }
 
     public GameScene(State gameState) {
@@ -88,6 +92,22 @@ public class GameScene extends Scene {
         }
 
         return new State(getPlayerPieces(PLAYER1), getPlayerPieces(PLAYER2), cards, currentPlayer);
+    }
+
+    public void enablePlayerAI(int player, int difficulty) {
+        switch (player) {
+            case PLAYER1:
+                player1.enableAI(difficulty);
+                break;
+            
+            case PLAYER2:
+                player2.enableAI(difficulty);
+                break;
+
+            default:
+                Util.printError("Invalid player");
+                break;
+        }
     }
 
     public static int getCurrentPlayer() {
@@ -282,7 +302,7 @@ public class GameScene extends Scene {
             Main.engine.pause();
         }
 
-        updateIteractableEntities();
+        updateGUI();
 
     }
 
@@ -295,6 +315,43 @@ public class GameScene extends Scene {
 
         gameBoard.setSelectedTile(act.getPiece());
         gameBoard.setSelectedAction(act.getMove());
+    }
+
+    public static void updateGUI() {
+        updatePlayerFade();
+        updateTurnLabels();
+        updateStandByCardArrows();
+        updateIteractableEntities();
+    }
+
+    public static void updateTurnLabels() {
+        if (currentPlayer == PLAYER1) {
+            leftTurnLabel.setRedTurn();
+            rightTurnLabel.clearTurn();
+        } else {
+            leftTurnLabel.clearTurn();
+            rightTurnLabel.setBlueTurn();
+        }
+    }
+
+    public static void updatePlayerFade() {
+        if (currentPlayer == PLAYER1) {
+            leftPlayerFade.setVisible(false);
+            rightPlayerFade.setVisible(true);
+        } else {
+            leftPlayerFade.setVisible(true);
+            rightPlayerFade.setVisible(false);
+        }
+    }
+
+    public static void updateStandByCardArrows() {
+        if (currentPlayer == PLAYER1) {
+            leftArrow.toggleLeftArrow();
+            rightArrow.clearArrow();
+        } else {
+            leftArrow.clearArrow();
+            rightArrow.toggleRightArrow();
+        }
     }
 
     public static void updateIteractableEntities() {
@@ -403,6 +460,9 @@ public class GameScene extends Scene {
 
         addComponent(redSide);
         
+
+        // TOP BAR
+
         // Dimension for top bar
         Dimension topBarArea = new Dimension(
             Main.engine.getResolution().width/3,
@@ -412,8 +472,82 @@ public class GameScene extends Scene {
             (int)(Main.engine.getResolution().width/2 - (topBarArea.width/2)),
             0
         );
-        TopBar gui = new TopBar(topBarArea, topBarPos);
-        addComponent(gui); 
+        TopBar topBar = new TopBar(topBarArea, topBarPos);
+        addComponent(topBar); 
+
+
+       // TURN LABELS
+
+        Dimension turnLabelDimension = new Dimension(
+            (int)(Main.engine.getResolution().width /3),
+            (int)(Main.engine.getResolution().height / 10)
+        );
+
+        Vector2D turnLabelOffset = new Vector2D(
+            15,
+            0
+        );
+
+        leftTurnLabel = new TurnLabel(turnLabelDimension, turnLabelOffset);
+
+        addComponent(leftTurnLabel);
+
+        turnLabelOffset = new Vector2D(
+            (int)(Main.engine.getResolution().width - turnLabelDimension.width)-15,
+            0
+        );
+
+        rightTurnLabel = new TurnLabel(turnLabelDimension, turnLabelOffset);
+
+        addComponent(rightTurnLabel);
+
+
+        // STAND BY CARD ARROW INDICATOR
+
+        Dimension arrowDimension = new Dimension(
+            (int)(Main.engine.getResolution().height / 10),
+            (int)(Main.engine.getResolution().height / 8)
+        );
+
+        Vector2D arrowOffset = new Vector2D(
+            (Main.engine.getResolution().width/2) - (int)(1.6*arrowDimension.getWidth()),
+            (int)(Main.engine.getResolution().height) - (int)(1.6*arrowDimension.getHeight())
+        );
+
+        leftArrow = new StandByArrow(arrowDimension, arrowOffset);
+        leftArrow.toggleLeftArrow();
+        addComponent(leftArrow);
+
+        arrowOffset = new Vector2D(
+            (Main.engine.getResolution().width/2) + (int)(arrowDimension.getWidth()/ 1.6),
+            (int)(Main.engine.getResolution().height) - (int)(1.6*arrowDimension.getHeight())
+        );
+
+        rightArrow = new StandByArrow(arrowDimension, arrowOffset);
+        rightArrow.toggleRightArrow();
+        addComponent(rightArrow);
+    }
+
+    private void createPlayersFade() {
+        Dimension sideDimension = new Dimension(
+            (int)(Main.engine.getResolution().width /4),
+            (int)(5 * Main.engine.getResolution().height / 8)
+        );
+        Vector2D sideOffset = new Vector2D(
+            (int)(Main.engine.getResolution().width - sideDimension.width),
+            (int)(Main.engine.getResolution().height / 8)
+        );
+        rightPlayerFade = new ColorArea(new Color(0,0,0,100), sideDimension, sideOffset);
+        
+        addComponent(rightPlayerFade);
+
+        sideOffset = new Vector2D(
+            (int)(0),
+            (int)(Main.engine.getResolution().height / 8)
+        );
+        leftPlayerFade = new ColorArea(new Color(0,0,0,100), sideDimension, sideOffset);
+        
+        addComponent(leftPlayerFade);
     }
 
     

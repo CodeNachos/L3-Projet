@@ -32,6 +32,8 @@ public class Player extends GameObject {
 
     public Sprite idleCardSprite;
     public Sprite selectedCardSprite;
+    public Sprite standBySprite;
+    public Sprite selectedStandBySprite;
 
     // Turn info
     Card selectedCard = null;
@@ -88,7 +90,7 @@ public class Player extends GameObject {
         else if (GameScene.getCurrentPlayer() == this.playerId) {
             aiAction = ai.play();
             GameScene.setAction(aiAction);
-            counter = 60; // 1 second delay
+            counter = 2*60; // 1 second delay
             return;
             
         } else {
@@ -186,7 +188,7 @@ public class Player extends GameObject {
             (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSprite.getHeight())
         );
 
-        standBy = new Card(name, cardPos, idleCardSprite, this);
+        standBy = new Card(name, cardPos, standBySprite, this);
         standBy.setStandBy(true);
         standBy.addCardToScene(scene);
 
@@ -203,7 +205,7 @@ public class Player extends GameObject {
                 (int)(Main.engine.getResolution().getHeight()/5),
                 (int)(Main.engine.getResolution().getHeight()/5))
         );
-        idleCardSprite.setBorder(5, playerId == GameScene.PLAYER1 ? Main.Palette.red : Main.Palette.highlight, 10);
+        idleCardSprite.setBorder(5, playerId == GameScene.PLAYER1 ? Main.Palette.red : Main.Palette.cyan, 10);
 
         selectedCardSprite = new Sprite(
             new Texture(
@@ -212,6 +214,24 @@ public class Player extends GameObject {
                 (int)(Main.engine.getResolution().getHeight()/5))
         );
         selectedCardSprite.setBorder(5, playerId == GameScene.PLAYER1 ? Main.Palette.red.brighter() : Main.Palette.cyan.brighter(), 10);
+
+        standBySprite = new Sprite(
+            new Texture(
+                Main.Palette.background, 
+                (int)(Main.engine.getResolution().getHeight()/5),
+                (int)(Main.engine.getResolution().getHeight()/5)
+            )
+        );
+        standBySprite.setBorder(5, Main.Palette.selection, 10);
+        
+        selectedStandBySprite = new Sprite(
+            new Texture(
+                Main.Palette.selection, 
+                (int)(Main.engine.getResolution().getHeight()/5),
+                (int)(Main.engine.getResolution().getHeight()/5)
+            )
+        );
+        selectedStandBySprite.setBorder(5, Main.Palette.selection.brighter(), 10);
 
         Vector2D cardPos;
 

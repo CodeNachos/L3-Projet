@@ -26,22 +26,13 @@ public class TopBar extends MenuFrame {
     JLabel playerLabel;
     
     public TopBar(Dimension area, Vector2D offset) {
-        super(area);
-        setPos(offset);
+        super(area, offset);
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         setMainColor(Main.Palette.selection.darker());
-        setAccentColor(Main.Palette.selection.darker());
-        setCurvature(5, 5);
-
-        add(Box.createHorizontalGlue()); // Add glue to left-align components
-
-        createPlayerLabel();
-
-        add(Box.createHorizontalGlue());
-        
-        createTimerLabel();
+        setAccentColor(Main.Palette.selection);
+        setCurvature(10, 10);
 
         add(Box.createHorizontalGlue()); // Add glue to right-align components
 
@@ -50,24 +41,28 @@ public class TopBar extends MenuFrame {
         add(Box.createHorizontalStrut(10));
 
         createRedoButton();
+
+        add(Box.createHorizontalGlue());
     }
 
     
     private FlatButton createBaseButton(String content) {
         FlatButton button = new FlatButton(content);
-        button.setFont(new Font("Arial", Font.BOLD, 16));
-        button.setForeground(Main.Palette.background);
-        button.setMainColor(Main.Palette.orange);
-        button.setAccentColor(Main.Palette.orange);
+        button.setFont(new Font("Cascadia Mono", Font.BOLD, 16));
+        button.setForeground(Main.Palette.foreground);
+        button.setMainColor(Main.Palette.selection.brighter());
+        button.setAccentColor(new Color(255,255,255,25));
         button.setCurvature(20, 20);
         button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         button.setSize(20, 20);
+        button.setFocusable(false);
         return button;
     }
 
     private void createUndoButton() {
 
-        undoButton = createBaseButton("Undo");
+        undoButton = createBaseButton("↩");
+        undoButton.setToolTipText("Undo");
 
         //undoButton.setEnabled(GameScene.canUndo());
         undoButton.addActionListener(new ActionListener() {
@@ -82,7 +77,8 @@ public class TopBar extends MenuFrame {
 
     private void createRedoButton() {
         
-        redoButton = createBaseButton("Redo");
+        redoButton = createBaseButton("↪");
+        redoButton.setToolTipText("Redo");
 
         //redoButton.setEnabled(GameScene.canRedo());
         redoButton.addActionListener(new ActionListener() {
@@ -117,18 +113,5 @@ public class TopBar extends MenuFrame {
         } else {
             return "BLUE";
         }
-    }
-
-    @Override
-    public void process(double delta) {
-        playerLabel.setText(getPlayerName());
-        if (GameScene.getCurrentPlayer() == GameScene.PLAYER1) {
-            playerLabel.setForeground(Main.Palette.red);
-        } else {
-            playerLabel.setForeground(Main.Palette.highlight);
-        }
-
-        //redoButton.setEnabled(GameScene.canRedo());
-        //undoButton.setEnabled(GameScene.canUndo());
     }
 }
