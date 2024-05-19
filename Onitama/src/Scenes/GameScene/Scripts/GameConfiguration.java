@@ -656,6 +656,12 @@ public class GameConfiguration implements Serializable {
             e.printStackTrace();
         }
     }
+
+	public boolean isWithinBounds(Vector2D to) {
+        int x = (int) to.getX();
+        int y = (int) to.getY();
+        return x >= 0 && x < 5 && y >= 0 && y < 5;
+    }
 }
 
 class Play implements Serializable {

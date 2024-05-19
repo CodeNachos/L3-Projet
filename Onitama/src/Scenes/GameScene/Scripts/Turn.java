@@ -13,9 +13,9 @@ public class Turn implements Serializable {
     Piece piece;
     Vector2D move;
 
-    public Turn(CardInfo playCard, Piece piece, Vector2D move) {
+    public Turn(CardInfo playCard, Piece position, Vector2D move) {
         this.playCard = playCard;
-        this.piece = piece;
+        this.piece = position;
         this.move = move;
     }
 
