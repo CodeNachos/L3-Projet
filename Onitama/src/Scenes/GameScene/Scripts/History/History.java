@@ -13,9 +13,12 @@ public class History {
     // stack of undone moves. It is cleared when we make a move.
     private Stack<State> redo;
 
+    private State initialGameState;
+
     public History() {
         undo = new Stack<>();
         redo = new Stack<>();
+        initialGameState = GameScene.getGameState();
     }
 
     public boolean canRedo() {
@@ -28,7 +31,7 @@ public class History {
 
     public void undo() {
         if (!canUndo()) {
-            Util.printWarning("Cannot undo");
+            Util.printWarning("Nothing to undo");
             return;
         }
 
@@ -41,7 +44,7 @@ public class History {
 
     public void redo() {
         if (!canRedo()) {
-            Util.printWarning("Cannot redo");
+            Util.printWarning("Nothing to redo");
             return;
         }
 
@@ -59,6 +62,11 @@ public class History {
     public void clearRecord() {
         undo.clear();
         redo.clear();
+    }
+
+    public void resetGame() {
+        GameScene.loadGameState(initialGameState);
+        clearRecord();
     }
 
 }

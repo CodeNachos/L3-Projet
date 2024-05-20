@@ -3,6 +3,7 @@ package Onitama.src.Scenes.GameScene.Interface;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -14,6 +15,7 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 
 
 public class TopBar extends MenuFrame {
@@ -120,7 +122,7 @@ public class TopBar extends MenuFrame {
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //GameScene.undo();
+                GameScene.history.resetGame();
             }
         });
 

@@ -75,8 +75,6 @@ public class Board extends TileMap {
         hoverSelectedPieceSprite = new Sprite(new Texture(new Color(255,255,255, 100), tileDimension.width, tileDimension.height,10));
         hoverSelectedPieceSprite.setBorder(5, new Color(255,255,255, 230), 10);
 
-
-
         populateBoard();
 
     }
