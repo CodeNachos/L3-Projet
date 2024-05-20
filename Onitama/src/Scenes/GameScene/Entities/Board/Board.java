@@ -1,5 +1,6 @@
 package Onitama.src.Scenes.GameScene.Entities.Board;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
 import Onitama.src.Scenes.GameScene.GameScene;
-import Onitama.src.Scenes.GameScene.Entities.Board.Piece.PieceType;
 import Onitama.src.Scenes.GameScene.Entities.Card.Card;
 import Onitama.src.Main;
 
@@ -23,6 +23,8 @@ public class Board extends TileMap {
     Sprite allowedActionTileSprite;
     Sprite hoverAllowedActionTileSprite;
     Sprite hoverSelectedActionTileSprite;
+    Sprite selectedPieceSprite;
+    Sprite hoverSelectedPieceSprite;
 
     private boolean highlighting = false; 
 
@@ -66,6 +68,14 @@ public class Board extends TileMap {
 
         hoverSelectedActionTileSprite = new Sprite(new Texture(Main.Palette.background.brighter(), tileDimension.width, tileDimension.height,10));
         hoverSelectedActionTileSprite.setBorder(5, Main.Palette.green.brighter(), 10);
+
+        selectedPieceSprite = new Sprite(new Texture(new Color(255,255,255, 60), tileDimension.width, tileDimension.height,10));
+        selectedPieceSprite.setBorder(5, new Color(255,255,255, 200), 10);
+
+        hoverSelectedPieceSprite = new Sprite(new Texture(new Color(255,255,255, 100), tileDimension.width, tileDimension.height,10));
+        hoverSelectedPieceSprite.setBorder(5, new Color(255,255,255, 230), 10);
+
+
 
         populateBoard();
 

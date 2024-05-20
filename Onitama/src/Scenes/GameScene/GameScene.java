@@ -453,7 +453,7 @@ public class GameScene extends Scene {
             (int)(5 * Main.engine.getResolution().height / 8)
         );
         Vector2D sideOffset = new Vector2D(
-            (int)(Main.engine.getResolution().width - sideDimension.width),
+            (int)(Main.engine.getResolution().width - sideDimension.width + 6),
             (int)(Main.engine.getResolution().height / 8)
         );
         MenuFrame blueSide = new MenuFrame(sideDimension, sideOffset);
@@ -465,7 +465,7 @@ public class GameScene extends Scene {
         addComponent(blueSide);
 
         sideOffset = new Vector2D(
-            (int)(0),
+            (int)(-6),
             (int)(Main.engine.getResolution().height / 8)
         );
         MenuFrame redSide = new MenuFrame(sideDimension, sideOffset);
@@ -550,7 +550,7 @@ public class GameScene extends Scene {
             (int)(5 * Main.engine.getResolution().height / 8)
         );
         Vector2D sideOffset = new Vector2D(
-            (int)(Main.engine.getResolution().width - sideDimension.width),
+            (int)(Main.engine.getResolution().width - sideDimension.width + 6),
             (int)(Main.engine.getResolution().height / 8)
         );
         rightPlayerFade = new ColorArea(new Color(0,0,0,100), sideDimension, sideOffset);
@@ -558,7 +558,7 @@ public class GameScene extends Scene {
         addComponent(rightPlayerFade);
 
         sideOffset = new Vector2D(
-            (int)(0),
+            (int)(-6),
             (int)(Main.engine.getResolution().height / 8)
         );
         leftPlayerFade = new ColorArea(new Color(0,0,0,100), sideDimension, sideOffset);

@@ -3,7 +3,6 @@ package Onitama.src.Scenes.GameScene.Entities.Board;
 
 import java.awt.event.MouseEvent;
 
-import Engine.Core.Engines.GameEngine;
 import Engine.Entities.TileMap.Tile;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Structures.Sprite;
@@ -82,10 +81,18 @@ public class BoardTile extends Tile {
                 }
             }
         } else if (((Board)parentMap).isSelectedTile(mapPosition)) {
-            if (hovering) {
-                sprite = ((Board)parentMap).hoverSelectedTileSprite;
+            if (GameScene.isCardSelected()) {
+                if (hovering) {
+                    sprite = ((Board)parentMap).hoverSelectedPieceSprite;
+                } else {
+                    sprite = ((Board)parentMap).selectedPieceSprite;
+                }
             } else {
-                sprite = ((Board)parentMap).selectedTileSprite;
+                if (hovering) {
+                    sprite = ((Board)parentMap).hoverSelectedTileSprite;
+                } else {
+                    sprite = ((Board)parentMap).selectedTileSprite;
+                }
             }
         } else if (hovering ) {
             sprite = ((Board)parentMap).hoverTileSprite;
