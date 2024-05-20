@@ -22,10 +22,10 @@ public class SmartAI extends AI {
     @SuppressWarnings("unchecked")
     private static final Function<GameConfiguration, Integer>[] evaluations = new Function[NB_METHOD];
     static {
-        evaluations[0] = config -> pieceNumber(config);
-        evaluations[1] = config -> kingSafety(config);
-        evaluations[2] = config -> throneDistance(config);
-        evaluations[3] = config -> centerDistance(config);
+        evaluations[0] = SmartAI::pieceNumber;
+        evaluations[1] = SmartAI::kingSafety;
+        evaluations[2] = SmartAI::throneDistance;
+        evaluations[3] = SmartAI::centerDistance;
     }
 
     Turn bestMove;
