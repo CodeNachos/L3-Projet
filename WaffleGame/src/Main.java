@@ -6,6 +6,7 @@ import Engine.Core.Engines.GameEngine;
 import Engine.Core.Renderer.Scene;
 import Engine.Global.Settings;
 import Engine.Global.Util;
+import WaffleGame.src.Scenes.GameScene.GameScene;
 import WaffleGame.src.Scenes.MainMenu.MainMenuScene;
 
 /**
@@ -18,7 +19,7 @@ public class Main {
     // Scenes
     public static Scene mainScene;
     public static Scene configScene;
-    public static Scene gameScene;
+    public static GameScene gameScene;
 
     // Color Palette
     public static Color primaryColor = new Color(251,195,83,255);

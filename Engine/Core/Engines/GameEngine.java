@@ -211,6 +211,13 @@ public class GameEngine implements Runnable {
     }
 
     /**
+     * Forces scene update
+     */
+    public void forceUpdate() {
+        updateScene(0);
+    }
+
+    /**
      * Updates the current scene by processing each game object.
      * 
      * @param delta The time since the last update in seconds

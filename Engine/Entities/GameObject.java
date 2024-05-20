@@ -136,6 +136,22 @@ public abstract class GameObject extends JComponent {
     }
 
     /**
+     * Gets visibility state.
+     * @return True if the object is visible, else false.
+     */
+    public boolean isVisible() {
+        return super.isVisible();
+    }
+
+    /**
+     * Toggle object's visibility.
+     * @param state Desired visibilty state
+     */
+    public void setVisible(boolean state) {
+        super.setVisible(state);
+    }
+
+    /**
      * Runs at every frame to update the object's state.
      * 
      * @param delta The time since the last update in seconds

@@ -1,14 +1,16 @@
 package Onitama.src.Scenes.GameScene.Scripts.AI;
 
-import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
-import Onitama.src.Scenes.GameScene.Scripts.Turn;
+import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.GameScene.Scripts.States.Action;
+import Onitama.src.Scenes.GameScene.Scripts.States.State;
 
 /**
  * Match
+ * simulates game for ai training
  */
 public class Match {
     SmartAI red, blue, winner;
-    GameConfiguration game;
+    State game;
     boolean captured, conquered;
     int length;
 
@@ -18,12 +20,12 @@ public class Match {
     }
 
     void fight() {
-        GameConfiguration game = new GameConfiguration();
-        Turn turn;
+        State game = (new GameScene()).getGameState();
+        Action turn;
 
         length = 0;
         while (!game.isGameOver() && length < 100) {
-            if (game.getCurrentPlayer() == GameConfiguration.PLAYER1)
+            if (game.getCurrentPlayer() == GameScene.PLAYER1)
                 turn = red.play(game);
             else
                 turn = blue.play(game);
@@ -33,12 +35,12 @@ public class Match {
 
         if (length > 9000)
             winner = null;
-        else if (game.getNextPlayer() == GameConfiguration.PLAYER1)
+        else if (game.getNextPlayer() == GameScene.PLAYER1)
             winner = red;
         else
             winner = blue;
 
-        if (game.iskingCaptured()) {
+        if (game.isKingCaptured()) {
             captured = true;
             conquered = false;
         } else {

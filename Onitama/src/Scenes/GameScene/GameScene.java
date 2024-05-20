@@ -1,70 +1,398 @@
 package Onitama.src.Scenes.GameScene;
 
+
 import java.awt.Color;
-import java.awt.Dimension;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
+import java.awt.Dimension; 
+import java.util.*;
 
 import Engine.Core.Renderer.Scene;
 import Engine.Entities.UI.ColorArea;
 import Engine.Entities.UI.MenuFrame;
-import Engine.Structures.Sprite;
-import Engine.Structures.Texture;
+import Engine.Global.Util;
 import Engine.Structures.Vector2D;
+import Onitama.src.Scenes.GameScene.Interface.StandByArrow;
+import Onitama.src.Scenes.GameScene.Interface.TopBar;
+import Onitama.src.Scenes.GameScene.Interface.TurnLabel;
+import Onitama.src.JsonReader;
+import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
+import Onitama.src.Scenes.GameScene.Scripts.History.History;
+import Onitama.src.Scenes.GameScene.Scripts.States.Action;
+import Onitama.src.Scenes.GameScene.Scripts.States.State;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.Entities.Board.Board;
-import Onitama.src.Scenes.GameScene.Entities.Board.PieceSet;
-import Onitama.src.Scenes.GameScene.Entities.Bots.Bot;
-import Onitama.src.Scenes.GameScene.Entities.Cards.Card;
-import Onitama.src.Scenes.GameScene.Interface.TopBar;
-import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
+import Onitama.src.Scenes.GameScene.Entities.Board.Piece;
+import Onitama.src.Scenes.GameScene.Entities.Board.Piece.PieceType;
+import Onitama.src.Scenes.GameScene.Entities.Card.Card;
+import Onitama.src.Scenes.GameScene.Entities.Player.Player;
 
 public class GameScene extends Scene {
+    public static final Vector2D RED_THRONE = new Vector2D(2, 4);
+    public static final Vector2D BLUE_THRONE = new Vector2D(2, 0);
 
-    // Game
-    public static GameConfiguration game;
+    public static final int PLAYER1 = 0; // red
+    public static final int PLAYER2 = 1; // blue
 
-    // Game board
-    public static PieceSet gamePieces;
+    public static int currentPlayer = PLAYER1;
+
+    public static Player player1;
+    public static Player player2;
+
     public static Board gameBoard;
 
-    // Card Visuals
-    public static Texture idleCardTexture;
-    public static Texture selectedCardTexture;
-    public static Sprite idleCardSprite;
-    public static Sprite selectedCardSprite;
+    public static HashMap<String, CardInfo> gameCards;
 
-    // Card Positions -> [p1:c1, p1:c2, p2:c1, p2:c2, stand by]
-    static Vector2D[] cardPositions;
-    // Cards -> [p1:c1, p1:c2, p2:c1, p2:c2, stand by]
-    static Card[] cards;
+    public static TurnLabel leftTurnLabel;
+    public static TurnLabel rightTurnLabel;
 
+    public static StandByArrow leftArrow;
+    public static StandByArrow rightArrow;
+
+    public static ColorArea leftPlayerFade;
+    public static ColorArea rightPlayerFade;
+
+    public static History history;
 
     public GameScene() {
         // Create game
-        game = new GameConfiguration();
-
-        // Instantiate game entities
-        // Add Board to scene
-        createBoard();
-        // Add cards to scene
-        createCards();
         
-        // Add GUI
-        createGUI();        
+        // Pick game cards 
+        chooseCards();
+        
+        // Instantiate game entities
+        createBoard();
+        createPlayersFade();
+        createPlayers();
 
+        player1.addToScene(this);
+        player2.addToScene(this);
+        addComponent(gameBoard);
+
+        // Add GUI
+        createGUI();
+        
         // Add background
         ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
         addComponent(background);
 
-        addComponent(new Bot(GameConfiguration.PLAYER1, 6));
-        //addComponent(new Bot(GameConfiguration.PLAYER2, 1));
+        updateGUI();
+
+        history = new History();
     }
 
+    public GameScene(State gameState) {
+        
+    }
 
+    public State getGameState() {
+        ArrayList<String> cards = new ArrayList<>();
+
+        cards.add(player1.getFirstCard());
+        cards.add(player1.getSecondCard());
+        cards.add(player2.getFirstCard());
+        cards.add(player2.getSecondCard());
+        if (currentPlayer == PLAYER1) {
+            cards.add(player1.getStandByCard());
+        } else {
+            cards.add(player2.getStandByCard());
+        }
+
+        return new State(getPlayerPieces(PLAYER1), getPlayerPieces(PLAYER2), cards, currentPlayer);
+    }
+
+    public static void loadGameState(State s) {
+        player1.loadState(s);
+        player2.loadState(s);
+
+        currentPlayer = s.getCurrentPlayer();
+
+        updateGUI();
+    }
+
+    public void enablePlayerAI(int player, int difficulty) {
+        switch (player) {
+            case PLAYER1:
+                player1.enableAI(difficulty);
+                break;
+            
+            case PLAYER2:
+                player2.enableAI(difficulty);
+                break;
+
+            default:
+                Util.printError("Invalid player");
+                break;
+        }
+    }
+
+    public static int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public static HashMap<String, CardInfo> getGameCards() {
+        return gameCards;
+    } 
+
+    public static Piece getPiece(int l, int c) {
+        Piece piece = player1.checkPiecePresence(l, c);
+        if (piece != null) {
+            return piece;
+        }
+
+        piece = player2.checkPiecePresence(l, c);
+        if (piece != null) {
+            return piece;
+        }
+
+        return null;
+    }
+
+    public static boolean isPieceSelected() { 
+        return gameBoard.getSelectedTile() != null;
+    }
+
+    public static Piece getSelectedPiece() {
+        if (gameBoard.getSelectedTile() == null)
+            return null;
+        
+        return getPiece(gameBoard.getSelectedTile());
+    }
+
+    public static Piece getPiece(Vector2D position) {
+        int l = position.getIntY();
+        int c = position.getIntX();
+
+        return getPiece(l, c);
+    }
+
+    public static boolean isCardSelected() {
+        return (player1.getSelectedCard() != null) || (player2.getSelectedCard() != null);
+    }
+
+    public static Card getSelectedCard() {
+        Card card = player1.getSelectedCard();
+
+        if (card != null)
+            return card;
+
+        card = player2.getSelectedCard();
+        
+        return card;
+    }
+
+    public static void clearSelectedCard() {
+        player1.setSelectedCard(null);
+        player2.setSelectedCard(null);
+    }
+
+    public static boolean isActionSelected() {
+        return gameBoard.getSelectedAction() != null;
+    }
+
+    public static Vector2D getSelectedAction() {
+        return gameBoard.getSelectedAction();
+    }
+    
+
+    public static ArrayList<Piece> getPlayerPieces(int player) {
+        ArrayList<Piece> pieces = null;
+
+        if (player == PLAYER1) {
+            pieces = player1.getPieces();
+        } else if (player == PLAYER2) {
+            pieces = player2.getPieces();
+        } else {
+            Util.printError("Invalid player");
+        }
+
+        return pieces;
+    }
+
+    public static int getNextPlayer() {
+        return (currentPlayer + 1) % 2;
+    }
+
+    public static void changePlayer() {
+        currentPlayer = (currentPlayer + 1) % 2;
+    }
+
+    public static boolean gameOver() {
+        return conqueredKing() || capturedKing();
+    }
+
+    private static boolean conqueredKing() {
+        for (Piece p : player1.getPieces()) {
+            if (p.getType() == PieceType.RED_KING && p.getPosition().equals(BLUE_THRONE)) {
+                return true;
+            }
+        }
+
+        for (Piece p : player2.getPieces()) {
+            if (p.getType() == PieceType.BLUE_KING && p.getPosition().equals(RED_THRONE)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean capturedKing() {
+
+        return ((!checkPresence(PieceType.BLUE_KING) && checkPresence(PieceType.RED_KING))
+                || (checkPresence(PieceType.BLUE_KING) && !checkPresence(PieceType.RED_KING)));
+    }
+
+    public static boolean checkPresence(PieceType type) {
+        for (Piece p : player1.getPieces()) {
+            if (p.getType() == type) {
+                 return true;
+            }
+        }
+
+        for (Piece p : player2.getPieces()) {
+            if (p.getType() == type) {
+                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void exchangeCards() {
+        if (currentPlayer == PLAYER1) {
+            player2.setStandBy(getSelectedCard().getName());
+            getSelectedCard().setName(player1.getStandByCard());
+            player1.removeStandBy();
+        } else {
+            player1.setStandBy(getSelectedCard().getName());
+            getSelectedCard().setName(player2.getStandByCard());
+            player2.removeStandBy();
+        }
+    }
+    
+    public void updateMatch() {
+        if (!isPieceSelected() || !isCardSelected() || !isActionSelected()) {
+            Util.printWarning("Update match called without update conditon met");
+            if (!isPieceSelected())
+                Util.printWarning("Piece not selected");
+            if (!isCardSelected())
+                Util.printWarning("Card not selected");
+            if (!isActionSelected())
+                Util.printWarning("Action not selected");
+            return;
+        }
+
+        history.addState(this.getGameState());
+
+        if (getPiece(getSelectedAction()) != null) {
+            for (Piece p : getPlayerPieces(getNextPlayer())) {
+                if (p.getPosition().equals(getSelectedAction())) {
+                    getPlayerPieces(getNextPlayer()).remove(p);
+                    break;
+                }
+            }
+        }
+
+        if (currentPlayer == GameScene.PLAYER1) {
+            player1.movePiece(getSelectedPiece(), getSelectedAction());
+            
+        } else {
+            player2.movePiece(getSelectedPiece(), getSelectedAction());
+        }
+        
+        gameBoard.setSelectedTile(null); gameBoard.setSelectedAction(null);
+
+        player1.update(); player2.update();
+
+        exchangeCards();
+
+        player1.setSelectedCard(null); player2.setSelectedCard(null);
+
+        changePlayer();
+
+        if (gameOver()) {
+            System.out.println("Player " + (getNextPlayer() == GameScene.PLAYER1 ? "RED" : "BLUE") + " won");
+            Main.engine.forceUpdate();
+            Main.engine.forceRefresh();
+            Main.engine.pause();
+        }
+
+        updateGUI();
+
+    }
+
+    public static void setAction(Action act) {
+        if (currentPlayer == PLAYER1) {
+            player1.setSelectedCardByName(act.getCard());
+        } else {
+            player2.setSelectedCardByName(act.getCard());
+        }
+
+        gameBoard.setSelectedTile(act.getPiece());
+        gameBoard.setSelectedAction(act.getMove());
+    }
+
+    public static void updateGUI() {
+        updatePlayerFade();
+        updateTurnLabels();
+        updateStandByCardArrows();
+        updateIteractableEntities();
+    }
+
+    public static void updateTurnLabels() {
+        if (currentPlayer == PLAYER1) {
+            leftTurnLabel.setRedTurn();
+            rightTurnLabel.clearTurn();
+        } else {
+            leftTurnLabel.clearTurn();
+            rightTurnLabel.setBlueTurn();
+        }
+    }
+
+    public static void updatePlayerFade() {
+        if (currentPlayer == PLAYER1) {
+            leftPlayerFade.setVisible(false);
+            rightPlayerFade.setVisible(true);
+        } else {
+            leftPlayerFade.setVisible(true);
+            rightPlayerFade.setVisible(false);
+        }
+    }
+
+    public static void updateStandByCardArrows() {
+        if (currentPlayer == PLAYER1) {
+            leftArrow.toggleLeftArrow();
+            rightArrow.clearArrow();
+        } else {
+            leftArrow.clearArrow();
+            rightArrow.toggleRightArrow();
+        }
+    }
+
+    public static void updateIteractableEntities() {
+        if (currentPlayer == PLAYER1) {
+            if (player1.isAiEnabled()) {
+                player1.setCardsInteractable(false);
+                player2.setCardsInteractable(false);
+                gameBoard.setIteractable(false);
+            } else {
+                player1.setCardsInteractable(true);
+                player2.setCardsInteractable(true);
+                gameBoard.setIteractable(true);
+            }
+        } else {
+            if (player2.isAiEnabled()) {
+                player1.setCardsInteractable(false);
+                player2.setCardsInteractable(false);
+                gameBoard.setIteractable(false);
+            } else {
+                player1.setCardsInteractable(true);
+                player2.setCardsInteractable(true);
+                gameBoard.setIteractable(true);
+            }
+        }
+    }
 
     private void createBoard() {
-
         // Compute board position and area
         Dimension boardArea = new Dimension(
             (int)(2.3 * Main.engine.getResolution().height / 4),
@@ -72,124 +400,52 @@ public class GameScene extends Scene {
 
         );
         Vector2D boardPos = new Vector2D(
-            (Main.engine.getResolution().width/2) - (boardArea.width/2),
+             (Main.engine.getResolution().width/2) - (boardArea.width/2),
             (Main.engine.getResolution().height / 2.5) - (boardArea.height/2.3)
         );
 
-        // Create game pieces
-        gamePieces = new PieceSet(boardArea, boardPos);
         // Create game board
-        gameBoard = new Board(boardArea, boardPos, gamePieces);
-        // Add components to scene
-        addComponent(gamePieces);
-        addComponent(gameBoard);
-
+        gameBoard = new Board(boardArea, boardPos);
     }
 
-    private void createCards() {
-        // Idle Card Sprite
-        idleCardTexture  = new Texture(
-            Main.Palette.background,
-            (int)(Main.engine.getResolution().getHeight()/5),
-            (int)(Main.engine.getResolution().getHeight()/5),
-            10
-        );
-        idleCardSprite = new Sprite(idleCardTexture);
-        idleCardSprite.setBorder(5, Main.Palette.selection, 10);
+    private void chooseCards() {
+        JsonReader jReader = new JsonReader();
+        List<CardInfo> listOfCards = jReader.readJson("Onitama/res/Cards/cards.json");
 
-        // Selected Card Sprite
-        selectedCardTexture  = new Texture(
-            Main.Palette.selection,
-            (int)(Main.engine.getResolution().getHeight()/5),
-            (int)(Main.engine.getResolution().getHeight()/5),
-            10
-        );
-        selectedCardSprite = new Sprite(selectedCardTexture);
-        selectedCardSprite.setBorder(5, Main.Palette.highlight, 10);
+        gameCards = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
 
-        // Initiate card positions
-        cardPositions = new Vector2D[5];
+        Random random = new Random();
 
-        // Compute blue player hand positions
-        // Compute player 2 card 1 positon
-        Vector2D card1Pos = new Vector2D(
-            (int)(gameBoard.getPos().getIntX()/2) - (int)(idleCardTexture.getWidth()/2),
-            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) - (1.1*idleCardTexture.getHeight()))
-        );
-        // Compute player 2 card 2 positon
-        cardPositions[2] = card1Pos.clone();
-        Vector2D card2Pos = new Vector2D(
-            (int)(gameBoard.getPos().getIntX()/2) - (int)(idleCardTexture.getWidth()/2),
-            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) + (0.1*idleCardTexture.getHeight()))
-        );
-        cardPositions[3] = card2Pos.clone();
-
-
-        // Compute red player hand positions
-        // Compute player 1 card 1 positon
-        card1Pos = new Vector2D(
-            (int)(card1Pos.getIntX() + gameBoard.getPos().getIntX() + gameBoard.getSize().height),
-            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) - (1.1*idleCardTexture.getHeight()))
-        );
-        cardPositions[0] = card1Pos.clone();
-        // Compute player 1 card 2 positon
-        card2Pos = new Vector2D(
-            (int)(card2Pos.getIntX() + gameBoard.getPos().getIntX() + gameBoard.getSize().height),
-            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) + (0.1*idleCardTexture.getHeight()))
-        );
-        cardPositions[1] = card2Pos.clone();
-
-        // Compute stand by card position
-        Vector2D cardPos = new Vector2D(
-            (Main.engine.getResolution().width/2) - (int)(idleCardTexture.getWidth()/2),
-            (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardTexture.getHeight())
-        );
-        cardPositions[4] = cardPos.clone();
-
-        // Initiate cards
-        cards = new Card[5];
-
-        // Initiate player 1 card 1
-        cards[0] = new Card(
-            game.player1Hand.getFirstCard().getName(),
-            cardPositions[0],
-            idleCardSprite,
-            game.player1Hand
-        );
-
-        // Initiate player 1 card 2
-        cards[1] = new Card(
-            game.player1Hand.getSecondCard().getName(),
-            cardPositions[1],
-            idleCardSprite,
-            game.player1Hand
-        );
-        // Initiate player 2 card 1
-        cards[2] = new Card(
-            game.player2Hand.getFirstCard().getName(),
-            cardPositions[2],
-            idleCardSprite,
-            game.player2Hand
-        );
-        // Initiate player 2 card 2
-        cards[3] = new Card(
-            game.player2Hand.getSecondCard().getName(),
-            cardPositions[3],
-            idleCardSprite,
-            game.player2Hand
-        );
-        // Initiate stand by card
-        cards[4] = new Card(
-            game.standByCard.getName(),
-            cardPositions[4],
-            idleCardSprite,
-            null
-        );
-
-        for (int c = 0; c < 5; c++) {
-            cards[c].addCardToScene(this);
+        int i = 0;  
+        while (i<5)
+        {
+            int cardIndex = random.nextInt(16);
+            if (!set.contains(cardIndex)) {
+                CardInfo card = listOfCards.get(cardIndex);
+                gameCards.put(card.getName(), card);
+                set.add(cardIndex);
+                ++i;
+            }
         }
+        return;
     }
+
+    private void createPlayers() {
+        Iterator<String> cardIter = gameCards.keySet().iterator();
+        
+        player1 = new Player(PLAYER1, cardIter.next(), cardIter.next(), null);
+
+        player2 = new Player(PLAYER2, cardIter.next(), cardIter.next(), null);
+
+        if (currentPlayer == PLAYER1) {
+            player1.setStandBy(cardIter.next());
+            player2.removeStandBy();
+        } else {
+            player2.setStandBy(cardIter.next());
+            player1.removeStandBy();
+        }
+    } 
 
     private void createGUI() {
         Dimension sideDimension = new Dimension(
@@ -197,7 +453,7 @@ public class GameScene extends Scene {
             (int)(5 * Main.engine.getResolution().height / 8)
         );
         Vector2D sideOffset = new Vector2D(
-            (int)(0),
+            (int)(Main.engine.getResolution().width - sideDimension.width + 6),
             (int)(Main.engine.getResolution().height / 8)
         );
         MenuFrame blueSide = new MenuFrame(sideDimension, sideOffset);
@@ -209,7 +465,7 @@ public class GameScene extends Scene {
         addComponent(blueSide);
 
         sideOffset = new Vector2D(
-            (int)(Main.engine.getResolution().width - sideDimension.width),
+            (int)(-6),
             (int)(Main.engine.getResolution().height / 8)
         );
         MenuFrame redSide = new MenuFrame(sideDimension, sideOffset);
@@ -220,6 +476,9 @@ public class GameScene extends Scene {
 
         addComponent(redSide);
         
+
+        // TOP BAR
+
         // Dimension for top bar
         Dimension topBarArea = new Dimension(
             Main.engine.getResolution().width/3,
@@ -229,80 +488,84 @@ public class GameScene extends Scene {
             (int)(Main.engine.getResolution().width/2 - (topBarArea.width/2)),
             0
         );
-        TopBar gui = new TopBar(topBarArea, topBarPos);
-        addComponent(gui); 
+        TopBar topBar = new TopBar(topBarArea, topBarPos);
+        addComponent(topBar); 
+
+
+       // TURN LABELS
+
+        Dimension turnLabelDimension = new Dimension(
+            (int)(Main.engine.getResolution().width /3),
+            (int)(Main.engine.getResolution().height / 10)
+        );
+
+        Vector2D turnLabelOffset = new Vector2D(
+            15,
+            0
+        );
+
+        leftTurnLabel = new TurnLabel(turnLabelDimension, turnLabelOffset);
+
+        addComponent(leftTurnLabel);
+
+        turnLabelOffset = new Vector2D(
+            (int)(Main.engine.getResolution().width - turnLabelDimension.width)-15,
+            0
+        );
+
+        rightTurnLabel = new TurnLabel(turnLabelDimension, turnLabelOffset);
+
+        addComponent(rightTurnLabel);
+
+
+        // STAND BY CARD ARROW INDICATOR
+
+        Dimension arrowDimension = new Dimension(
+            (int)(Main.engine.getResolution().height / 10),
+            (int)(Main.engine.getResolution().height / 8)
+        );
+
+        Vector2D arrowOffset = new Vector2D(
+            (Main.engine.getResolution().width/2) - (int)(1.6*arrowDimension.getWidth()),
+            (int)(Main.engine.getResolution().height) - (int)(1.6*arrowDimension.getHeight())
+        );
+
+        leftArrow = new StandByArrow(arrowDimension, arrowOffset);
+        leftArrow.toggleLeftArrow();
+        addComponent(leftArrow);
+
+        arrowOffset = new Vector2D(
+            (Main.engine.getResolution().width/2) + (int)(arrowDimension.getWidth()/ 1.6),
+            (int)(Main.engine.getResolution().height) - (int)(1.6*arrowDimension.getHeight())
+        );
+
+        rightArrow = new StandByArrow(arrowDimension, arrowOffset);
+        rightArrow.toggleRightArrow();
+        addComponent(rightArrow);
     }
+
+    private void createPlayersFade() {
+        Dimension sideDimension = new Dimension(
+            (int)(Main.engine.getResolution().width /4),
+            (int)(5 * Main.engine.getResolution().height / 8)
+        );
+        Vector2D sideOffset = new Vector2D(
+            (int)(Main.engine.getResolution().width - sideDimension.width + 6),
+            (int)(Main.engine.getResolution().height / 8)
+        );
+        rightPlayerFade = new ColorArea(new Color(0,0,0,100), sideDimension, sideOffset);
+        
+        addComponent(rightPlayerFade);
+
+        sideOffset = new Vector2D(
+            (int)(-6),
+            (int)(Main.engine.getResolution().height / 8)
+        );
+        leftPlayerFade = new ColorArea(new Color(0,0,0,100), sideDimension, sideOffset);
+        
+        addComponent(leftPlayerFade);
+    }
+
     
-
-    public static boolean canUndo() {
-        return game.canUndo();
-    }
-
-    public static boolean canRedo() {
-        return game.canRedo();
-    }
-
-    public static void undo() {
-        game.undo();
-        updateCards();
-        gamePieces.updatePieces();
-    }
-
-    public static void redo() {
-        game.redo();
-        updateCards();
-        gamePieces.updatePieces();
-    }
-
-    public static void save() {
-        game.save();
-    }
-
-    public static void loadSave(String saveFile) {
-        
-        if (saveFile == null) {
-            saveFile = GameConfiguration.DEFAULT_SAVE_FILE;
-        }
-
-        try {
-
-            FileInputStream fileInputStream = new FileInputStream(saveFile);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            game = (GameConfiguration) objectInputStream.readObject();
-            
-            updateCards();
-            gamePieces.updatePieces();
-
-            objectInputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-    }
-
-    public static void updateMatch() {
-
-        game.play();
-
-        gamePieces.updatePieces();
-        updateCards();
-
-        if (game.isGameOver()) {
-            System.out.println("Player " + (game.getNextPlayer() == GameConfiguration.PLAYER1 ? "RED" : "BLUE") + " won");
-            Main.engine.forceRefresh();
-            Main.engine.pause();
-        }
-    }
-
-    private static void updateCards() {
-        cards[0].setName(game.player1Hand.getFirstCard().getName());
-        cards[1].setName(game.player1Hand.getSecondCard().getName());
-        cards[2].setName(game.player2Hand.getFirstCard().getName());
-        cards[3].setName(game.player2Hand.getSecondCard().getName());
-
-        
-        // cards[4].setName(game.getSelectedCard());
-        cards[4].setName(game.standByCard.getName());
-    }
 
 }
