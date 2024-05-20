@@ -1,5 +1,6 @@
 package Onitama.src.Scenes.GameScene.Scripts.AI;
 
+import java.util.Hashtable;
 import java.util.Random;
 
 /**
@@ -9,6 +10,10 @@ public class Training {
     static Random random = new Random();
     static int difficulty = 6;
     static int populationSize = 100;
+    static int survivalSize = 50;
+    static SmartAI[] population = new SmartAI[populationSize];
+    static SmartAI[] survivors = new SmartAI[survivalSize];
+    static Hashtable<SmartAI, Integer> fitness = new Hashtable<>();
     
     static SmartAI generateAI() {
         int[] weights = new int[SmartAI.NB_METHOD];
@@ -34,12 +39,34 @@ public class Training {
         return original;
     }
 
+    static void calculateFitness() {
+
+    }
+
+    static void selection() {
+
+    }
+    
+    static void crossover() {
+
+    }
+
+    static void mutation() {
+
+    }
+
     public static void main(String[] args) {
         // Intialize population
-        SmartAI[] population = new SmartAI[populationSize];
         for (int i = 0; i < populationSize; i++)
             population[i] = generateAI();
 
-        // TODO
+        for (int step = 0; step < 1000; step++) {
+            calculateFitness();
+            selection();
+            crossover();
+            mutation();
+        }
+
+        System.out.println("Best weight vector: [" + "]");
     }
 }
