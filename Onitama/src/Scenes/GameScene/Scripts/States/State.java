@@ -87,6 +87,10 @@ public class State implements Serializable {
         return currentPlayer;
     }
 
+    public int getNextPlayer() {
+        return (currentPlayer + 1) % 2;
+    }
+
     public boolean isGameOver() {
         Vector2D ally = allyKing();
         Vector2D enemy = enemyKing();
@@ -109,6 +113,29 @@ public class State implements Serializable {
 
         return false;
     } 
+
+    public boolean isKingConquered() {
+        Vector2D ally = allyKing();
+        Vector2D enemy = enemyKing();
+        
+        if (ally != null) {
+            if (ally.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.BLUE_THRONE : GameScene.RED_THRONE)) {
+                return true;
+            }
+        }
+        
+        if (enemy != null) {
+            if (enemy.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.BLUE_THRONE : GameScene.RED_THRONE)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isKingCaptured() {
+        return (allyKing() == null || enemyKing() == null);
+    }
 
     public List<Vector2D> allyPositions() {
         List<Vector2D> positions = new ArrayList<>();

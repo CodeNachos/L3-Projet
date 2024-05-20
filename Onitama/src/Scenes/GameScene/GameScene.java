@@ -83,7 +83,7 @@ public class GameScene extends Scene {
         
     }
 
-    public static State getGameState() {
+    public State getGameState() {
         ArrayList<String> cards = new ArrayList<>();
 
         cards.add(player1.getFirstCard());
@@ -269,7 +269,7 @@ public class GameScene extends Scene {
         }
     }
     
-    public static void updateMatch() {
+    public void updateMatch() {
         if (!isPieceSelected() || !isCardSelected() || !isActionSelected()) {
             Util.printWarning("Update match called without update conditon met");
             if (!isPieceSelected())
@@ -281,7 +281,7 @@ public class GameScene extends Scene {
             return;
         }
 
-        history.addState(getGameState());
+        history.addState(this.getGameState());
 
         if (getPiece(getSelectedAction()) != null) {
             for (Piece p : getPlayerPieces(getNextPlayer())) {

@@ -5,6 +5,7 @@ import java.util.Stack;
 import Engine.Global.Util;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
+import Onitama.src.Main;
 
 public class History {
     // stack of played moves
@@ -13,12 +14,15 @@ public class History {
     // stack of undone moves. It is cleared when we make a move.
     private Stack<State> redo;
 
-    private State initialGameState;
+    private State initialGameState = null;
 
     public History() {
         undo = new Stack<>();
         redo = new Stack<>();
-        initialGameState = GameScene.getGameState();
+    }
+
+    public void setInitialGameState(State s) {
+        initialGameState = s;
     }
 
     public boolean canRedo() {
@@ -36,7 +40,7 @@ public class History {
         }
 
         State pastState = undo.pop();
-        redo.push(GameScene.getGameState());
+        redo.push(Main.gameScene.getGameState());
 
         GameScene.loadGameState(pastState);
         
@@ -49,12 +53,15 @@ public class History {
         }
 
         State futureState = redo.pop();
-        undo.push(GameScene.getGameState());
+        undo.push(Main.gameScene.getGameState());
 
         GameScene.loadGameState(futureState);
     }
 
     public void addState(State s) {
+        if (undo.isEmpty() && initialGameState == null) {
+            setInitialGameState(Main.gameScene.getGameState());
+        }
         undo.push(s);
         redo.clear();
     }

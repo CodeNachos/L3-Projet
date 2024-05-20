@@ -24,7 +24,7 @@ public abstract class AI {
         return result;
     }
 
-    int distance(Vector2D first, Vector2D second) {
+    static int distance(Vector2D first, Vector2D second) {
         return abs(first.getIntX() - second.getIntX()) + abs(first.getIntY() - second.getIntY());
     }
 }

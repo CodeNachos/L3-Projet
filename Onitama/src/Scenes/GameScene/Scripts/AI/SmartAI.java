@@ -1,13 +1,13 @@
 package Onitama.src.Scenes.GameScene.Scripts.AI;
 
-import java.util.*;
-
-import Onitama.src.Scenes.GameScene.GameScene;
-import Onitama.src.Scenes.GameScene.Scripts.States.Action;
-import Onitama.src.Scenes.GameScene.Scripts.States.State;
-
 import static java.lang.Math.min;
 import static java.lang.Math.max;
+import java.util.function.Function;
+
+import Engine.Structures.Vector2D;
+import Onitama.src.Scenes.GameScene.Scripts.States.Action;
+import Onitama.src.Scenes.GameScene.Scripts.States.State;
+import Onitama.src.Main;
 
 /**
  * SmartAI
@@ -15,29 +15,46 @@ import static java.lang.Math.max;
 public class SmartAI extends AI {
     private static final int minusINF = Integer.MIN_VALUE;
     private static final int plusINF = Integer.MAX_VALUE;
+    private static final Vector2D center = new Vector2D(2, 2);
+    private static final int[] defaultWeights = {4, 3, 2, 1};
+    public static final int NB_METHOD = 4;
+
+    @SuppressWarnings("unchecked")
+    private static final Function<State, Integer>[] evaluations = new Function[NB_METHOD];
+    static {
+        evaluations[0] = SmartAI::pieceNumber;
+        evaluations[1] = SmartAI::kingSafety;
+        evaluations[2] = SmartAI::throneDistance;
+        evaluations[3] = SmartAI::centerDistance;
+    }
+
     Action bestMove;
-    Random random;
-    int difficulty;
-    int selfID;
+    int difficulty, selfID;
+    int[] weights;
 
 
     public SmartAI(int difficulty, int player) {
-        this.random = new Random();
+        this(difficulty, player, defaultWeights);
+    }
+
+    public SmartAI(int difficulty, int player, int[] weights) {
         this.difficulty = difficulty;
         this.selfID = player;
+        this.weights = weights;
     }
 
 
     @Override
     public Action play() {
-        int eval = minmax(GameScene.getGameState(), true, difficulty, 
-                          minusINF, plusINF);
-        System.err.println("Best score found: " + eval);
+        //int eval = minmax(Main.gameScene.getGameState(), true, difficulty, 
+        //                   minusINF, plusINF);
+        //System.err.println("Best score found: " + eval);
+        minmax(Main.gameScene.getGameState(), true, difficulty, minusINF, plusINF);
         return bestMove;
     }
 
     private int minmax(State config, boolean isMaximizing, 
-                                       int depth, int alpha, int beta) {
+                                    int depth, int alpha, int beta) {
         if (config.isGameOver() || depth == 0) 
             return heuristic(config, depth);
 
@@ -74,12 +91,13 @@ public class SmartAI extends AI {
 
 
     private int heuristic(State config, int depth) {
-        int eval; // evaluation for AI
+        int eval = 0; // evaluation for AI
 
         if (config.isGameOver()) // AI lost
-            eval = -(1000000 + depth);
+            eval -= (1000000 + depth);
         else // ran out of depth, give an estimate
-            eval = pieceNumber(config) + throneDistance(config); 
+            for (int i = 0; i < evaluations.length; i++)
+                eval += weights[i] * evaluations[i].apply(config);
 
         if (config.getCurrentPlayer() == selfID)
             return eval;
@@ -90,13 +108,38 @@ public class SmartAI extends AI {
 
     /* Methods to evaluate a state of the game  */
 
-    private int pieceNumber(State config) {
+    private static int pieceNumber(State config) {
         return config.allyPositions().size() - config.enemyPositions().size();
     }
 
-    private int throneDistance(State config) {
+    private static int kingSafety(State config) {
+        int allyDanger = 0;
+        for (Vector2D enemy : config.enemyPositions())
+            allyDanger += distance(config.allyKing(), enemy);
+        int enemyDanger = 0;
+        for (Vector2D ally : config.allyPositions())
+            enemyDanger += distance(config.enemyKing(), ally);
+        return enemyDanger - allyDanger;        
+    }
+
+    private static int throneDistance(State config) {
         return distance(config.allyKing(), config.allyGoal()) - 
                distance(config.enemyGoal(), config.enemyKing());
+    }
+
+    private static int centerDistance(State config) {
+        int allyDist = 0;
+        for (Vector2D ally : config.allyPositions())
+            allyDist += distance(ally, center);
+        int enemyDist = 0;
+        for (Vector2D enemy : config.enemyPositions())
+            enemyDist += distance(enemy, center);
+        return allyDist - enemyDist;
+    }
+
+    public Action play(State game) {
+        minmax(game, true, difficulty, minusINF, plusINF);
+        return bestMove;
     }
 
     /* End of evaluation methods */

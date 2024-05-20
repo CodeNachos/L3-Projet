@@ -7,6 +7,7 @@ import Engine.Entities.TileMap.Tile;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Structures.Sprite;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Main;
 
 public class BoardTile extends Tile {
 
@@ -108,7 +109,7 @@ public class BoardTile extends Tile {
             !(GameScene.getSelectedCard().isStandBy())) {
             if (!((Board)parentMap).isSelectedAction(mapPosition)) {
                 ((Board)parentMap).setSelectedAction(mapPosition);
-                GameScene.updateMatch();
+                Main.gameScene.updateMatch();
             } else {
                 ((Board)parentMap).setSelectedAction(null);
             }

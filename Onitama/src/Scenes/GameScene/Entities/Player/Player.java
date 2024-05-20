@@ -85,7 +85,7 @@ public class Player extends GameObject {
                 counter--;
                 return;
             }
-            GameScene.updateMatch();
+            Main.gameScene.updateMatch();
             aiAction = null;
         }
 
