@@ -1,16 +1,21 @@
 package Onitama.src;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 import Engine.Core.Engines.GameEngine;
 import Engine.Core.Renderer.Scene;
 import Engine.Global.Settings;
+import Engine.Global.Util;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class Main {
     public static GameEngine engine;
 
-    public static Scene gameScene;
+    public static GameScene gameScene;
+    public static Scene newGameMenu;
 
     public static void main(String[] args) {
 
@@ -21,17 +26,53 @@ public class Main {
         Settings.resolution = new Dimension((int)(aspectRatio*600),600);
         Settings.stretch = false;
         Settings.resizable = false;
+        Settings.applicationName = "Onitama";
 
         // create engine
         engine = new GameEngine();
         engine.setResolution(Settings.resolution);
 
-        gameScene = new GameScene();
+        engine.setIcon(Util.getImage("Onitama/res/Sprites/redKing.png"));
+
+        newGameMenu = new NewGameMenuScene();
 
         // start engine
-        engine.setMainScene(gameScene);
+        engine.setMainScene(newGameMenu);
         engine.start();
-    } 
+    }
+
+    public static class FontManager {
+        private static Font defaultFont;
+        private static Font unicodeFont;
+
+        static {
+            try {
+                // Load the font from the specified file
+                defaultFont = Font.createFont(Font.TRUETYPE_FONT, new File("Onitama/res/Fonts/monofonto.otf"));
+            } catch (FontFormatException | IOException e) {
+                e.printStackTrace();
+                defaultFont = new Font("Arial", Font.PLAIN, 12);
+            }
+        }
+
+        static {
+            try {
+                // Load the font from the specified file
+                unicodeFont = Font.createFont(Font.TRUETYPE_FONT, new File("Onitama/res/Fonts/Symbola.ttf"));
+            } catch (FontFormatException | IOException e) {
+                e.printStackTrace();
+                unicodeFont = new Font("Arial", Font.PLAIN, 12);
+            }
+        }
+
+        public static Font getDefaultCustomFont(int style, float size) {
+            return defaultFont.deriveFont(style, size);
+        }
+
+        public static Font getUnicodeCustomFont(int style, float size) {
+            return unicodeFont.deriveFont(style, size);
+        }
+    }
     
     public static class Palette {
         public static Color background = new Color(40,42,54,255);
@@ -47,6 +88,5 @@ public class Main {
         public static Color red = new Color(255, 85, 85,255);
         public static Color yellow = new Color(241,250,140,255); 
     }
-
 
 }

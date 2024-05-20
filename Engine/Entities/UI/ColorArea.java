@@ -51,6 +51,6 @@ public class ColorArea extends UIObject {
         super.paintComponent(g); // Call superclass's paintComponent method
 
         g.setColor(color); // Set color for drawing
-        g.fillRect(position.getIntX(), position.getIntY(), getWidth(), getHeight()); // Draw filled rectangle
+        g.fillRect(0, 0, getWidth(), getHeight()); // Draw filled rectangle
     }
 }

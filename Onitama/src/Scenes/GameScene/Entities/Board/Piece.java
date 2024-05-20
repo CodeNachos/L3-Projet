@@ -1,17 +1,24 @@
-package Onitama.src.Scenes.GameScene.Scripts.Piece;
+package Onitama.src.Scenes.GameScene.Entities.Board;
 
-import java.io.Serializable;
-
+import Engine.Entities.TileMap.Tile;
+import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 
-public class Piece implements Serializable {
-    
-    public PieceType type;
-    public Vector2D position;
+public class Piece extends Tile {
 
-    public Piece(PieceType type, Vector2D position) {
+    public static enum PieceType {
+        RED_KING,
+        RED_PAWN,
+        BLUE_KING,
+        BLUE_PAWN,
+        EMPTY
+    };
+
+    PieceType type;
+
+    public Piece(PieceMap map, PieceType type, Vector2D position, Sprite sprite) {
+        super(map, position.getIntY(), position.getIntX(), sprite);
         this.type = type;
-        this.position = position.clone();
     }
 
     public PieceType getType() {
@@ -25,21 +32,9 @@ public class Piece implements Serializable {
     public boolean isRed() {
         return type == PieceType.RED_KING || type == PieceType.RED_PAWN;
     }
-
-    public int getLine() {
-        return position.getIntY();
-    }
-
-    public int getColumn() {
-        return position.getIntX();
-    }
-
+    
     public Vector2D getPosition() {
-        return position;
-    }
-
-    public void setPosition(Vector2D newPos) {
-        position = newPos.clone();
+        return mapPosition;
     }
 
     @Override
@@ -57,7 +52,7 @@ public class Piece implements Serializable {
 
     @Override
     public Piece clone() {
-        Piece clone = new Piece(type, position);
+        Piece clone = new Piece((PieceMap)parentMap, type, position, sprite);
         return clone;
     }
 }

@@ -3,6 +3,7 @@ package Engine.Entities.TileMap;
 import java.awt.Graphics;
 
 import Engine.Entities.GameObject;
+import Engine.Global.Util;
 import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 
@@ -13,7 +14,7 @@ import Engine.Structures.Vector2D;
 public class Tile extends GameObject {
 
     public TileMap parentMap; // Reference to the parent tile map
-    public Vector2D mapPosition; // Position of the tile in the map grid
+    protected Vector2D mapPosition; // Position of the tile in the map grid
 
     /**
      * Constructs a new Tile instance with the specified map, position, and sprite.
@@ -44,6 +45,25 @@ public class Tile extends GameObject {
 
     public int getColumn() {
         return mapPosition.getIntX();
+    }
+
+    public Vector2D getMapPosition() {
+        return mapPosition.clone();
+    }
+
+    public void setMapPosition(Vector2D pos) {
+        if (pos.getIntX() < 0 || pos.getIntX() > parentMap.mapDimension.width ||
+            pos.getIntY() < 0 || pos.getIntY() > parentMap.mapDimension.height
+        ) {
+            Util.printError("Invalid tile destination position");
+            return;
+        }
+        
+        mapPosition = pos.clone();
+        setPos(new Vector2D(
+            getColumn() * parentMap.tileDimension.width, // Calculate x-coordinate based on column and tile width
+            getLine() * parentMap.tileDimension.height // Calculate y-coordinate based on line and tile height
+        ));
     }
 
     /**

@@ -1,4 +1,4 @@
-package Onitama.src.Scenes.GameScene.Entities.Cards;
+package Onitama.src.Scenes.GameScene.Entities.Card;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,7 +11,6 @@ import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.GameScene;
-import Onitama.src.Scenes.GameScene.Scripts.GameConfiguration;
 import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 
 public class CardMap extends TileMap {
@@ -41,8 +40,13 @@ public class CardMap extends TileMap {
     }
 
     public void populateActions(String name, int player) {
-        CardInfo cardInfo = GameScene.game.gameCards.get(name);
-        List<Vector2D> actions = player == GameConfiguration.PLAYER1 ? cardInfo.getRedMovement() : cardInfo.getBlueMovement();
+        if (name == null) {
+            clearMap();
+            return;
+        }
+
+        CardInfo cardInfo = GameScene.getGameCards().get(name);
+        List<Vector2D> actions = player == GameScene.PLAYER1 ? cardInfo.getRedMovement() : cardInfo.getBlueMovement();
 
         for (int l = 0; l < mapDimension.height ; l++) {
             for (int c = 0; c < mapDimension.width; c++) {
