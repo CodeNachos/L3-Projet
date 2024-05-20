@@ -136,5 +136,10 @@ public class SmartAI extends AI {
         return allyDist - enemyDist;
     }
 
+    public Turn play(GameConfiguration game) {
+        minmax(game, true, difficulty, minusINF, plusINF);
+        return bestMove;
+    }
+
     /* End of evaluation methods */
 }

@@ -280,7 +280,7 @@ public class GameConfiguration implements Serializable {
         return isKingConquered() || iskingCaptured();
     }
 
-    private boolean isKingConquered() {
+    public boolean isKingConquered() {
         for (Piece p : player1Pieces) {
             if (p.getType() == PieceType.RED_KING && p.getPosition().equals(BLUE_THRONE)) {
                 return true;
@@ -296,7 +296,7 @@ public class GameConfiguration implements Serializable {
         return false;
     }
 
-    private boolean iskingCaptured() {
+    public boolean iskingCaptured() {
 
         return ((!checkPresence(PieceType.BLUE_KING) && checkPresence(PieceType.RED_KING))
                 || (checkPresence(PieceType.BLUE_KING) && !checkPresence(PieceType.RED_KING)));
