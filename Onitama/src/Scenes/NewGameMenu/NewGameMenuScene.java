@@ -27,10 +27,10 @@ public class NewGameMenuScene extends Scene {
     public NewGameMenuScene() {
 
         playerClasses = new ArrayList<>();
-        playerClasses.add("HUMAN");
-        playerClasses.add("AI EASY");
-        playerClasses.add("AI MEDIUM");
-        playerClasses.add("AI HARD");
+        playerClasses.add("Human");
+        playerClasses.add("AI Easy");
+        playerClasses.add("AI Medium");
+        playerClasses.add("AI Hard");
 
        createSelectionMenu();
        createStartButton();
@@ -74,8 +74,8 @@ public class NewGameMenuScene extends Scene {
         GridBagConstraints gbc = new GridBagConstraints();
         selectionMenu.setLayout(new GridBagLayout());
         
-        JLabel menuTitle = new JLabel("CHOOSE PLAYERS");
-        menuTitle.setFont(new Font("Arial", Font.BOLD, 18));
+        JLabel menuTitle = new JLabel("Choose Players");
+        menuTitle.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 22));
         menuTitle.setForeground(Main.Palette.foreground);
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -84,8 +84,8 @@ public class NewGameMenuScene extends Scene {
         gbc.insets = new Insets(10,10,20,10);
         selectionMenu.add(menuTitle, gbc);
 
-        FlatButton leftButtonPlayer1 = new FlatButton("  <  ");
-        leftButtonPlayer1.setFont(new Font("Arial", Font.BOLD, 18));
+        FlatButton leftButtonPlayer1 = new FlatButton("  🞀  ");
+        leftButtonPlayer1.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 18));
         leftButtonPlayer1.setForeground(Main.Palette.foreground);
         leftButtonPlayer1.setMainColor(Main.Palette.selection);
         leftButtonPlayer1.setAccentColor(Main.Palette.selection.brighter());
@@ -101,7 +101,7 @@ public class NewGameMenuScene extends Scene {
 
         
         JLabel player1Label = new JLabel(playerClasses.get(0), SwingConstants.CENTER);
-        player1Label.setFont(new Font("Arial", Font.BOLD, 14));
+        player1Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
         player1Label.setForeground(Main.Palette.red);
         player1Label.setPreferredSize(new Dimension(80,20));
         gbc.gridx = 1;
@@ -109,8 +109,8 @@ public class NewGameMenuScene extends Scene {
         gbc.ipady = 0;
         selectionMenu.add(player1Label, gbc);
 
-        FlatButton rightButtonPlayer1 = new FlatButton("  >  ");
-        rightButtonPlayer1.setFont(new Font("Arial", Font.BOLD, 18));
+        FlatButton rightButtonPlayer1 = new FlatButton("  🞂  ");
+        rightButtonPlayer1.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 18));
         rightButtonPlayer1.setForeground(Main.Palette.foreground);
         rightButtonPlayer1.setMainColor(Main.Palette.selection);
         rightButtonPlayer1.setAccentColor(Main.Palette.selection.brighter());
@@ -122,8 +122,8 @@ public class NewGameMenuScene extends Scene {
         gbc.ipady = 10;
         selectionMenu.add(rightButtonPlayer1, gbc);
 
-        FlatButton leftButtonPlayer2 = new FlatButton("  <  ");
-        leftButtonPlayer2.setFont(new Font("Arial", Font.BOLD, 18));
+        FlatButton leftButtonPlayer2 = new FlatButton("  🞀  ");
+        leftButtonPlayer2.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 18));
         leftButtonPlayer2.setForeground(Main.Palette.foreground);
         leftButtonPlayer2.setMainColor(Main.Palette.selection);
         leftButtonPlayer2.setAccentColor(Main.Palette.selection.brighter());
@@ -137,7 +137,7 @@ public class NewGameMenuScene extends Scene {
 
         
         JLabel player2Label = new JLabel(playerClasses.get(2), SwingConstants.CENTER);
-        player2Label.setFont(new Font("Arial", Font.BOLD, 14));
+        player2Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
         player2Label.setForeground(Main.Palette.cyan);
         player2Label.setPreferredSize(new Dimension(80,20));
         gbc.gridx = 1;
@@ -145,8 +145,8 @@ public class NewGameMenuScene extends Scene {
         gbc.ipady = 0;
         selectionMenu.add(player2Label, gbc);
 
-        FlatButton rightButtonPlayer2 = new FlatButton("  >  ");
-        rightButtonPlayer2.setFont(new Font("Arial", Font.BOLD, 18));
+        FlatButton rightButtonPlayer2 = new FlatButton("  🞂  ");
+        rightButtonPlayer2.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 18));
         rightButtonPlayer2.setForeground(Main.Palette.foreground);
         rightButtonPlayer2.setMainColor(Main.Palette.selection);
         rightButtonPlayer2.setAccentColor(Main.Palette.selection.brighter());
@@ -220,8 +220,8 @@ public class NewGameMenuScene extends Scene {
     }
 
     private void createStartButton() {
-        FlatButton startButton = new FlatButton("START GAME");
-        startButton.setFont(new Font("Arial", Font.BOLD, 22));
+        FlatButton startButton = new FlatButton("Start Game");
+        startButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 22));
         startButton.setForeground(Main.Palette.foreground);
         startButton.setMainColor(Main.Palette.selection);
         startButton.setAccentColor(Main.Palette.selection.brighter());
@@ -281,8 +281,8 @@ public class NewGameMenuScene extends Scene {
     }
 
     private void createMainMenuButton() {
-        FlatButton mainMenuButton = new FlatButton("MAIN MENU");
-        mainMenuButton.setFont(new Font("Arial", Font.BOLD, 14));
+        FlatButton mainMenuButton = new FlatButton("Main Menu");
+        mainMenuButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
         mainMenuButton.setForeground(Main.Palette.foreground);
         mainMenuButton.setMainColor(Main.Palette.selection.darker());
         mainMenuButton.setAccentColor(Main.Palette.selection);

@@ -1,6 +1,8 @@
 package Onitama.src;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 import Engine.Core.Engines.GameEngine;
 import Engine.Core.Renderer.Scene;
@@ -38,6 +40,39 @@ public class Main {
         engine.setMainScene(newGameMenu);
         engine.start();
     }
+
+    public static class FontManager {
+        private static Font defaultFont;
+        private static Font unicodeFont;
+
+        static {
+            try {
+                // Load the font from the specified file
+                defaultFont = Font.createFont(Font.TRUETYPE_FONT, new File("Onitama/res/Fonts/monofonto.otf"));
+            } catch (FontFormatException | IOException e) {
+                e.printStackTrace();
+                defaultFont = new Font("Arial", Font.PLAIN, 12);
+            }
+        }
+
+        static {
+            try {
+                // Load the font from the specified file
+                unicodeFont = Font.createFont(Font.TRUETYPE_FONT, new File("Onitama/res/Fonts/Symbola.ttf"));
+            } catch (FontFormatException | IOException e) {
+                e.printStackTrace();
+                unicodeFont = new Font("Arial", Font.PLAIN, 12);
+            }
+        }
+
+        public static Font getDefaultCustomFont(int style, float size) {
+            return defaultFont.deriveFont(style, size);
+        }
+
+        public static Font getUnicodeCustomFont(int style, float size) {
+            return unicodeFont.deriveFont(style, size);
+        }
+    }
     
     public static class Palette {
         public static Color background = new Color(40,42,54,255);
@@ -53,6 +88,5 @@ public class Main {
         public static Color red = new Color(255, 85, 85,255);
         public static Color yellow = new Color(241,250,140,255); 
     }
-
 
 }

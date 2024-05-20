@@ -17,6 +17,9 @@ public class TurnLabel extends MenuFrame {
     JLabel turnLabel;
 
     private int counter;
+    private int player;
+
+    private static String[] labels = {"   Red to play", "    Blue to play"};
 
     public TurnLabel(Dimension area, Vector2D offset) {
         super(area, offset);
@@ -28,7 +31,7 @@ public class TurnLabel extends MenuFrame {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         turnLabel = new JLabel("LABEL");
-        turnLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        turnLabel.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 18));
         turnLabel.setForeground(Main.Palette.foreground);
         
 
@@ -38,12 +41,14 @@ public class TurnLabel extends MenuFrame {
     }
 
     public void setBlueTurn() {
-        turnLabel.setText("      BLUE TO PLAY");
+        player = 1;
+        turnLabel.setText(labels[player]);
         counter = 30;
     }
 
     public void setRedTurn() {
-        turnLabel.setText("   RED TO PLAY");
+        player = 0;
+        turnLabel.setText(labels[player]);
         counter = 30;
     }
 
@@ -55,9 +60,9 @@ public class TurnLabel extends MenuFrame {
     public void process(double delta) {
         if (counter <= 0) {
             if (!turnLabel.getText().isEmpty()) {
-                if (turnLabel.getText().length() > 50)
-                    return;
-                turnLabel.setText(turnLabel.getText() + " .");
+                if (turnLabel.getText().length() > 35)
+                    turnLabel.setText(labels[player]);
+                turnLabel.setText(turnLabel.getText() + ".");
             }
             counter = 30;
         } else {

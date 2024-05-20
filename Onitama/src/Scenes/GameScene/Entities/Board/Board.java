@@ -8,6 +8,7 @@ import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.GameScene.Entities.Board.Piece.PieceType;
 import Onitama.src.Scenes.GameScene.Entities.Card.Card;
 import Onitama.src.Main;
 

@@ -15,6 +15,7 @@ import Onitama.src.Scenes.GameScene.Interface.TopBar;
 import Onitama.src.Scenes.GameScene.Interface.TurnLabel;
 import Onitama.src.JsonReader;
 import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
+import Onitama.src.Scenes.GameScene.Scripts.History.History;
 import Onitama.src.Scenes.GameScene.Scripts.States.Action;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
 import Onitama.src.Main;
@@ -49,6 +50,8 @@ public class GameScene extends Scene {
     public static ColorArea leftPlayerFade;
     public static ColorArea rightPlayerFade;
 
+    public static History history;
+
     public GameScene() {
         // Create game
         
@@ -57,8 +60,8 @@ public class GameScene extends Scene {
         
         // Instantiate game entities
         createBoard();
-        createPlayers();
         createPlayersFade();
+        createPlayers();
 
         player1.addToScene(this);
         player2.addToScene(this);
@@ -72,6 +75,8 @@ public class GameScene extends Scene {
         addComponent(background);
 
         updateGUI();
+
+        history = new History();
     }
 
     public GameScene(State gameState) {
@@ -85,13 +90,22 @@ public class GameScene extends Scene {
         cards.add(player1.getSecondCard());
         cards.add(player2.getFirstCard());
         cards.add(player2.getSecondCard());
-        if (player1.getStandByCard() != null) {
-            cards.add(player1.getStandByCard().getName());
+        if (currentPlayer == PLAYER1) {
+            cards.add(player1.getStandByCard());
         } else {
-            cards.add(player2.getStandByCard().getName());
+            cards.add(player2.getStandByCard());
         }
 
         return new State(getPlayerPieces(PLAYER1), getPlayerPieces(PLAYER2), cards, currentPlayer);
+    }
+
+    public static void loadGameState(State s) {
+        player1.loadState(s);
+        player2.loadState(s);
+
+        currentPlayer = s.getCurrentPlayer();
+
+        updateGUI();
     }
 
     public void enablePlayerAI(int player, int difficulty) {
@@ -244,16 +258,13 @@ public class GameScene extends Scene {
     }
 
     public static void exchangeCards() {
-        String tmp = getSelectedCard().getName();
         if (currentPlayer == PLAYER1) {
-            getSelectedCard().setName(player1.getStandByCard().getName());
-            player1.getStandByCard().setName(tmp);
-            player2.setStandBy(player1.getStandByCard());
+            player2.setStandBy(getSelectedCard().getName());
+            getSelectedCard().setName(player1.getStandByCard());
             player1.removeStandBy();
         } else {
-            getSelectedCard().setName(player2.getStandByCard().getName());
-            player2.getStandByCard().setName(tmp);
-            player1.setStandBy(player2.getStandByCard());
+            player1.setStandBy(getSelectedCard().getName());
+            getSelectedCard().setName(player2.getStandByCard());
             player2.removeStandBy();
         }
     }
@@ -269,6 +280,8 @@ public class GameScene extends Scene {
                 Util.printWarning("Action not selected");
             return;
         }
+
+        history.addState(getGameState());
 
         if (getPiece(getSelectedAction()) != null) {
             for (Piece p : getPlayerPieces(getNextPlayer())) {
@@ -298,6 +311,7 @@ public class GameScene extends Scene {
 
         if (gameOver()) {
             System.out.println("Player " + (getNextPlayer() == GameScene.PLAYER1 ? "RED" : "BLUE") + " won");
+            Main.engine.forceUpdate();
             Main.engine.forceRefresh();
             Main.engine.pause();
         }
@@ -420,14 +434,16 @@ public class GameScene extends Scene {
     private void createPlayers() {
         Iterator<String> cardIter = gameCards.keySet().iterator();
         
-        player1 = new Player(PLAYER1, cardIter.next(), cardIter.next());
+        player1 = new Player(PLAYER1, cardIter.next(), cardIter.next(), null);
 
-        player2 = new Player(PLAYER2, cardIter.next(), cardIter.next());
+        player2 = new Player(PLAYER2, cardIter.next(), cardIter.next(), null);
 
         if (currentPlayer == PLAYER1) {
-            player1.createStandBy(this, cardIter.next());
+            player1.setStandBy(cardIter.next());
+            player2.removeStandBy();
         } else {
-            player2.createStandBy(this, cardIter.next());
+            player2.setStandBy(cardIter.next());
+            player1.removeStandBy();
         }
     } 
 

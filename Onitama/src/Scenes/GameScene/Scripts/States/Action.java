@@ -1,12 +1,10 @@
 package Onitama.src.Scenes.GameScene.Scripts.States;
 
-import java.io.Serializable;
-
 import Engine.Structures.Vector2D;
 
 //Turn = card they'll play + piece they'll move + actual movement
 
-public class Action implements Serializable {
+public class Action {
     String playCard;
     Vector2D piece;
     Vector2D move;

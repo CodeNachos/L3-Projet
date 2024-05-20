@@ -27,7 +27,7 @@ public class StandByArrow extends MenuFrame {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         arrowLabel = new JLabel("< >");
-        arrowLabel.setFont(new Font("Cascadia Mono", Font.BOLD, 24));
+        arrowLabel.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 24));
         arrowLabel.setForeground(Main.Palette.foreground);
 
         arrowLabel.setAlignmentX(Component.CENTER_ALIGNMENT);

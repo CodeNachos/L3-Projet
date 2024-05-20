@@ -19,11 +19,11 @@ import Onitama.src.Scenes.GameScene.GameScene;
 public class TopBar extends MenuFrame {
     FlatButton validateButton;
     
+    FlatButton menuButton;
     FlatButton undoButton;
+    FlatButton resetButton;
     FlatButton redoButton;
-
-    JLabel timerLabel;
-    JLabel playerLabel;
+    FlatButton helpButton;
     
     public TopBar(Dimension area, Vector2D offset) {
         super(area, offset);
@@ -36,11 +36,31 @@ public class TopBar extends MenuFrame {
 
         add(Box.createHorizontalGlue()); // Add glue to right-align components
 
+        createMenuButton();
+
+        add(Box.createHorizontalGlue()); 
+
+        createSepLabel();
+
+        add(Box.createHorizontalGlue()); 
+        
         createUndoButton();
         
-        add(Box.createHorizontalStrut(10));
+        add(Box.createHorizontalStrut(6));
 
+        createResetButton();
+
+        add(Box.createHorizontalStrut(6));
+        
         createRedoButton();
+
+        add(Box.createHorizontalGlue());
+        
+        createSepLabel();
+        
+        add(Box.createHorizontalGlue()); 
+
+        createHelpButton();
 
         add(Box.createHorizontalGlue());
     }
@@ -48,7 +68,7 @@ public class TopBar extends MenuFrame {
     
     private FlatButton createBaseButton(String content) {
         FlatButton button = new FlatButton(content);
-        button.setFont(new Font("Cascadia Mono", Font.BOLD, 16));
+        button.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 16));
         button.setForeground(Main.Palette.foreground);
         button.setMainColor(Main.Palette.selection.brighter());
         button.setAccentColor(new Color(255,255,255,25));
@@ -68,7 +88,7 @@ public class TopBar extends MenuFrame {
         undoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //GameScene.undo();
+                GameScene.history.undo();
             }
         });
 
@@ -84,34 +104,72 @@ public class TopBar extends MenuFrame {
         redoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // GameScene.redo();
+                GameScene.history.redo();
             }
         });
 
         add(redoButton);
     }
 
-    private void createTimerLabel() {
-        timerLabel = new JLabel("0:00");
-        timerLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        timerLabel.setForeground(Main.Palette.foreground);
+    private void createResetButton() {
 
-        add(timerLabel);
+        resetButton = createBaseButton("↺");
+        resetButton.setToolTipText("Reset");
+
+        //undoButton.setEnabled(GameScene.canUndo());
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //GameScene.undo();
+            }
+        });
+
+        add(resetButton);
     }
 
-    private void createPlayerLabel() {
-        playerLabel = new JLabel(getPlayerName());
-        playerLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        playerLabel.setForeground(Main.Palette.foreground);
+    private void createMenuButton() {
 
-        add(playerLabel);
+        menuButton = createBaseButton("☰");
+        menuButton.setToolTipText("In Game Menu");
+        menuButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 26));
+        menuButton.setBorder(BorderFactory.createEmptyBorder(6, 10, 4, 10));
+
+        //undoButton.setEnabled(GameScene.canUndo());s
+        menuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //GameScene.undo();
+            }
+        });
+
+        add(menuButton);
     }
 
-    private String getPlayerName() {
-        if (GameScene.getCurrentPlayer() == GameScene.PLAYER1) {
-            return "RED";
-        } else {
-            return "BLUE";
-        }
+    private void createHelpButton() {
+
+        helpButton = createBaseButton(" ? ");
+        helpButton.setToolTipText("How To Play");
+        helpButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
+        helpButton.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+        
+        //undoButton.setEnabled(GameScene.canUndo());
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //GameScene.undo();
+            }
+        });
+
+        add(helpButton);
     }
+
+    private void createSepLabel() {
+        JLabel sepLabel = new JLabel("|");
+        sepLabel.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 24));
+        sepLabel.setForeground(Main.Palette.selection);
+
+        add(sepLabel);
+    }
+
+
 }

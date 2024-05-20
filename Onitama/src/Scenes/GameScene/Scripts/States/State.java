@@ -13,6 +13,7 @@ import Onitama.src.Scenes.GameScene.Entities.Board.Piece.PieceType;
 
 public class State implements Serializable {
     public PieceType[][] board;
+    // gameCards -> [p1:c1, p1:c2, p2:c1, p2:c2, stand by]
     public List<String> gameCards;
     public int currentPlayer;
 
@@ -68,6 +69,14 @@ public class State implements Serializable {
             (player == GameScene.PLAYER1 && (piece == PieceType.RED_KING)) ||
             (player == GameScene.PLAYER2 && (piece == PieceType.BLUE_KING))
         );
+    }
+
+    public PieceType[][] getBoard() {
+        return board;
+    }
+
+    public List<String> getGameCards() {
+        return gameCards;
     }
 
     

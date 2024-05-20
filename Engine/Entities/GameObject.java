@@ -15,8 +15,6 @@ import Engine.Structures.Vector2D;
 public abstract class GameObject extends JComponent {
     public boolean cursorIn = false;
 
-    private boolean visible = true;
-
     // Object attributes
     public Vector2D position = new Vector2D(0, 0); // Position of the object
     public Vector2D scale = new Vector2D(1, 1); // Scale of the object
@@ -142,7 +140,7 @@ public abstract class GameObject extends JComponent {
      * @return True if the object is visible, else false.
      */
     public boolean isVisible() {
-        return visible;
+        return super.isVisible();
     }
 
     /**
@@ -150,7 +148,7 @@ public abstract class GameObject extends JComponent {
      * @param state Desired visibilty state
      */
     public void setVisible(boolean state) {
-        visible = state;
+        super.setVisible(state);
     }
 
     /**
@@ -205,10 +203,6 @@ public abstract class GameObject extends JComponent {
      * @param g The Graphics context used for painting
      */
     public void paintComponent(Graphics g) {
-        if (!visible) {
-            return;
-        }
-        
         super.paintComponent(g); // Call superclass's paintComponent method
         
         if (sprite != null) // If a sprite is set

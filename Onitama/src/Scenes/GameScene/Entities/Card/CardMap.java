@@ -40,6 +40,11 @@ public class CardMap extends TileMap {
     }
 
     public void populateActions(String name, int player) {
+        if (name == null) {
+            clearMap();
+            return;
+        }
+
         CardInfo cardInfo = GameScene.getGameCards().get(name);
         List<Vector2D> actions = player == GameScene.PLAYER1 ? cardInfo.getRedMovement() : cardInfo.getBlueMovement();
 

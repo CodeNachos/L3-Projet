@@ -81,13 +81,17 @@ public class Card extends GameObject {
 
     @Override
     public void process(double delta) {
+        
+        cardMap.setVisible(isVisible());
+        cardLabel.setVisible(isVisible());
+
         if (GameScene.isCardSelected() && GameScene.getSelectedCard() == this) {
-            if (player.getStandByCard() == this) {
+            if (player.getStandByCard() != null && player.getStandByCard().equals(name)) {
                 sprite = player.selectedStandBySprite;
             }
             else if (sprite != player.selectedCardSprite)
                 sprite = player.selectedCardSprite;
-        } else if (player.getStandByCard() == this) {
+        } else if (player.getStandByCard() != null && player.getStandByCard().equals(name)) {
             if (sprite != player.standBySprite) 
                 sprite = player.standBySprite;
         } else if (sprite != player.idleCardSprite) {
@@ -171,7 +175,7 @@ public class Card extends GameObject {
         JLabel label = new JLabel(name);
         label.setAlignmentX(CENTER_ALIGNMENT);
         label.setForeground(Main.Palette.foreground);
-        label.setFont(new Font("Arial", Font.BOLD, 16));
+        label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
         label.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         cardLabel.add(label);
     }

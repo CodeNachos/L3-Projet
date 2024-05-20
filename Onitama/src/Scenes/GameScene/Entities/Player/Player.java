@@ -1,5 +1,6 @@
 package Onitama.src.Scenes.GameScene.Entities.Player;
 
+import java.util.List;
 import java.util.ArrayList;
 
 import Engine.Core.Renderer.Scene;
@@ -14,6 +15,7 @@ import Onitama.src.Scenes.GameScene.Scripts.AI.AI;
 import Onitama.src.Scenes.GameScene.Scripts.AI.RandomAI;
 import Onitama.src.Scenes.GameScene.Scripts.AI.SmartAI;
 import Onitama.src.Scenes.GameScene.Scripts.States.Action;
+import Onitama.src.Scenes.GameScene.Scripts.States.State;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece.PieceType;
@@ -43,10 +45,10 @@ public class Player extends GameObject {
     }
 
 
-    public Player(int playerId, String card1, String card2) {
+    public Player(int playerId, String card1, String card2, String stb) {
         this.playerId = playerId;
-        createCards(card1, card2);
-        createPieces();
+        initCards(card1, card2, stb);
+        initPieces();
     }
 
     public int getPlayerId() {
@@ -102,9 +104,7 @@ public class Player extends GameObject {
     public void setCardsInteractable(boolean state) {
         card1.setinteractable(state);
         card2.setinteractable(state);
-        if (standBy != null) {
-            standBy.setinteractable(state);
-        }
+        standBy.setinteractable(state);
     }
 
     public ArrayList<Piece> getPieces() {
@@ -168,37 +168,81 @@ public class Player extends GameObject {
         pieceMap.updatePieces();
     }
 
-    public Card getStandByCard() {
+    public String getStandByCard() {
         if (standBy == null)
             return null;
         
-        return standBy;
+        return standBy.getName();
     }
 
-    public void setStandBy(Card stb) {
-        standBy = stb;
-        if (standBy != null) {
-            standBy.setPlayer(this);
-        }
-    }
-
-    public void createStandBy(Scene scene, String name) {
-        Vector2D cardPos = new Vector2D(
-            (Main.engine.getResolution().width/2) - (int)(idleCardSprite.getWidth()/2),
-            (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSprite.getHeight())
-        );
-
-        standBy = new Card(name, cardPos, standBySprite, this);
-        standBy.setStandBy(true);
-        standBy.addCardToScene(scene);
-
+    public void setStandBy(String stb) {
+        standBy.setName(stb);
+        standBy.setVisible(true);
     }
 
     public void removeStandBy() {
-        standBy = null;
+        standBy.setName(null);
+        standBy.setVisible(false);
     }
 
-    private void createCards(String card1Name, String card2Name) {
+    public void loadState(State s) {
+        loadPieces(s.getBoard());
+        pieceMap.updatePieces();
+        List<String> cards = s.getGameCards();
+        card1.setName(cards.get(playerId * 2));
+        card2.setName(cards.get(playerId * 2 + 1));
+        if (s.getCurrentPlayer() == playerId) {
+            setStandBy(cards.get(4));
+        } else {
+            removeStandBy();
+        }
+        
+    }
+
+    public void loadPieces(PieceType[][] pieces) {
+        Sprite kingSprite, pawnSprite;
+        if (playerId == GameScene.PLAYER1) {
+            kingSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redKing.png"));   
+            pawnSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redPawn.png"));   
+        } else {
+            kingSprite = new Sprite(Util.getImage("Onitama/res/Sprites/blueKing.png"));   
+            pawnSprite = new Sprite(Util.getImage("Onitama/res/Sprites/bluePawn.png"));
+        }
+
+        this.pieces = new ArrayList<>();
+
+        for (int l = 0; l < 5; l++) {
+            for (int c = 0; c < 5; c++) {
+                if (ownPiece(pieces[l][c])) {
+                    this.pieces.add(
+                        new Piece(
+                            pieceMap, 
+                            pieces[l][c], 
+                            new Vector2D(c,l), 
+                            (
+                                pieces[l][c] == PieceType.RED_KING || pieces[l][c] == PieceType.BLUE_KING ? 
+                                kingSprite : pawnSprite
+                            )
+                        )
+                    );
+                }
+            }
+        }
+    }
+
+    private boolean ownPiece(PieceType p) {
+        if (playerId == GameScene.PLAYER1) {
+            if (p == PieceType.RED_KING || p == PieceType.RED_PAWN)
+                return true;
+        } else {
+            if (p == PieceType.BLUE_KING || p == PieceType.BLUE_PAWN)
+                return true;
+        }
+
+        return false;
+    }
+
+    private void initCards(String card1Name, String card2Name, String standByName) {
         idleCardSprite = new Sprite(
             new Texture(
                 Main.Palette.background, 
@@ -264,9 +308,22 @@ public class Player extends GameObject {
         }
 
         this.card2 = new Card(card2Name, cardPos, idleCardSprite, this);
+
+        cardPos = new Vector2D(
+            (Main.engine.getResolution().width/2) - (int)(idleCardSprite.getWidth()/2),
+            (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSprite.getHeight())
+        );
+
+        if (standByName == null) {
+            standBy = new Card(null, cardPos, standBySprite, this);
+            setVisible(false);
+        } else {
+            standBy = new Card(standByName, cardPos, standBySprite, this);
+        }
+        standBy.setStandBy(true);
     }
 
-    private void createPieces() {
+    private void initPieces() {
         Sprite kingSprite, pawnSprite;
         if (playerId == GameScene.PLAYER1) {
             kingSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redKing.png"));   
@@ -295,6 +352,7 @@ public class Player extends GameObject {
         s.addComponent(pieceMap);
         card1.addCardToScene(s);
         card2.addCardToScene(s);
+        standBy.addCardToScene(s);
     }
 
      
