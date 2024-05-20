@@ -11,9 +11,9 @@ import static java.lang.Math.abs;
 public class Training {
     static Random random = new Random();
     static int difficulty = 2;
-    static int populationSize = 40;
-    static int survivalSize = 10;
-    static int numberStep = 1000;
+    static int populationSize = 20;
+    static int survivalSize = 5;
+    static int numberStep = 100;
     static SmartAI[] population = new SmartAI[populationSize];
     static SmartAI[] survivors = new SmartAI[survivalSize];
     static Hashtable<SmartAI, Double> fitness = new Hashtable<>();

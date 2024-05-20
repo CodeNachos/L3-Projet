@@ -15,6 +15,8 @@ public class Match {
     Match(SmartAI red, SmartAI blue) {
         this.red = red;
         this.blue = blue;
+        this.red.selfID = GameConfiguration.PLAYER1;
+        this.blue.selfID = GameConfiguration.PLAYER2;
     }
 
     void fight() {
