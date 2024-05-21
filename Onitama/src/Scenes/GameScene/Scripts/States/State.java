@@ -106,7 +106,7 @@ public class State implements Serializable {
         }
         
         if (enemy != null) {
-            if (enemy.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.BLUE_THRONE : GameScene.RED_THRONE)) {
+            if (enemy.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.RED_THRONE : GameScene.BLUE_THRONE)) {
                 return true;
             }
         }
@@ -125,7 +125,7 @@ public class State implements Serializable {
         }
         
         if (enemy != null) {
-            if (enemy.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.BLUE_THRONE : GameScene.RED_THRONE)) {
+            if (enemy.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.RED_THRONE : GameScene.BLUE_THRONE)) {
                 return true;
             }
         }
@@ -156,7 +156,7 @@ public class State implements Serializable {
         
         for (int l = 0; l < 5; l++) {
             for (int c = 0; c < 5; c++) {
-                if (!isPlayerPiece(board[l][c], currentPlayer) && !(board[l][c] == PieceType.EMPTY)) {
+                if (isPlayerPiece(board[l][c], getNextPlayer())) {
                     positions.add(new Vector2D(c, l));
                 }
             }
@@ -179,7 +179,7 @@ public class State implements Serializable {
     public Vector2D enemyKing() {
         for (int l = 0; l < 5; l++) {
             for (int c = 0; c < 5; c++) {
-                if (!isPlayerKing(board[l][c], currentPlayer)) {
+                if (isPlayerKing(board[l][c], getNextPlayer())) {
                     return new Vector2D(c,l);
                 }
             }
