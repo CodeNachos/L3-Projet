@@ -17,8 +17,8 @@ public class Match {
     Match(SmartAI red, SmartAI blue) {
         this.red = red;
         this.blue = blue;
-        this.red.selfID = GameScene.PLAYER_RED;
-        this.blue.selfID = GameScene.PLAYER_BLUE;
+        this.red.selfID = GameScene.PLAYER1;
+        this.blue.selfID = GameScene.PLAYER2;
     }
 
     void fight() {
@@ -27,7 +27,7 @@ public class Match {
 
         length = 0;
         while (!game.isGameOver() && length < 100) {
-            if (game.getCurrentPlayer() == GameScene.PLAYER_RED)
+            if (game.getCurrentPlayer() == GameScene.PLAYER1)
                 turn = red.play(game);
             else
                 turn = blue.play(game);
@@ -37,7 +37,7 @@ public class Match {
 
         if (length > 9000)
             winner = null;
-        else if (game.getNextPlayer() == GameScene.PLAYER_RED)
+        else if (game.getNextPlayer() == GameScene.PLAYER1)
             winner = red;
         else
             winner = blue;

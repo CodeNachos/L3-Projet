@@ -43,10 +43,10 @@ public class NewGameMenuScene extends Scene {
 
     public String getPlayerClass(int player) {
         switch (player) {
-            case GameScene.PLAYER_RED:
+            case GameScene.PLAYER1:
                 return classPlayer1;
                 
-            case GameScene.PLAYER_BLUE:
+            case GameScene.PLAYER2:
                 return classPlayer2;
 
             default:
@@ -233,23 +233,23 @@ public class NewGameMenuScene extends Scene {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Main.gameScene = new GameScene();
-                if (!getPlayerClass(GameScene.PLAYER_RED).equals(playerClasses.get(0))) {
-                    if (getPlayerClass(GameScene.PLAYER_RED).equals(playerClasses.get(1))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER_RED, 1);
-                    } else if (getPlayerClass(GameScene.PLAYER_RED).equals(playerClasses.get(2))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER_RED, 3);
-                    } else if (getPlayerClass(GameScene.PLAYER_RED).equals(playerClasses.get(3))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER_RED, 6);
+                if (!getPlayerClass(GameScene.PLAYER1).equals(playerClasses.get(0))) {
+                    if (getPlayerClass(GameScene.PLAYER1).equals(playerClasses.get(1))) {
+                        Main.gameScene.enablePlayerAI(GameScene.PLAYER1, 1);
+                    } else if (getPlayerClass(GameScene.PLAYER1).equals(playerClasses.get(2))) {
+                        Main.gameScene.enablePlayerAI(GameScene.PLAYER1, 3);
+                    } else if (getPlayerClass(GameScene.PLAYER1).equals(playerClasses.get(3))) {
+                        Main.gameScene.enablePlayerAI(GameScene.PLAYER1, 6);
                     }
                 }
 
-                if (!getPlayerClass(GameScene.PLAYER_BLUE).equals(playerClasses.get(0))) {
-                    if (getPlayerClass(GameScene.PLAYER_BLUE).equals(playerClasses.get(1))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER_BLUE, 1);
-                    } else if (getPlayerClass(GameScene.PLAYER_BLUE).equals(playerClasses.get(2))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER_BLUE, 4);
-                    } else if (getPlayerClass(GameScene.PLAYER_BLUE).equals(playerClasses.get(3))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER_BLUE, 5);
+                if (!getPlayerClass(GameScene.PLAYER2).equals(playerClasses.get(0))) {
+                    if (getPlayerClass(GameScene.PLAYER2).equals(playerClasses.get(1))) {
+                        Main.gameScene.enablePlayerAI(GameScene.PLAYER2, 1);
+                    } else if (getPlayerClass(GameScene.PLAYER2).equals(playerClasses.get(2))) {
+                        Main.gameScene.enablePlayerAI(GameScene.PLAYER2, 4);
+                    } else if (getPlayerClass(GameScene.PLAYER2).equals(playerClasses.get(3))) {
+                        Main.gameScene.enablePlayerAI(GameScene.PLAYER2, 5);
                     }
                 }
 
