@@ -46,7 +46,7 @@ public class CardMap extends TileMap {
         }
 
         CardInfo cardInfo = GameScene.getGameCards().get(name);
-        List<Vector2D> actions = player == GameScene.PLAYER1 ? cardInfo.getRedMovement() : cardInfo.getBlueMovement();
+        List<Vector2D> actions = player == GameScene.PLAYER_RED ? cardInfo.getRedMovement() : cardInfo.getBlueMovement();
 
         for (int l = 0; l < mapDimension.height ; l++) {
             for (int c = 0; c < mapDimension.width; c++) {

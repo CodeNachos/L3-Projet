@@ -24,8 +24,8 @@ public class State implements Serializable {
         }
 
         this.currentPlayer = currentPlayer;
-        this.gameCards = cards;
-        createBoard(p1p, p2p);
+        this.gameCards = new ArrayList<>(cards);;
+        createBoard(new ArrayList<>(p1p), new ArrayList<>(p2p));
     }
 
     public State(PieceType[][] board, List<String> cards, int currentPlayer) {
@@ -34,7 +34,7 @@ public class State implements Serializable {
         }
 
         this.currentPlayer = currentPlayer;
-        this.gameCards = cards;
+        this.gameCards = new ArrayList<>(cards);
         this.board = copyBoard(board);
 
     }
@@ -59,15 +59,15 @@ public class State implements Serializable {
 
     public boolean isPlayerPiece(PieceType piece, int player) {
         return (
-            (player == GameScene.PLAYER1 && (piece == PieceType.RED_KING || piece == PieceType.RED_PAWN)) ||
-            (player == GameScene.PLAYER2 && (piece == PieceType.BLUE_KING || piece == PieceType.BLUE_PAWN))
+            (player == GameScene.PLAYER_RED && (piece == PieceType.RED_KING || piece == PieceType.RED_PAWN)) ||
+            (player == GameScene.PLAYER_BLUE && (piece == PieceType.BLUE_KING || piece == PieceType.BLUE_PAWN))
         );
     }
 
     public boolean isPlayerKing(PieceType piece, int player) {
         return (
-            (player == GameScene.PLAYER1 && (piece == PieceType.RED_KING)) ||
-            (player == GameScene.PLAYER2 && (piece == PieceType.BLUE_KING))
+            (player == GameScene.PLAYER_RED && (piece == PieceType.RED_KING)) ||
+            (player == GameScene.PLAYER_BLUE && (piece == PieceType.BLUE_KING))
         );
     }
 
@@ -98,34 +98,25 @@ public class State implements Serializable {
         if (ally == null || enemy == null) {
             return true;
         }
-        
-        if (ally != null) {
-            if (ally.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.BLUE_THRONE : GameScene.RED_THRONE)) {
-                return true;
-            }
-        }
-        
-        if (enemy != null) {
-            if (enemy.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.RED_THRONE : GameScene.BLUE_THRONE)) {
-                return true;
-            }
-        }
 
-        return false;
-    } 
+        boolean isKingConquered = (board[GameScene.BLUE_THRONE.getIntX()][GameScene.BLUE_THRONE.getIntY()] == PieceType.RED_KING) ||
+                (board[GameScene.RED_THRONE.getIntX()][GameScene.RED_THRONE.getIntY()] == PieceType.BLUE_KING);
+
+        return isKingConquered();
+    }
 
     public boolean isKingConquered() {
         Vector2D ally = allyKing();
         Vector2D enemy = enemyKing();
-        
+
         if (ally != null) {
-            if (ally.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.BLUE_THRONE : GameScene.RED_THRONE)) {
+            if (ally.equals(currentPlayer == GameScene.PLAYER_RED ? GameScene.BLUE_THRONE : GameScene.RED_THRONE)) {
                 return true;
             }
         }
-        
+
         if (enemy != null) {
-            if (enemy.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.RED_THRONE : GameScene.BLUE_THRONE)) {
+            if (enemy.equals(currentPlayer == GameScene.PLAYER_RED ? GameScene.RED_THRONE : GameScene.BLUE_THRONE)) {
                 return true;
             }
         }
@@ -188,14 +179,14 @@ public class State implements Serializable {
     }
 
     public Vector2D allyGoal() {
-        if (currentPlayer == GameScene.PLAYER1)
+        if (currentPlayer == GameScene.PLAYER_RED)
             return GameScene.RED_THRONE;
         else
             return GameScene.BLUE_THRONE;
     }
 
     public Vector2D enemyGoal() {
-        if (currentPlayer == GameScene.PLAYER2)
+        if (currentPlayer == GameScene.PLAYER_BLUE)
             return GameScene.RED_THRONE;
         else
             return GameScene.BLUE_THRONE;
@@ -204,7 +195,7 @@ public class State implements Serializable {
     public List<String> availableCards() {
         List<String> cards = new ArrayList<>();
         
-        if (currentPlayer == GameScene.PLAYER1) {
+        if (currentPlayer == GameScene.PLAYER_RED) {
             cards.add(gameCards.get(0));
             cards.add(gameCards.get(1));
         } else {
@@ -218,7 +209,7 @@ public class State implements Serializable {
     public List<Vector2D> possiblePositions(Vector2D piece, String card) {
         List<Vector2D> allies = allyPositions();
         List<Vector2D> curMovement;
-        if (currentPlayer == GameScene.PLAYER1)
+        if (currentPlayer == GameScene.PLAYER_RED)
             curMovement = GameScene.getGameCards().get(card).getRedMovement();
         else
             curMovement = GameScene.getGameCards().get(card).getBlueMovement();
@@ -252,7 +243,7 @@ public class State implements Serializable {
         next.board[turn.getPiece().getIntY()][turn.getPiece().getIntX()] = PieceType.EMPTY;
 
         String tmp;
-        if (next.currentPlayer == GameScene.PLAYER1) {
+        if (next.currentPlayer == GameScene.PLAYER_RED) {
             if (turn.getCard().equals(next.gameCards.get(0))) {
                 tmp = next.gameCards.get(0);
                 next.gameCards.set(0, next.gameCards.get(4));

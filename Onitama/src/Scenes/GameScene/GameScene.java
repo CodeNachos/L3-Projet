@@ -29,13 +29,13 @@ public class GameScene extends Scene {
     public static final Vector2D RED_THRONE = new Vector2D(2, 4);
     public static final Vector2D BLUE_THRONE = new Vector2D(2, 0);
 
-    public static final int PLAYER1 = 0; // red
-    public static final int PLAYER2 = 1; // blue
+    public static final int PLAYER_RED = 0; // red
+    public static final int PLAYER_BLUE = 1; // blue
 
-    public static int currentPlayer = PLAYER1;
+    public static int currentPlayer = PLAYER_RED;
 
-    public static Player player1;
-    public static Player player2;
+    public static Player playerRed;
+    public static Player playerBlue;
 
     public static Board gameBoard;
 
@@ -63,8 +63,8 @@ public class GameScene extends Scene {
         createPlayersFade();
         createPlayers();
 
-        player1.addToScene(this);
-        player2.addToScene(this);
+        playerRed.addToScene(this);
+        playerBlue.addToScene(this);
         addComponent(gameBoard);
 
         // Add GUI
@@ -86,22 +86,22 @@ public class GameScene extends Scene {
     public State getGameState() {
         ArrayList<String> cards = new ArrayList<>();
 
-        cards.add(player1.getFirstCard());
-        cards.add(player1.getSecondCard());
-        cards.add(player2.getFirstCard());
-        cards.add(player2.getSecondCard());
-        if (currentPlayer == PLAYER1) {
-            cards.add(player1.getStandByCard());
+        cards.add(playerRed.getFirstCard());
+        cards.add(playerRed.getSecondCard());
+        cards.add(playerBlue.getFirstCard());
+        cards.add(playerBlue.getSecondCard());
+        if (currentPlayer == PLAYER_RED) {
+            cards.add(playerRed.getStandByCard());
         } else {
-            cards.add(player2.getStandByCard());
+            cards.add(playerBlue.getStandByCard());
         }
 
-        return new State(getPlayerPieces(PLAYER1), getPlayerPieces(PLAYER2), cards, currentPlayer);
+        return new State(getPlayerPieces(PLAYER_RED), getPlayerPieces(PLAYER_BLUE), cards, currentPlayer);
     }
 
     public static void loadGameState(State s) {
-        player1.loadState(s);
-        player2.loadState(s);
+        playerRed.loadState(s);
+        playerBlue.loadState(s);
 
         currentPlayer = s.getCurrentPlayer();
 
@@ -110,12 +110,12 @@ public class GameScene extends Scene {
 
     public void enablePlayerAI(int player, int difficulty) {
         switch (player) {
-            case PLAYER1:
-                player1.enableAI(difficulty);
+            case PLAYER_RED:
+                playerRed.enableAI(difficulty);
                 break;
             
-            case PLAYER2:
-                player2.enableAI(difficulty);
+            case PLAYER_BLUE:
+                playerBlue.enableAI(difficulty);
                 break;
 
             default:
@@ -133,12 +133,12 @@ public class GameScene extends Scene {
     } 
 
     public static Piece getPiece(int l, int c) {
-        Piece piece = player1.checkPiecePresence(l, c);
+        Piece piece = playerRed.checkPiecePresence(l, c);
         if (piece != null) {
             return piece;
         }
 
-        piece = player2.checkPiecePresence(l, c);
+        piece = playerBlue.checkPiecePresence(l, c);
         if (piece != null) {
             return piece;
         }
@@ -165,23 +165,23 @@ public class GameScene extends Scene {
     }
 
     public static boolean isCardSelected() {
-        return (player1.getSelectedCard() != null) || (player2.getSelectedCard() != null);
+        return (playerRed.getSelectedCard() != null) || (playerBlue.getSelectedCard() != null);
     }
 
     public static Card getSelectedCard() {
-        Card card = player1.getSelectedCard();
+        Card card = playerRed.getSelectedCard();
 
         if (card != null)
             return card;
 
-        card = player2.getSelectedCard();
+        card = playerBlue.getSelectedCard();
         
         return card;
     }
 
     public static void clearSelectedCard() {
-        player1.setSelectedCard(null);
-        player2.setSelectedCard(null);
+        playerRed.setSelectedCard(null);
+        playerBlue.setSelectedCard(null);
     }
 
     public static boolean isActionSelected() {
@@ -196,10 +196,10 @@ public class GameScene extends Scene {
     public static ArrayList<Piece> getPlayerPieces(int player) {
         ArrayList<Piece> pieces = null;
 
-        if (player == PLAYER1) {
-            pieces = player1.getPieces();
-        } else if (player == PLAYER2) {
-            pieces = player2.getPieces();
+        if (player == PLAYER_RED) {
+            pieces = playerRed.getPieces();
+        } else if (player == PLAYER_BLUE) {
+            pieces = playerBlue.getPieces();
         } else {
             Util.printError("Invalid player");
         }
@@ -220,13 +220,13 @@ public class GameScene extends Scene {
     }
 
     private static boolean conqueredKing() {
-        for (Piece p : player1.getPieces()) {
+        for (Piece p : playerRed.getPieces()) {
             if (p.getType() == PieceType.RED_KING && p.getPosition().equals(BLUE_THRONE)) {
                 return true;
             }
         }
 
-        for (Piece p : player2.getPieces()) {
+        for (Piece p : playerBlue.getPieces()) {
             if (p.getType() == PieceType.BLUE_KING && p.getPosition().equals(RED_THRONE)) {
                 return true;
             }
@@ -242,13 +242,13 @@ public class GameScene extends Scene {
     }
 
     public static boolean checkPresence(PieceType type) {
-        for (Piece p : player1.getPieces()) {
+        for (Piece p : playerRed.getPieces()) {
             if (p.getType() == type) {
                  return true;
             }
         }
 
-        for (Piece p : player2.getPieces()) {
+        for (Piece p : playerBlue.getPieces()) {
             if (p.getType() == type) {
                  return true;
             }
@@ -258,14 +258,14 @@ public class GameScene extends Scene {
     }
 
     public static void exchangeCards() {
-        if (currentPlayer == PLAYER1) {
-            player2.setStandBy(getSelectedCard().getName());
-            getSelectedCard().setName(player1.getStandByCard());
-            player1.removeStandBy();
+        if (currentPlayer == PLAYER_RED) {
+            playerBlue.setStandBy(getSelectedCard().getName());
+            getSelectedCard().setName(playerRed.getStandByCard());
+            playerRed.removeStandBy();
         } else {
-            player1.setStandBy(getSelectedCard().getName());
-            getSelectedCard().setName(player2.getStandByCard());
-            player2.removeStandBy();
+            playerRed.setStandBy(getSelectedCard().getName());
+            getSelectedCard().setName(playerBlue.getStandByCard());
+            playerBlue.removeStandBy();
         }
     }
     
@@ -292,25 +292,25 @@ public class GameScene extends Scene {
             }
         }
 
-        if (currentPlayer == GameScene.PLAYER1) {
-            player1.movePiece(getSelectedPiece(), getSelectedAction());
+        if (currentPlayer == GameScene.PLAYER_RED) {
+            playerRed.movePiece(getSelectedPiece(), getSelectedAction());
             
         } else {
-            player2.movePiece(getSelectedPiece(), getSelectedAction());
+            playerBlue.movePiece(getSelectedPiece(), getSelectedAction());
         }
         
         gameBoard.setSelectedTile(null); gameBoard.setSelectedAction(null);
 
-        player1.update(); player2.update();
+        playerRed.update(); playerBlue.update();
 
         exchangeCards();
 
-        player1.setSelectedCard(null); player2.setSelectedCard(null);
+        playerRed.setSelectedCard(null); playerBlue.setSelectedCard(null);
 
         changePlayer();
 
         if (gameOver()) {
-            System.out.println("Player " + (getNextPlayer() == GameScene.PLAYER1 ? "RED" : "BLUE") + " won");
+            System.out.println("Player " + (getNextPlayer() == GameScene.PLAYER_RED ? "RED" : "BLUE") + " won");
             Main.engine.forceUpdate();
             Main.engine.forceRefresh();
             Main.engine.pause();
@@ -321,10 +321,10 @@ public class GameScene extends Scene {
     }
 
     public static void setAction(Action act) {
-        if (currentPlayer == PLAYER1) {
-            player1.setSelectedCardByName(act.getCard());
+        if (currentPlayer == PLAYER_RED) {
+            playerRed.setSelectedCardByName(act.getCard());
         } else {
-            player2.setSelectedCardByName(act.getCard());
+            playerBlue.setSelectedCardByName(act.getCard());
         }
 
         gameBoard.setSelectedTile(act.getPiece());
@@ -339,7 +339,7 @@ public class GameScene extends Scene {
     }
 
     public static void updateTurnLabels() {
-        if (currentPlayer == PLAYER1) {
+        if (currentPlayer == PLAYER_RED) {
             leftTurnLabel.setRedTurn();
             rightTurnLabel.clearTurn();
         } else {
@@ -349,7 +349,7 @@ public class GameScene extends Scene {
     }
 
     public static void updatePlayerFade() {
-        if (currentPlayer == PLAYER1) {
+        if (currentPlayer == PLAYER_RED) {
             leftPlayerFade.setVisible(false);
             rightPlayerFade.setVisible(true);
         } else {
@@ -359,7 +359,7 @@ public class GameScene extends Scene {
     }
 
     public static void updateStandByCardArrows() {
-        if (currentPlayer == PLAYER1) {
+        if (currentPlayer == PLAYER_RED) {
             leftArrow.toggleLeftArrow();
             rightArrow.clearArrow();
         } else {
@@ -369,24 +369,24 @@ public class GameScene extends Scene {
     }
 
     public static void updateIteractableEntities() {
-        if (currentPlayer == PLAYER1) {
-            if (player1.isAiEnabled()) {
-                player1.setCardsInteractable(false);
-                player2.setCardsInteractable(false);
+        if (currentPlayer == PLAYER_RED) {
+            if (playerRed.isAiEnabled()) {
+                playerRed.setCardsInteractable(false);
+                playerBlue.setCardsInteractable(false);
                 gameBoard.setIteractable(false);
             } else {
-                player1.setCardsInteractable(true);
-                player2.setCardsInteractable(true);
+                playerRed.setCardsInteractable(true);
+                playerBlue.setCardsInteractable(true);
                 gameBoard.setIteractable(true);
             }
         } else {
-            if (player2.isAiEnabled()) {
-                player1.setCardsInteractable(false);
-                player2.setCardsInteractable(false);
+            if (playerBlue.isAiEnabled()) {
+                playerRed.setCardsInteractable(false);
+                playerBlue.setCardsInteractable(false);
                 gameBoard.setIteractable(false);
             } else {
-                player1.setCardsInteractable(true);
-                player2.setCardsInteractable(true);
+                playerRed.setCardsInteractable(true);
+                playerBlue.setCardsInteractable(true);
                 gameBoard.setIteractable(true);
             }
         }
@@ -434,16 +434,16 @@ public class GameScene extends Scene {
     private void createPlayers() {
         Iterator<String> cardIter = gameCards.keySet().iterator();
         
-        player1 = new Player(PLAYER1, cardIter.next(), cardIter.next(), null);
+        playerRed = new Player(PLAYER_RED, cardIter.next(), cardIter.next(), null);
 
-        player2 = new Player(PLAYER2, cardIter.next(), cardIter.next(), null);
+        playerBlue = new Player(PLAYER_BLUE, cardIter.next(), cardIter.next(), null);
 
-        if (currentPlayer == PLAYER1) {
-            player1.setStandBy(cardIter.next());
-            player2.removeStandBy();
+        if (currentPlayer == PLAYER_RED) {
+            playerRed.setStandBy(cardIter.next());
+            playerBlue.removeStandBy();
         } else {
-            player2.setStandBy(cardIter.next());
-            player1.removeStandBy();
+            playerBlue.setStandBy(cardIter.next());
+            playerRed.removeStandBy();
         }
     } 
 

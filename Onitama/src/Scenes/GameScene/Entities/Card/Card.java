@@ -129,7 +129,7 @@ public class Card extends GameObject {
 
     public void updateCard() {
         if (player == null)
-            cardMap.populateActions(name, GameScene.PLAYER1);
+            cardMap.populateActions(name, GameScene.PLAYER_RED);
         else 
             cardMap.populateActions(name, player.getPlayerId());
     }

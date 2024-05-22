@@ -46,16 +46,19 @@ public class SmartAI extends AI {
 
     @Override
     public Action play() {
-        //int eval = minmax(Main.gameScene.getGameState(), true, difficulty, 
-        //                   minusINF, plusINF);
-        //System.err.println("Best score found: " + eval);
-        minmax(Main.gameScene.getGameState(), true, difficulty, minusINF, plusINF);
+
+        State s = Main.gameScene.getGameState();
+
+        int eval = minmax(s, true, difficulty,
+                           minusINF, plusINF);
+        System.err.println("Best score found: " + eval);
+        //minmax(Main.gameScene.getGameState(), true, difficulty, minusINF, plusINF);
         return bestMove;
     }
 
     private int minmax(State config, boolean isMaximizing, 
                                     int depth, int alpha, int beta) {
-        if (config.isGameOver() || depth == 0) 
+        if (config.isGameOver() || depth == 0)
             return heuristic(config, depth);
 
         int eval, maxEval, minEval;
