@@ -9,9 +9,12 @@ import Engine.Core.Renderer.Scene;
 import Engine.Global.Settings;
 import Engine.Global.Util;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.GameScene.Scripts.AI.Testing;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class Main {
+    private static boolean testing = false;
+
     public static GameEngine engine;
 
     public static GameScene gameScene;
@@ -34,11 +37,16 @@ public class Main {
 
         engine.setIcon(Util.getImage("Onitama/res/Sprites/redKing.png"));
 
-        newGameMenu = new NewGameMenuScene();
-
-        // start engine
-        engine.setMainScene(newGameMenu);
-        engine.start();
+        
+        if (testing) {
+            gameScene = new GameScene();
+            Testing.test();
+        } else {
+            newGameMenu = new NewGameMenuScene();
+            // start engine
+            engine.setMainScene(newGameMenu);
+            engine.start();
+        }
     }
 
     public static class FontManager {
