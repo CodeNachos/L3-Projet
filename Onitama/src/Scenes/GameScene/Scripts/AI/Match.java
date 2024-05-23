@@ -3,6 +3,7 @@ package Onitama.src.Scenes.GameScene.Scripts.AI;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.States.Action;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
+import Onitama.src.Main;
 
 /**
  * Match
@@ -22,7 +23,7 @@ public class Match {
     }
 
     void fight() {
-        State game = (new GameScene()).getGameState();
+        State game = Main.gameScene.getGameState();
         Action turn;
 
         length = 0;
