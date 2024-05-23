@@ -24,8 +24,8 @@ public class State implements Serializable {
         }
 
         this.currentPlayer = currentPlayer;
-        this.gameCards = cards;
-        createBoard(p1p, p2p);
+        this.gameCards = new ArrayList<>(cards);;
+        createBoard(new ArrayList<>(p1p), new ArrayList<>(p2p));
     }
 
     public State(PieceType[][] board, List<String> cards, int currentPlayer) {
@@ -34,7 +34,7 @@ public class State implements Serializable {
         }
 
         this.currentPlayer = currentPlayer;
-        this.gameCards = cards;
+        this.gameCards = new ArrayList<>(cards);
         this.board = copyBoard(board);
 
     }
@@ -98,32 +98,23 @@ public class State implements Serializable {
         if (ally == null || enemy == null) {
             return true;
         }
-        
-        if (ally != null) {
-            if (ally.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.BLUE_THRONE : GameScene.RED_THRONE)) {
-                return true;
-            }
-        }
-        
-        if (enemy != null) {
-            if (enemy.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.RED_THRONE : GameScene.BLUE_THRONE)) {
-                return true;
-            }
-        }
 
-        return false;
-    } 
+        boolean isKingConquered = (board[GameScene.BLUE_THRONE.getIntX()][GameScene.BLUE_THRONE.getIntY()] == PieceType.RED_KING) ||
+                (board[GameScene.RED_THRONE.getIntX()][GameScene.RED_THRONE.getIntY()] == PieceType.BLUE_KING);
+
+        return isKingConquered();
+    }
 
     public boolean isKingConquered() {
         Vector2D ally = allyKing();
         Vector2D enemy = enemyKing();
-        
+
         if (ally != null) {
             if (ally.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.BLUE_THRONE : GameScene.RED_THRONE)) {
                 return true;
             }
         }
-        
+
         if (enemy != null) {
             if (enemy.equals(currentPlayer == GameScene.PLAYER1 ? GameScene.RED_THRONE : GameScene.BLUE_THRONE)) {
                 return true;
