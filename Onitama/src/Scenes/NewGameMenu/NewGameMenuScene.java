@@ -211,7 +211,7 @@ public class NewGameMenuScene extends Scene {
             
         });
 
-        classPlayer1 = playerClasses.get(3);
+        classPlayer1 = playerClasses.get(0);
         classPlayer2 = playerClasses.get(2);
 
         
@@ -253,6 +253,8 @@ public class NewGameMenuScene extends Scene {
                     }
                 }
 
+                System.out.println(getPlayerClass(GameScene.PLAYER1));
+                System.out.println(getPlayerClass(GameScene.PLAYER2));
                 Main.engine.setCurrentScene(Main.gameScene);
             }
             
