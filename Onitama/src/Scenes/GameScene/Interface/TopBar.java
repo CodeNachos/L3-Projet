@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 
 import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
+import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.GameScene;
@@ -21,7 +22,7 @@ public class TopBar extends MenuFrame {
     
     FlatButton menuButton;
     FlatButton undoButton;
-    FlatButton resetButton;
+    FlatButton hintButton;
     FlatButton redoButton;
     FlatButton helpButton;
     
@@ -45,10 +46,6 @@ public class TopBar extends MenuFrame {
         add(Box.createHorizontalGlue()); 
         
         createUndoButton();
-        
-        add(Box.createHorizontalStrut(6));
-
-        createResetButton();
 
         add(Box.createHorizontalStrut(6));
         
@@ -57,8 +54,12 @@ public class TopBar extends MenuFrame {
         add(Box.createHorizontalGlue());
         
         createSepLabel();
-        
+
         add(Box.createHorizontalGlue()); 
+
+        createHintButton();
+        
+        add(Box.createHorizontalStrut(6));
 
         createHelpButton();
 
@@ -111,20 +112,22 @@ public class TopBar extends MenuFrame {
         add(redoButton);
     }
 
-    private void createResetButton() {
+    private void createHintButton() {
 
-        resetButton = createBaseButton("↺");
-        resetButton.setToolTipText("Reset");
+        hintButton = createBaseButton(" ? ");
+        hintButton.setToolTipText("Need a hint?");
+        hintButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
+        hintButton.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
 
         //undoButton.setEnabled(GameScene.canUndo());
-        resetButton.addActionListener(new ActionListener() {
+        hintButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameScene.history.resetGame();
+                Util.printWarning("Not implemented");
             }
         });
 
-        add(resetButton);
+        add(hintButton);
     }
 
     private void createMenuButton() {
@@ -147,10 +150,9 @@ public class TopBar extends MenuFrame {
 
     private void createHelpButton() {
 
-        helpButton = createBaseButton(" ? ");
+        helpButton = createBaseButton("🛈");
         helpButton.setToolTipText("How To Play");
-        helpButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
-        helpButton.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+        helpButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         //undoButton.setEnabled(GameScene.canUndo());
         helpButton.addActionListener(new ActionListener() {

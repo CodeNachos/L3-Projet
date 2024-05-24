@@ -80,11 +80,11 @@ public class MenuFrame extends UIObject {
 
         // paint background
         g2d.setColor(mainColor);
-        g2d.fillRoundRect(2, 2, getWidth() - 4, getHeight() - 4, curvature.width, curvature.height);
+        g2d.fillRoundRect(borderWidth, borderWidth, getWidth() - 2*borderWidth, getHeight() - 2*borderWidth, curvature.width, curvature.height);
 
         // paint borders in accent color
         g.setColor(accentColor);
-        g2d.drawRoundRect(2, 2, getWidth() - 4, getHeight() - 4, curvature.width, curvature.height);
+        g2d.drawRoundRect(borderWidth, borderWidth, getWidth() - 2*borderWidth, getHeight() - 2*borderWidth, curvature.width, curvature.height);
 
         // restore stroke
         g2d.setStroke(defaultStroke);
