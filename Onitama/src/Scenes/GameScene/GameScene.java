@@ -376,7 +376,7 @@ public class GameScene extends Scene {
                 gameBoard.setIteractable(false);
             } else {
                 player1.setCardsInteractable(true);
-                player2.setCardsInteractable(true);
+                player2.setCardsInteractable(false);
                 gameBoard.setIteractable(true);
             }
         } else {
@@ -385,7 +385,7 @@ public class GameScene extends Scene {
                 player2.setCardsInteractable(false);
                 gameBoard.setIteractable(false);
             } else {
-                player1.setCardsInteractable(true);
+                player1.setCardsInteractable(false);
                 player2.setCardsInteractable(true);
                 gameBoard.setIteractable(true);
             }
@@ -448,31 +448,34 @@ public class GameScene extends Scene {
     } 
 
     private void createGUI() {
+
+        // PLAYER SIDES
+        
         Dimension sideDimension = new Dimension(
-            (int)(Main.engine.getResolution().width /4),
+            (int)(Main.engine.getResolution().width /4) + 32,
             (int)(5 * Main.engine.getResolution().height / 8)
         );
         Vector2D sideOffset = new Vector2D(
-            (int)(Main.engine.getResolution().width - sideDimension.width + 6),
+            (int)(Main.engine.getResolution().width - sideDimension.width + 32),
             (int)(Main.engine.getResolution().height / 8)
         );
         MenuFrame blueSide = new MenuFrame(sideDimension, sideOffset);
-        blueSide.setMainColor(new Color(139,233,253,70));
+        blueSide.setMainColor(new Color(139,233,253,5));
         blueSide.setAccentColor(new Color(139,233,253,100));
-        blueSide.setCurvature(5, 5);
-        blueSide.setBorderWidth(5);
+        blueSide.setCurvature(30, 30);
+        blueSide.setBorderWidth(8);
     
         addComponent(blueSide);
 
         sideOffset = new Vector2D(
-            (int)(-6),
+            (int)(-32),
             (int)(Main.engine.getResolution().height / 8)
         );
         MenuFrame redSide = new MenuFrame(sideDimension, sideOffset);
-        redSide.setMainColor(new Color(255, 85, 85,70));
-        redSide.setAccentColor(new Color(255, 85, 85,100));
-        redSide.setCurvature(5, 5);
-        redSide.setBorderWidth(5);
+        redSide.setMainColor(new Color(255, 85, 85,5));
+        redSide.setAccentColor(new Color(255, 85, 85,200));
+        redSide.setCurvature(30, 30);
+        redSide.setBorderWidth(8);
 
         addComponent(redSide);
         
@@ -546,11 +549,11 @@ public class GameScene extends Scene {
 
     private void createPlayersFade() {
         Dimension sideDimension = new Dimension(
-            (int)(Main.engine.getResolution().width /4),
+            (int)(Main.engine.getResolution().width /4) + 32,
             (int)(5 * Main.engine.getResolution().height / 8)
         );
         Vector2D sideOffset = new Vector2D(
-            (int)(Main.engine.getResolution().width - sideDimension.width + 6),
+            (int)(Main.engine.getResolution().width - sideDimension.width +32),
             (int)(Main.engine.getResolution().height / 8)
         );
         rightPlayerFade = new ColorArea(new Color(0,0,0,100), sideDimension, sideOffset);
@@ -558,7 +561,7 @@ public class GameScene extends Scene {
         addComponent(rightPlayerFade);
 
         sideOffset = new Vector2D(
-            (int)(-6),
+            (int)(-32),
             (int)(Main.engine.getResolution().height / 8)
         );
         leftPlayerFade = new ColorArea(new Color(0,0,0,100), sideDimension, sideOffset);
