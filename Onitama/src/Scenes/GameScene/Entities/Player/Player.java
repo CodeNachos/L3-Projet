@@ -107,6 +107,12 @@ public class Player extends GameObject {
         standBy.setinteractable(state);
     }
 
+    public void setPiecesInteractable(boolean state) {
+        for (Piece p : pieces) {
+            p.setInteractable(state);
+        }
+    }
+
     public ArrayList<Piece> getPieces() {
         return pieces;
     }
@@ -249,15 +255,17 @@ public class Player extends GameObject {
                 (int)(Main.engine.getResolution().getHeight()/5),
                 (int)(Main.engine.getResolution().getHeight()/5))
         );
-        idleCardSprite.setBorder(5, playerId == GameScene.PLAYER1 ? Main.Palette.red : Main.Palette.cyan, 10);
+        //idleCardSprite.setBorder(5, playerId == GameScene.PLAYER1 ? Main.Palette.red : Main.Palette.cyan, 10);
+        idleCardSprite.setBorder(5, Main.Palette.selection, 10);
 
         selectedCardSprite = new Sprite(
             new Texture(
                 Main.Palette.selection,
                 (int)(Main.engine.getResolution().getHeight()/5),
-                (int)(Main.engine.getResolution().getHeight()/5))
+                (int)(Main.engine.getResolution().getHeight()/5)) 
         );
-        selectedCardSprite.setBorder(5, playerId == GameScene.PLAYER1 ? Main.Palette.red.brighter() : Main.Palette.cyan.brighter(), 10);
+        //selectedCardSprite.setBorder(5, playerId == GameScene.PLAYER1 ? Main.Palette.red.brighter() : Main.Palette.cyan.brighter(), 10);
+        selectedCardSprite.setBorder(5, Main.Palette.selection.brighter(), 10);
 
         standBySprite = new Sprite(
             new Texture(

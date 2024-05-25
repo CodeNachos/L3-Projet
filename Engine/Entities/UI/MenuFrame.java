@@ -62,6 +62,10 @@ public class MenuFrame extends UIObject {
         curvature.height = arcHeight; // Set arc height of the curvature
     }
 
+    /**
+     * Sets the border with value.
+     * @param width Desired border width
+     */
     public void setBorderWidth(int width) {
         borderWidth = width;
     }   
@@ -80,11 +84,11 @@ public class MenuFrame extends UIObject {
 
         // paint background
         g2d.setColor(mainColor);
-        g2d.fillRoundRect(borderWidth, borderWidth, getWidth() - 2*borderWidth, getHeight() - 2*borderWidth, curvature.width, curvature.height);
+        g2d.fillRoundRect(0, 0, getWidth() - borderWidth/2, getHeight() - borderWidth/2, curvature.width, curvature.height);
 
         // paint borders in accent color
         g.setColor(accentColor);
-        g2d.drawRoundRect(borderWidth, borderWidth, getWidth() - 2*borderWidth, getHeight() - 2*borderWidth, curvature.width, curvature.height);
+        g2d.drawRoundRect(borderWidth/2, borderWidth/2, getWidth() - borderWidth, getHeight() - borderWidth, curvature.width, curvature.height);
 
         // restore stroke
         g2d.setStroke(defaultStroke);

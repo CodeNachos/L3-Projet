@@ -27,4 +27,8 @@ public class PieceMap extends TileMap {
     public Piece getPiece(int l, int c) {
         return (Piece)getTile(l, c);
     }
+
+    public int getPlayer() {
+        return player.getPlayerId();
+    }
 }

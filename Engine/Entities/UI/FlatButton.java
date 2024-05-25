@@ -16,6 +16,8 @@ public class FlatButton extends JButton {
     private Color accentColor = new Color(255, 255, 255, 255); // Accent color of the button (border color)
     private Color textColor = new Color(0, 0, 0, 255); // Text color of the button
 
+    private int borderWidth = 3;
+
     private Dimension curvature = new Dimension(0, 0); // Curvature of the button corners
 
     /**
@@ -77,6 +79,14 @@ public class FlatButton extends JButton {
     }
 
     /**
+     * Sets the border with value.
+     * @param width Desired border width
+     */
+    public void setBorderWidth(int width) {
+        borderWidth = width;
+    }
+
+    /**
      * Overrides the paintComponent method to customize the button's appearance.
      * @param g The Graphics context used for painting
      */
@@ -90,7 +100,7 @@ public class FlatButton extends JButton {
         } else {
             g.setColor(mainColor); // Use the main color
         }
-        g.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, curvature.width, curvature.height); // Draw rounded rectangle
+        g.fillRoundRect(0, 0, getWidth()-borderWidth/2, getHeight()-borderWidth/2, curvature.width, curvature.height); // Draw rounded rectangle
 
         // Let the superclass paint the button text
         super.paintComponent(g);
@@ -105,10 +115,10 @@ public class FlatButton extends JButton {
         // set stroke
         Graphics2D g2d = (Graphics2D) g;
         Stroke defaultStroke = g2d.getStroke();
-        g2d.setStroke(new BasicStroke(3));
+        g2d.setStroke(new BasicStroke(borderWidth));
         // Draw border
         g.setColor(accentColor); // Use the accent color for border
-        g.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, curvature.width, curvature.height); // Draw rounded rectangle border
+        g.drawRoundRect(borderWidth/2, borderWidth/2, getWidth() - borderWidth, getHeight() - borderWidth, curvature.width, curvature.height); // Draw rounded rectangle border
         // restore stroke
         g2d.setStroke(defaultStroke);
     }

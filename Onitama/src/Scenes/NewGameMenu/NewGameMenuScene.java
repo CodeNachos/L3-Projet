@@ -228,6 +228,7 @@ public class NewGameMenuScene extends Scene {
         startButton.setCurvature(15, 15);
         startButton.setBorder(BorderFactory.createEmptyBorder());
         startButton.setFocusable(false);
+        startButton.setBorderWidth(6);
 
         startButton.addActionListener(new ActionListener() {
             @Override
@@ -272,7 +273,7 @@ public class NewGameMenuScene extends Scene {
 
         MenuFrame buttonFrame = new MenuFrame(buttonArea, buttonOffset);
 
-        buttonFrame.setMainColor(new Color(100,0,0,255));
+        buttonFrame.setMainColor(new Color(0,0,0,0));
         buttonFrame.setAccentColor(new Color(0,0,0,0));
         
         buttonFrame.setLayout(new GridLayout());
@@ -304,7 +305,7 @@ public class NewGameMenuScene extends Scene {
 
         MenuFrame buttonFrame = new MenuFrame(buttonArea, buttonOffset);
 
-        buttonFrame.setMainColor(new Color(100,0,0,255));
+        buttonFrame.setMainColor(new Color(0,0,0,0));
         buttonFrame.setAccentColor(new Color(0,0,0,0));
         
         buttonFrame.setLayout(new GridLayout());

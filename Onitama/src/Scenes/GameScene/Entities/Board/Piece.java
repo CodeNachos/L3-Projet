@@ -1,8 +1,13 @@
 package Onitama.src.Scenes.GameScene.Entities.Board;
 
+import java.awt.event.MouseEvent;
+
 import Engine.Entities.TileMap.Tile;
 import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
+import Onitama.src.Constants;
+import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.GameScene;
 
 public class Piece extends Tile {
 
@@ -15,6 +20,12 @@ public class Piece extends Tile {
     };
 
     PieceType type;
+
+    boolean interactable;
+
+    Vector2D[] animation = null;
+    int animationStep = 0;
+    double timeCounter = 0.;
 
     public Piece(PieceMap map, PieceType type, Vector2D position, Sprite sprite) {
         super(map, position.getIntY(), position.getIntX(), sprite);
@@ -37,6 +48,10 @@ public class Piece extends Tile {
         return mapPosition;
     }
 
+    public void setInteractable(boolean state) {
+        interactable = state;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -55,4 +70,46 @@ public class Piece extends Tile {
         Piece clone = new Piece((PieceMap)parentMap, type, position, sprite);
         return clone;
     }
+
+    @Override
+    public void input(MouseEvent e) {
+        if (!interactable) 
+            return;
+        
+        if (e.getID() == MouseEvent.MOUSE_CLICKED) {
+            if (
+                (Main.gameScene.getCurrentPlayer() == Constants.PLAYER1 && isBlue()) ||
+                (Main.gameScene.getCurrentPlayer() == Constants.PLAYER2 && isRed())
+            ) {
+                animation = animations[0];
+                timeCounter = 0.02;
+            }
+        }
+    }
+
+    @Override
+    public void process(double delta) {
+        if (animation != null) {
+            if (timeCounter <= 0) {
+                setPos(getPos().add(animation[animationStep]));
+                animationStep++;
+                if (animationStep == animation.length) {
+                    animation = null;
+                    animationStep = 0;
+                } else {
+                    timeCounter = 0.02;
+                }
+            } else {
+                timeCounter -= delta;
+            }
+        }
+    }
+
+    private Vector2D[] invalidAnimation = {
+        new Vector2D(-2, 0),
+        new Vector2D(4, 0),
+        new Vector2D(-2,0)
+    };
+
+    private Vector2D[][] animations = {invalidAnimation};
 }

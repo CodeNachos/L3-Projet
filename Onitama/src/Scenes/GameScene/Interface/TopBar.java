@@ -14,7 +14,6 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
-import Onitama.src.Scenes.GameScene.GameScene;
 
 
 public class TopBar extends MenuFrame {
@@ -66,6 +65,18 @@ public class TopBar extends MenuFrame {
         add(Box.createHorizontalGlue());
     }
 
+    public void setEnabledUndo(boolean state) {
+        undoButton.setEnabled(state);
+    }
+
+    public void setEnabledRedo(boolean state) {
+        redoButton.setEnabled(state);
+    }
+
+    public void setEnabledHint(boolean state) {
+        hintButton.setEnabled(state);
+    }
+
     
     private FlatButton createBaseButton(String content) {
         FlatButton button = new FlatButton(content);
@@ -89,7 +100,7 @@ public class TopBar extends MenuFrame {
         undoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameScene.history.undo();
+                Main.gameScene.history.undo();
             }
         });
 
@@ -105,7 +116,7 @@ public class TopBar extends MenuFrame {
         redoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameScene.history.redo();
+                Main.gameScene.history.redo();
             }
         });
 
@@ -135,13 +146,13 @@ public class TopBar extends MenuFrame {
         menuButton = createBaseButton("☰");
         menuButton.setToolTipText("In Game Menu");
         menuButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 26));
-        menuButton.setBorder(BorderFactory.createEmptyBorder(6, 10, 4, 10));
+        menuButton.setBorder(BorderFactory.createEmptyBorder(7, 10, 3, 10));
 
         //undoButton.setEnabled(GameScene.canUndo());s
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //GameScene.undo();
+                Util.printWarning("Not implemented");
             }
         });
 
@@ -152,13 +163,14 @@ public class TopBar extends MenuFrame {
 
         helpButton = createBaseButton("🛈");
         helpButton.setToolTipText("How To Play");
-        helpButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        helpButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 18));
+        helpButton.setBorder(BorderFactory.createEmptyBorder(9, 10, 9, 10));
         
         //undoButton.setEnabled(GameScene.canUndo());
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //GameScene.undo();
+                Util.printWarning("Not implemented");
             }
         });
 
@@ -171,6 +183,23 @@ public class TopBar extends MenuFrame {
         sepLabel.setForeground(Main.Palette.selection);
 
         add(sepLabel);
+    }
+
+    @Override
+    public void process(double delta) {
+        //if (!Main.gameScene.history.canUndo()) {
+        //    undoButton.setEnabled(false);
+        //} else {
+        //    undoButton.setEnabled(true);
+        //}
+
+        //if (!Main.gameScene.history.canRedo()) {
+        //    redoButton.setEnabled(false);
+        //} else {
+        //    redoButton.setEnabled(true);
+        //}
+
+
     }
 
 

@@ -50,6 +50,8 @@ public class GameScene extends Scene {
     public static ColorArea leftPlayerFade;
     public static ColorArea rightPlayerFade;
 
+    public static TopBar topBar;
+
     public static History history;
 
     public GameScene() {
@@ -74,9 +76,9 @@ public class GameScene extends Scene {
         ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
         addComponent(background);
 
-        updateGUI();
-
         history = new History();
+        
+        updateGUI();
     }
 
     public GameScene(State gameState) {
@@ -372,23 +374,51 @@ public class GameScene extends Scene {
         if (currentPlayer == PLAYER1) {
             if (player1.isAiEnabled()) {
                 player1.setCardsInteractable(false);
+                player1.setPiecesInteractable(false);
                 player2.setCardsInteractable(false);
+                player2.setPiecesInteractable(false);
                 gameBoard.setIteractable(false);
+                updateInterfaceButtons(false);
             } else {
                 player1.setCardsInteractable(true);
+                player1.setPiecesInteractable(false);
                 player2.setCardsInteractable(false);
+                player2.setPiecesInteractable(true);
                 gameBoard.setIteractable(true);
+                updateInterfaceButtons(true);
             }
         } else {
             if (player2.isAiEnabled()) {
                 player1.setCardsInteractable(false);
+                player1.setPiecesInteractable(false);
                 player2.setCardsInteractable(false);
+                player2.setPiecesInteractable(false);
                 gameBoard.setIteractable(false);
+                updateInterfaceButtons(false);
             } else {
                 player1.setCardsInteractable(false);
+                player1.setPiecesInteractable(true);
                 player2.setCardsInteractable(true);
+                player2.setPiecesInteractable(false);
                 gameBoard.setIteractable(true);
+                updateInterfaceButtons(true);
             }
+        }
+    }
+
+    public static void updateInterfaceButtons(boolean state) {
+        topBar.setEnabledHint(state);
+        
+        if (history.canUndo()) {
+            topBar.setEnabledUndo(state);
+        } else {
+            topBar.setEnabledUndo(false);
+        }
+
+        if (history.canRedo()) {
+            topBar.setEnabledRedo(state);
+        } else {
+            topBar.setEnabledRedo(false);
         }
     }
 
@@ -491,7 +521,7 @@ public class GameScene extends Scene {
             (int)(Main.engine.getResolution().width/2 - (topBarArea.width/2)),
             0
         );
-        TopBar topBar = new TopBar(topBarArea, topBarPos);
+        topBar = new TopBar(topBarArea, topBarPos);
         addComponent(topBar); 
 
 
@@ -557,7 +587,8 @@ public class GameScene extends Scene {
             (int)(Main.engine.getResolution().height / 8)
         );
         rightPlayerFade = new ColorArea(new Color(0,0,0,100), sideDimension, sideOffset);
-        
+        rightPlayerFade.setCurvature(36, 36);
+
         addComponent(rightPlayerFade);
 
         sideOffset = new Vector2D(
@@ -565,10 +596,8 @@ public class GameScene extends Scene {
             (int)(Main.engine.getResolution().height / 8)
         );
         leftPlayerFade = new ColorArea(new Color(0,0,0,100), sideDimension, sideOffset);
-        
+        leftPlayerFade.setCurvature(36, 36);
+
         addComponent(leftPlayerFade);
     }
-
-    
-
 }
