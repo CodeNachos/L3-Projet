@@ -35,9 +35,22 @@ public class Card extends GameObject {
 
     private boolean interactable = true;
 
+    // need > 1
+    private double animState = 2;
+    private Vector2D targetPos;
+    private Vector2D initialPos;
+
+    public void startAnim(Vector2D target) {
+        targetPos = target;
+        animState = 0;
+        initialPos = position.clone();
+        System.out.println("target = " + target + ", initial = " + initialPos);
+    }
 
     public Card(String name, Vector2D position, Sprite sprite, Player player) {
         super(position, sprite);
+
+        
 
         this.player = player;
 
@@ -81,7 +94,15 @@ public class Card extends GameObject {
 
     @Override
     public void process(double delta) {
-        
+
+        if (animState <= 1) {
+            position.x = initialPos.x + ((targetPos.x - initialPos.x) * animState);
+            position.y = initialPos.y + ((targetPos.y - initialPos.y) * animState);
+            
+            // System.out.println("pos: " + position);
+            animState += 0.001;
+        }
+
         cardMap.setVisible(isVisible());
         cardLabel.setVisible(isVisible());
 
@@ -97,6 +118,7 @@ public class Card extends GameObject {
         } else if (sprite != player.idleCardSprite) {
             sprite = player.idleCardSprite;
         }
+
     }
 
     @Override

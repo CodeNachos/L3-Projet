@@ -89,13 +89,9 @@ public class Player extends GameObject {
                 GameScene.setAction(null);
                 Main.iaShouldWait = false;
             }
-            
             return;
         }
             
-
-       
-
         if (Main.iaShouldWait) {
             Main.iaShouldWait = false;
             iaWaitCounter = 2*60;
@@ -205,6 +201,24 @@ public class Player extends GameObject {
         return standBy.getName();
     }
 
+    // animate the standyCard
+    // to the selected position
+    // return the selected previous position
+    // the idea is to reuse the selected position
+    // to start animating the other player stanby card
+    // 
+    // How it works ?
+    // 1. we set the position of selected to stanby
+    // 2. we animate the selected position from standby to normal
+    public Vector2D animSelected() {
+        Vector2D pos = selectedCard.position.clone();
+        selectedCard.position = standBy.position.clone();
+        selectedCard.startAnim(pos.clone());
+
+        return pos.clone();
+    }
+
+ 
     public void setStandBy(String stb) {
         standBy.setName(stb);
         standBy.setVisible(true);

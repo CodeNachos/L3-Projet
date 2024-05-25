@@ -262,6 +262,8 @@ public class GameScene extends Scene {
 
     public static void exchangeCards() {
         if (currentPlayer == RED_PLAYER) {
+            player1.animSelected();
+
             player2.setStandBy(getSelectedCard().getName());
             getSelectedCard().setName(player1.getStandByCard());
             player1.removeStandBy();
