@@ -324,6 +324,14 @@ public class GameScene extends Scene {
     }
 
     public static void setAction(Action act) {
+        if (act == null) {
+            player1.setSelectedCard(null);
+            player2.setSelectedCard(null);
+            gameBoard.setSelectedTile(null);
+            gameBoard.setSelectedAction(null);
+            return;
+        }
+
         if (currentPlayer == RED_PLAYER) {
             player1.setSelectedCardByName(act.getCard());
         } else {
@@ -411,13 +419,13 @@ public class GameScene extends Scene {
         topBar.setEnabledHint(state);
         
         if (history.canUndo()) {
-            topBar.setEnabledUndo(state);
+            topBar.setEnabledUndo(true);
         } else {
             topBar.setEnabledUndo(false);
         }
 
         if (history.canRedo()) {
-            topBar.setEnabledRedo(state);
+            topBar.setEnabledRedo(true);
         } else {
             topBar.setEnabledRedo(false);
         }
