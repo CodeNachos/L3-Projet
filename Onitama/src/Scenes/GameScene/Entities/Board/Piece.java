@@ -77,8 +77,8 @@ public class Piece extends Tile {
         
         if (e.getID() == MouseEvent.MOUSE_CLICKED) {
             if (
-                (Main.gameScene.getCurrentPlayer() == GameScene.PLAYER1 && isBlue()) ||
-                (Main.gameScene.getCurrentPlayer() == GameScene.PLAYER2 && isRed())
+                (Main.gameScene.getCurrentPlayer() == GameScene.RED_PLAYER && isBlue()) ||
+                (Main.gameScene.getCurrentPlayer() == GameScene.BLUE_PLAYER && isRed())
             ) {
                 animation = animations[0];
                 timeCounter = 0.02;
