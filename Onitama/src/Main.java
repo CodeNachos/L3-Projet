@@ -10,6 +10,7 @@ import Engine.Global.Settings;
 import Engine.Global.Util;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.AI.Testing;
+import Onitama.src.Scenes.GameScene.Scripts.States.Config;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class Main {
@@ -27,8 +28,6 @@ public class Main {
         double aspectRatio = (double) screenSize.width / screenSize.height;
         //Settings.resolution = screenSize;
         Settings.resolution = new Dimension((int)(aspectRatio*600),600);
-        Settings.stretch = false;
-        Settings.resizable = false;
         Settings.applicationName = "Onitama";
 
         // create engine
@@ -39,7 +38,7 @@ public class Main {
 
         
         if (testing) {
-            gameScene = new GameScene();
+            gameScene = new GameScene(new Config(null, null));
             Testing.test();
         } else {
             newGameMenu = new NewGameMenuScene();

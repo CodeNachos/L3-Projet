@@ -3,8 +3,6 @@ package Onitama.src.Scenes.NewGameMenu;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -15,22 +13,17 @@ import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.GameScene.Scripts.States.Config;
+import Onitama.src.Scenes.GameScene.Scripts.States.IADifficulty;
 import Onitama.src.Main;
 
 public class NewGameMenuScene extends Scene {
 
-    ArrayList<String> playerClasses;
 
-    String classPlayer1;
-    String classPlayer2;
+
+    Config initialConfig = new Config(IADifficulty.HUMAN, IADifficulty.HUMAN);
 
     public NewGameMenuScene() {
-
-        playerClasses = new ArrayList<>();
-        playerClasses.add("Human");
-        playerClasses.add("AI Easy");
-        playerClasses.add("AI Medium");
-        playerClasses.add("AI Hard");
 
        createSelectionMenu();
        createStartButton();
@@ -41,18 +34,7 @@ public class NewGameMenuScene extends Scene {
         addComponent(background);
     }
 
-    public String getPlayerClass(int player) {
-        switch (player) {
-            case GameScene.PLAYER1:
-                return classPlayer1;
-                
-            case GameScene.PLAYER2:
-                return classPlayer2;
 
-            default:
-                return null;
-        }
-    }
 
     private void createSelectionMenu() {
         // Compute field area
@@ -100,7 +82,7 @@ public class NewGameMenuScene extends Scene {
         selectionMenu.add(leftButtonPlayer1, gbc);
 
         
-        JLabel player1Label = new JLabel(playerClasses.get(0), SwingConstants.CENTER);
+        JLabel player1Label = new JLabel(initialConfig.redDifficulty.toString(), SwingConstants.CENTER);
         player1Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
         player1Label.setForeground(Main.Palette.red);
         player1Label.setPreferredSize(new Dimension(80,20));
@@ -136,7 +118,7 @@ public class NewGameMenuScene extends Scene {
         selectionMenu.add(leftButtonPlayer2, gbc);
 
         
-        JLabel player2Label = new JLabel(playerClasses.get(2), SwingConstants.CENTER);
+        JLabel player2Label = new JLabel(initialConfig.blueDifficulty.toString(), SwingConstants.CENTER);
         player2Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
         player2Label.setForeground(Main.Palette.cyan);
         player2Label.setPreferredSize(new Dimension(80,20));
@@ -163,12 +145,8 @@ public class NewGameMenuScene extends Scene {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                int index = playerClasses.indexOf(player1Label.getText());
-                index--;
-                if (index < 0)
-                    index = playerClasses.size()-1;
-                player1Label.setText(playerClasses.get(index));
-                classPlayer1 = playerClasses.get(index);
+                initialConfig.redDifficulty = initialConfig.redDifficulty.previous();
+                player1Label.setText(initialConfig.redDifficulty.toString());
             }
             
         });
@@ -177,10 +155,8 @@ public class NewGameMenuScene extends Scene {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                int index = playerClasses.indexOf(player1Label.getText());
-                index = (index + 1) % playerClasses.size();
-                player1Label.setText(playerClasses.get(index));
-                classPlayer1 = playerClasses.get(index);
+                initialConfig.redDifficulty = initialConfig.redDifficulty.next();
+                player1Label.setText(initialConfig.redDifficulty.toString());
             }
             
         });
@@ -189,12 +165,8 @@ public class NewGameMenuScene extends Scene {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                int index = playerClasses.indexOf(player2Label.getText());
-                index--;
-                if (index < 0)
-                    index = playerClasses.size()-1;
-                player2Label.setText(playerClasses.get(index));
-                classPlayer2 = playerClasses.get(index);
+                initialConfig.blueDifficulty = initialConfig.blueDifficulty.previous();
+                player2Label.setText(initialConfig.blueDifficulty.toString());
             }
             
         });
@@ -203,17 +175,11 @@ public class NewGameMenuScene extends Scene {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                int index = playerClasses.indexOf(player2Label.getText());
-                index = (index + 1) % playerClasses.size();
-                player2Label.setText(playerClasses.get(index));
-                classPlayer2 = playerClasses.get(index);
+                initialConfig.blueDifficulty = initialConfig.blueDifficulty.next();
+                player2Label.setText(initialConfig.blueDifficulty.toString());
             }
             
         });
-
-        classPlayer1 = playerClasses.get(0);
-        classPlayer2 = playerClasses.get(2);
-
         
         addComponent(selectionMenu);
         addComponent(new ColorArea(new Color(0,0,0,15), menuArea, menuOffset.add(new Vector2D(8,8))));
@@ -233,29 +199,17 @@ public class NewGameMenuScene extends Scene {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.gameScene = new GameScene();
-                if (!getPlayerClass(GameScene.PLAYER1).equals(playerClasses.get(0))) {
-                    if (getPlayerClass(GameScene.PLAYER1).equals(playerClasses.get(1))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER1, 1);
-                    } else if (getPlayerClass(GameScene.PLAYER1).equals(playerClasses.get(2))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER1, 3);
-                    } else if (getPlayerClass(GameScene.PLAYER1).equals(playerClasses.get(3))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER1, 5);
-                    }
+                
+                Main.gameScene = new GameScene(initialConfig);
+
+                if (initialConfig.redDifficulty != IADifficulty.HUMAN) {
+                    Main.gameScene.enablePlayerAI(GameScene.RED_PLAYER, initialConfig.redDifficulty.deatph());
+                }
+                if (initialConfig.blueDifficulty != IADifficulty.HUMAN) {
+                    Main.gameScene.enablePlayerAI(GameScene.BLUE_PLAYER, initialConfig.blueDifficulty.deatph());
                 }
 
-                if (!getPlayerClass(GameScene.PLAYER2).equals(playerClasses.get(0))) {
-                    if (getPlayerClass(GameScene.PLAYER2).equals(playerClasses.get(1))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER2, 1);
-                    } else if (getPlayerClass(GameScene.PLAYER2).equals(playerClasses.get(2))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER2, 3);
-                    } else if (getPlayerClass(GameScene.PLAYER2).equals(playerClasses.get(3))) {
-                        Main.gameScene.enablePlayerAI(GameScene.PLAYER2, 5);
-                    }
-                }
-
-                System.out.println(getPlayerClass(GameScene.PLAYER1));
-                System.out.println(getPlayerClass(GameScene.PLAYER2));
+              
                 Main.engine.setCurrentScene(Main.gameScene);
             }
             
