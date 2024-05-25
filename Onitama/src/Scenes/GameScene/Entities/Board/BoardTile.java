@@ -70,8 +70,8 @@ public class BoardTile extends Tile {
                     pieceOwned = false;
                 } else { 
                     pieceOwned = (
-                        (GameScene.getCurrentPlayer() == GameScene.PLAYER1 && tilePiece.isRed()) ||
-                        (GameScene.getCurrentPlayer() == GameScene.PLAYER2 && tilePiece.isBlue())
+                        (GameScene.getCurrentPlayer() == GameScene.RED_PLAYER && tilePiece.isRed()) ||
+                        (GameScene.getCurrentPlayer() == GameScene.BLUE_PLAYER && tilePiece.isBlue())
                     );
                 }
                 
@@ -117,8 +117,8 @@ public class BoardTile extends Tile {
         }
 
         else if (tilePiece != null &&
-            (GameScene.getCurrentPlayer() == GameScene.PLAYER1 && tilePiece.isRed() ||
-            GameScene.getCurrentPlayer() == GameScene.PLAYER2 && tilePiece.isBlue())
+            (GameScene.getCurrentPlayer() == GameScene.RED_PLAYER && tilePiece.isRed() ||
+            GameScene.getCurrentPlayer() == GameScene.BLUE_PLAYER && tilePiece.isBlue())
         ) {
             
             if (!((Board)parentMap).isSelectedTile(mapPosition)) {
