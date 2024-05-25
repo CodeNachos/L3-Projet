@@ -60,7 +60,7 @@ public class TurnLabel extends MenuFrame {
     public void process(double delta) {
         if (counter <= 0) {
             if (!turnLabel.getText().isEmpty()) {
-                if (turnLabel.getText().length() > 35)
+                if (turnLabel.getText().length() > 33)
                     turnLabel.setText(labels[player]);
                 turnLabel.setText(turnLabel.getText() + ".");
             }

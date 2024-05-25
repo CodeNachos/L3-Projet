@@ -14,6 +14,8 @@ public class ColorArea extends UIObject {
 
     public Color color = Color.white; // Color of the area
 
+    private Dimension curvature = new Dimension(0, 0); // Curvature of the color area corners
+
     /**
      * Constructs a new ColorArea instance with the specified color, area, and offset.
      * @param color The color of the area
@@ -44,6 +46,16 @@ public class ColorArea extends UIObject {
     }
 
     /**
+     * Sets the curvature (arc width and arc height) of the menu frame corners.
+     * @param arcWidth The arc width of the curvature
+     * @param arcHeight The arc height of the curvature
+     */
+    public void setCurvature(int arcWidth, int arcHeight) {
+        curvature.width = arcWidth; // Set arc width of the curvature
+        curvature.height = arcHeight; // Set arc height of the curvature
+    }
+
+    /**
      * Overrides the paintComponent method to render the colored area.
      * @param g The Graphics context used for painting
      */
@@ -51,6 +63,6 @@ public class ColorArea extends UIObject {
         super.paintComponent(g); // Call superclass's paintComponent method
 
         g.setColor(color); // Set color for drawing
-        g.fillRect(0, 0, getWidth(), getHeight()); // Draw filled rectangle
+        g.fillRoundRect(0, 0, getWidth(), getHeight(), curvature.width, curvature.height); // Draw filled rounded rectangle
     }
 }
