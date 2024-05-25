@@ -18,6 +18,10 @@ public class Main {
 
     public static GameEngine engine;
 
+    // this field is set to true if
+    // undo or redo was clicked
+    public static boolean iaShouldWait = false;
+
     public static GameScene gameScene;
     public static Scene newGameMenu;
 

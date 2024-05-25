@@ -101,6 +101,7 @@ public class TopBar extends MenuFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Main.gameScene.history.undo();
+                Main.iaShouldWait = true;
             }
         });
 
@@ -117,6 +118,7 @@ public class TopBar extends MenuFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Main.gameScene.history.redo();
+                Main.iaShouldWait = true;
             }
         });
 

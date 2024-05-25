@@ -31,6 +31,7 @@ public class Player extends GameObject {
 
     private Action aiAction = null;
     private int counter;
+    private int iaWaitCounter;
 
     public Sprite idleCardSprite;
     public Sprite selectedCardSprite;
@@ -77,28 +78,51 @@ public class Player extends GameObject {
 
     @Override
     public void process(double delta) {
-        if (GameScene.gameOver() || ai == null)
-            return;
-        
-        if (aiAction != null) {
-            if (counter > 0) {
-                counter--;
-                return;
-            }
-            Main.gameScene.updateMatch();
+
+        if (GameScene.getCurrentPlayer() != this.playerId) {
             aiAction = null;
+            return;
         }
 
-        else if (GameScene.getCurrentPlayer() == this.playerId) {
+        if (GameScene.gameOver() || ai == null) {
+            if (Main.iaShouldWait) {
+                GameScene.setAction(null);
+                Main.iaShouldWait = false;
+            }
+            
+            return;
+        }
+            
+
+       
+
+        if (Main.iaShouldWait) {
+            Main.iaShouldWait = false;
+            iaWaitCounter = 2*60;
+            GameScene.setAction(null);
+            aiAction = null;
+            return;
+        }
+
+        if (iaWaitCounter > 0) {
+            iaWaitCounter--;
+            return;
+        }
+
+        if (aiAction == null) {
             aiAction = ai.play();
             GameScene.setAction(aiAction);
             counter = 2*60; // 1 second delay
             return;
-            
-        } else {
-            aiAction = null;
         }
         
+        if (counter > 0) {
+            counter--;
+            return;
+        }
+
+        Main.gameScene.updateMatch();
+        aiAction = null;        
     }
 
     public void setCardsInteractable(boolean state) {
