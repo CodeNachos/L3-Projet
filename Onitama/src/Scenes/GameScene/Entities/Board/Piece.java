@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 import Engine.Entities.TileMap.Tile;
 import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
-import Onitama.src.Constants;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.GameScene;
 
@@ -78,8 +77,8 @@ public class Piece extends Tile {
         
         if (e.getID() == MouseEvent.MOUSE_CLICKED) {
             if (
-                (Main.gameScene.getCurrentPlayer() == Constants.PLAYER1 && isBlue()) ||
-                (Main.gameScene.getCurrentPlayer() == Constants.PLAYER2 && isRed())
+                (Main.gameScene.getCurrentPlayer() == GameScene.PLAYER1 && isBlue()) ||
+                (Main.gameScene.getCurrentPlayer() == GameScene.PLAYER2 && isRed())
             ) {
                 animation = animations[0];
                 timeCounter = 0.02;
