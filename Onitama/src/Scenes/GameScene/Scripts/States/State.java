@@ -28,16 +28,25 @@ public class State implements Serializable {
         createBoard(new ArrayList<>(p1p), new ArrayList<>(p2p));
     }
 
-    public State(PieceType[][] board, List<String> cards, int currentPlayer) {
-        if (Main.gameScene == null) {
-            Util.printWarning("Game Scene was not instantiated");
+    private State() { }
+
+    
+    public State copy() {
+        State s = new State();
+
+        s.currentPlayer = currentPlayer;
+        s.gameCards = new ArrayList<>(gameCards);
+        s.board = new PieceType[5][5];
+
+        for (int l = 0; l < 5; l++) {
+            for (int c = 0; c < 5; c++) {
+                s.board[l][c] = board[l][c];
+            }
         }
 
-        this.currentPlayer = currentPlayer;
-        this.gameCards = new ArrayList<>(cards);
-        this.board = copyBoard(board);
-
+        return s;
     }
+    
 
     public void createBoard(ArrayList<Piece> p1p, ArrayList<Piece> p2p) {
         board = new PieceType[5][5];
@@ -233,7 +242,7 @@ public class State implements Serializable {
     }
 
     public State nextConfig(Action turn) {
-        State next = new State(board, gameCards, currentPlayer);
+        State next = this.copy();
         
         if (enemyPositions().contains(turn.getMove())) {
             next.board[turn.getMove().getIntY()][turn.getMove().getIntX()] = PieceType.EMPTY;
@@ -270,15 +279,4 @@ public class State implements Serializable {
         return next;
     }
 
-    private PieceType[][] copyBoard(PieceType[][] board) {
-        PieceType[][] copy = new PieceType[5][5];
-
-        for (int l = 0; l < 5; l++) {
-            for (int c = 0; c < 5; c++) {
-                copy[l][c] = board[l][c];
-            }
-        }
-
-        return copy;
-    }
 }
