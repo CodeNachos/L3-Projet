@@ -218,6 +218,14 @@ public class Player extends GameObject {
         return pos.clone();
     }
 
+    // set standby to selectedPos
+    // animate standy to normal
+    public void animStanby(Vector2D selectedPos) {
+        Vector2D normalStandbyPosition = standBy.position.clone();
+        standBy.position = selectedPos.clone();
+        standBy.startAnim(normalStandbyPosition);
+    }
+
  
     public void setStandBy(String stb) {
         standBy.setName(stb);

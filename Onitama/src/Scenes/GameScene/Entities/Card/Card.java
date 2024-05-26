@@ -44,7 +44,7 @@ public class Card extends GameObject {
         targetPos = target;
         animState = 0;
         initialPos = position.clone();
-        System.out.println("target = " + target + ", initial = " + initialPos);
+        // System.out.println("target = " + target + ", initial = " + initialPos);
     }
 
     public Card(String name, Vector2D position, Sprite sprite, Player player) {
@@ -92,15 +92,32 @@ public class Card extends GameObject {
         return player.getPlayerId();
     }
 
+    private void updatePosCardComponents() {
+        cardMap.setPos(new Vector2D(
+            position.x + getSize().width * 0.2,
+            position.y + getSize().height * 0.12
+        ));
+
+        cardLabel.setPos(new Vector2D(
+            position.x + getSize().width * 0.15,
+            position.y + getSize().height * 0.7 
+        ));
+    }
+
     @Override
     public void process(double delta) {
 
         if (animState <= 1) {
-            position.x = initialPos.x + ((targetPos.x - initialPos.x) * animState);
-            position.y = initialPos.y + ((targetPos.y - initialPos.y) * animState);
+            
+            setPos(new Vector2D(
+                initialPos.x + ((targetPos.x - initialPos.x) * animState),
+                initialPos.y + ((targetPos.y - initialPos.y) * animState)
+            ));
+            
+            updatePosCardComponents();
             
             // System.out.println("pos: " + position);
-            animState += 0.001;
+            animState += 0.03;
         }
 
         cardMap.setVisible(isVisible());
