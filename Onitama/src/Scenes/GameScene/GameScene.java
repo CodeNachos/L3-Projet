@@ -261,6 +261,11 @@ public class GameScene extends Scene {
     }
 
     public static void exchangeCards() {
+        // ensure we get the right position
+        // before animated, because multiple
+        // animations can change the position a little
+        player1.resetPosCard();
+        player2.resetPosCard();
         if (currentPlayer == RED_PLAYER) {
             Vector2D selectedPos = player1.animSelected();
             player2.setStandBy(getSelectedCard().getName());

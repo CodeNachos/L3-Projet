@@ -21,7 +21,7 @@ public class NewGameMenuScene extends Scene {
 
 
 
-    Config initialConfig = new Config(IADifficulty.HUMAN, IADifficulty.HARD);
+    Config initialConfig = new Config(IADifficulty.HARD, IADifficulty.HARD);
 
     public NewGameMenuScene() {
 

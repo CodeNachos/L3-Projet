@@ -40,6 +40,16 @@ public class Card extends GameObject {
     private Vector2D targetPos;
     private Vector2D initialPos;
 
+
+    @Override
+    public void resize(Vector2D ratio) {
+        super.resize(ratio);
+        if (targetPos != null && initialPos != null) {
+            targetPos.multiply(ratio);
+            initialPos.multiply(ratio);
+        }
+    }
+
     public void startAnim(Vector2D target) {
         targetPos = target;
         animState = 0;
@@ -92,7 +102,8 @@ public class Card extends GameObject {
         return player.getPlayerId();
     }
 
-    private void updatePosCardComponents() {
+    public void updatePosCard(Vector2D pos) {
+        setPos(pos);
         cardMap.setPos(new Vector2D(
             position.x + getSize().width * 0.2,
             position.y + getSize().height * 0.12
@@ -109,12 +120,10 @@ public class Card extends GameObject {
 
         if (animState <= 1) {
             
-            setPos(new Vector2D(
+            updatePosCard(new Vector2D(
                 initialPos.x + ((targetPos.x - initialPos.x) * animState),
                 initialPos.y + ((targetPos.y - initialPos.y) * animState)
             ));
-            
-            updatePosCardComponents();
             
             // System.out.println("pos: " + position);
             animState += 0.03;

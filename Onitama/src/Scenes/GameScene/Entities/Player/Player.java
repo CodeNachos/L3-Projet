@@ -294,6 +294,56 @@ public class Player extends GameObject {
         return false;
     }
 
+    // i tried to call this function
+    // after `initCards` but this doesn't works
+    // so we duplicate the pos code
+    public void resetPosCard() {
+
+        Vector2D cardPos;
+
+        if (playerId == GameScene.RED_PLAYER) {
+            cardPos = new Vector2D(
+                
+                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*selectedCardSprite.getHeight()))
+            );
+        } else {
+            cardPos = new Vector2D(
+                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*idleCardSprite.getHeight()))
+            );
+        }
+
+        this.card1.updatePosCard(cardPos);
+
+
+        if (playerId == GameScene.RED_PLAYER) {
+            cardPos = new Vector2D(
+                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
+            );
+        } else {
+            cardPos = new Vector2D(
+                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
+                
+            );
+        }
+
+        this.card2.updatePosCard(cardPos);
+
+
+        if (standBy != null) {
+            cardPos = new Vector2D(
+                (Main.engine.getResolution().width/2) - (int)(idleCardSprite.getWidth()/2),
+                (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSprite.getHeight())
+            );
+            this.standBy.updatePosCard(cardPos);
+        }
+    }
+
+
+
     private void initCards(String card1Name, String card2Name, String standByName) {
         idleCardSprite = new Sprite(
             new Texture(
