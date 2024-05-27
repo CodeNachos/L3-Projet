@@ -19,10 +19,6 @@ public class State implements Serializable {
 
 
     public State(ArrayList<Piece> p1p, ArrayList<Piece> p2p, List<String> cards, int currentPlayer) {
-        if (Main.gameScene == null) {
-            Util.printWarning("Game Scene was not instantiated");
-        }
-
         this.currentPlayer = currentPlayer;
         this.gameCards = new ArrayList<>(cards);;
         createBoard(new ArrayList<>(p1p), new ArrayList<>(p2p));

@@ -31,6 +31,11 @@ public class Piece extends Tile {
         this.type = type;
     }
 
+    public Piece(PieceType type, Vector2D position) {
+        super(position.getIntY(), position.getIntX());
+        this.type = type;
+    }
+
     public PieceType getType() {
         return type;
     }

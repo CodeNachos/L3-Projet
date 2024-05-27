@@ -39,6 +39,10 @@ public class Tile extends GameObject {
         mapPosition = new Vector2D(column, line); // Set position of the tile in the map grid
     }
 
+    public Tile(int line, int column) {
+        mapPosition = new Vector2D(column, line);
+    }
+
     public int getLine() {
         return mapPosition.getIntY();
     }

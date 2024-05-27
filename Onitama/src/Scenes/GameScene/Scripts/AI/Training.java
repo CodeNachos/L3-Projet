@@ -13,11 +13,11 @@ public class Training {
     static int difficulty = 2;
     static int populationSize = 20;
     static int survivalSize = 5;
-    static int numberStep = 100;
+    static int numberStep = 1000;
     static SmartAI[] population = new SmartAI[populationSize];
     static SmartAI[] survivors = new SmartAI[survivalSize];
     static Hashtable<SmartAI, Double> fitness = new Hashtable<>();
-    
+
     static SmartAI generateAI() {
         int[] weights = new int[SmartAI.NB_METHOD];
         for (int i = 0; i < SmartAI.NB_METHOD; i++)
@@ -28,18 +28,27 @@ public class Training {
     static SmartAI mate(SmartAI father, SmartAI mother) {
         int[] weights = new int[SmartAI.NB_METHOD];
         for (int i = 0; i < SmartAI.NB_METHOD; i++)
-            weights[i] = (father.weights[i] + mother.weights[i]) / 2;
+            if (random.nextBoolean())
+                weights[i] = father.weights[i];
+            else
+                weights[i] = mother.weights[i];
         return new SmartAI(difficulty, 0, weights);
     }
 
     static SmartAI mutate(SmartAI original) {
-        int index = random.nextInt(SmartAI.NB_METHOD);
-        int variation = random.nextInt(abs(original.weights[index])/100);
-        if (random.nextBoolean())
-            original.weights[index] += variation;
-        else
-            original.weights[index] -= variation; 
-        return original;
+        int[] weights = new int[SmartAI.NB_METHOD];
+        for (int i = 0; i < SmartAI.NB_METHOD; i++)
+            weights[i] = original.weights[i];
+
+        for (int i = 0; i < SmartAI.NB_METHOD; i++) {
+            int variation = random.nextInt(abs(weights[i])/10);
+            if (random.nextBoolean())
+                weights[i] += variation;
+            else
+                weights[i] -= variation; 
+        }
+        
+        return new SmartAI(difficulty, 0, weights);
     }
 
     static void calculateFitness() {

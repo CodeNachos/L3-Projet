@@ -82,8 +82,12 @@ public class GameScene extends Scene {
         updateGUI();
     }
 
-    public GameScene(State gameState) {
-        
+    public GameScene() {
+        JsonReader jReader = new JsonReader();
+        List<CardInfo> listOfCards = jReader.readJson("Onitama/res/Cards/cards.json");
+        gameCards = new HashMap<>();
+        for (CardInfo card : listOfCards)
+            gameCards.put(card.getName(), card);
     }
 
     public State getGameState() {
