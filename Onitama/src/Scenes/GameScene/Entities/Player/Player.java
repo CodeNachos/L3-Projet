@@ -325,7 +325,6 @@ public class Player extends GameObject {
             cardPos = new Vector2D(
                 (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
                 (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
-                
             );
         }
 
@@ -383,39 +382,22 @@ public class Player extends GameObject {
         Vector2D cardPos;
 
         if (playerId == GameScene.RED_PLAYER) {
-            cardPos = new Vector2D(
-                
-                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*selectedCardSprite.getHeight()))
-            );
+            cardPos = GameScene.placeholderPlayer1Card1.getPos();
         } else {
-            cardPos = new Vector2D(
-                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*idleCardSprite.getHeight()))
-            );
+            cardPos = GameScene.placeholderPlayer2Card1.getPos();
         }
 
         this.card1 = new Card(card1Name, cardPos, idleCardSprite, this);
 
         if (playerId == GameScene.RED_PLAYER) {
-            cardPos = new Vector2D(
-                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
-            );
+            cardPos = GameScene.placeholderPlayer1Card2.getPos();
         } else {
-            cardPos = new Vector2D(
-                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
-                
-            );
+            cardPos = GameScene.placeholderPlayer2Card2.getPos();
         }
 
         this.card2 = new Card(card2Name, cardPos, idleCardSprite, this);
 
-        cardPos = new Vector2D(
-            (Main.engine.getResolution().width/2) - (int)(idleCardSprite.getWidth()/2),
-            (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSprite.getHeight())
-        );
+        cardPos = GameScene.placeholderStandByCard.getPos();
 
         if (standByName == null) {
             standBy = new Card(null, cardPos, standBySprite, this);

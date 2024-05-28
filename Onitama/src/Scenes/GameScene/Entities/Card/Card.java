@@ -193,6 +193,9 @@ public class Card extends GameObject {
         scene.addComponent(cardLabel);
         scene.addComponent(cardMap);
         scene.addComponent(this);
+        scene.setComponentZOrder(this, 0);
+        scene.setComponentZOrder(cardLabel, 0);
+        scene.setComponentZOrder(cardMap, 0);
     }
 
     private void createCardMap() {

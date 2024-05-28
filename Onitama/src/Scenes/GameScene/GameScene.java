@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.util.*;
 
 import Engine.Core.Renderer.Scene;
+import Engine.Entities.GameObject;
 import Engine.Entities.UI.ColorArea;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Global.Util;
@@ -24,6 +25,7 @@ import Onitama.src.Scenes.GameScene.Entities.Board.Board;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece.PieceType;
 import Onitama.src.Scenes.GameScene.Entities.Card.Card;
+import Onitama.src.Scenes.GameScene.Entities.Card.CardPlaceholder;
 import Onitama.src.Scenes.GameScene.Entities.Player.Player;
 
 public class GameScene extends Scene {
@@ -34,6 +36,12 @@ public class GameScene extends Scene {
     public static final int BLUE_PLAYER = 1; // blue
 
     public static int currentPlayer = RED_PLAYER;
+
+    public static GameObject placeholderPlayer1Card1;
+    public static GameObject placeholderPlayer1Card2;
+    public static GameObject placeholderPlayer2Card1;
+    public static GameObject placeholderPlayer2Card2;
+    public static GameObject placeholderStandByCard;
 
     public static Player player1;
     public static Player player2;
@@ -63,6 +71,7 @@ public class GameScene extends Scene {
         
         // Instantiate game entities
         createBoard();
+        createCardPlaceholders();
         createPlayersFade();
         createPlayers();
 
@@ -486,6 +495,36 @@ public class GameScene extends Scene {
             }
         }
         return;
+    }
+
+    private void createCardPlaceholders() {
+        double cardSize = Main.engine.getResolution().getHeight() / 5;
+
+        placeholderPlayer1Card1 = new CardPlaceholder(new Vector2D(
+            (int)(gameBoard.getPos().getIntX()/2) - (int)(cardSize/2),
+            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) - (1.1*cardSize))
+        ));
+
+        placeholderPlayer2Card1 = new CardPlaceholder(new Vector2D(
+            (int)((gameBoard.getPos().getIntX()/2) - (int)(cardSize/2) + gameBoard.getPos().getIntX() + gameBoard.getSize().height),
+            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) - (1.1*cardSize))
+        ));
+
+        placeholderPlayer1Card2 = new CardPlaceholder(new Vector2D(
+            (int)(gameBoard.getPos().getIntX()/2) - (int)(cardSize/2),
+            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) + (0.1*cardSize))
+        ));
+
+        placeholderPlayer2Card2 = new CardPlaceholder(new Vector2D(
+            (int)((gameBoard.getPos().getIntX()/2) - (int)(cardSize/2) + gameBoard.getPos().getIntX() + gameBoard.getSize().height),
+            (int)(gameBoard.getPos().getIntY() + (gameBoard.getSize().height / 2) + (0.1*cardSize))
+                
+        ));
+
+        placeholderStandByCard = new CardPlaceholder(new Vector2D(
+            (Main.engine.getResolution().width/2) - (int)(cardSize/2),
+            (int)(Main.engine.getResolution().height) -(int)(1.2*cardSize)
+        ));
     }
 
     private void createPlayers() {
