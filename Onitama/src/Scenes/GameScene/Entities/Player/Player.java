@@ -78,7 +78,6 @@ public class Player extends GameObject {
 
     @Override
     public void process(double delta) {
-
         if (GameScene.getCurrentPlayer() != this.playerId) {
             aiAction = null;
             return;
@@ -211,9 +210,9 @@ public class Player extends GameObject {
     // 1. we set the position of selected to stanby
     // 2. we animate the selected position from standby to normal
     public Vector2D animSelected() {
-        Vector2D pos = selectedCard.position.clone();
-        selectedCard.position = standBy.position.clone();
-        selectedCard.startAnim(pos.clone());
+        Vector2D pos = selectedCard.getPos();
+        selectedCard.position = standBy.getPos();
+        selectedCard.startAnim(pos);
 
         return pos.clone();
     }

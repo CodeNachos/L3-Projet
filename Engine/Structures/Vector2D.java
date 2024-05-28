@@ -72,12 +72,18 @@ public class Vector2D implements Serializable {
 
     public Vector2D multiply(Vector2D other) {
         return new Vector2D(this.x * other.x, this.y * other.y);
-        // this.x *= other.x;
-        // this.y *= other.y;
     }
 
     public double magnitude() {
         return Math.sqrt(x * x + y * y);
+    }
+
+    public Vector2D normalize() {
+        double mag = magnitude();
+        if (mag == 0) {
+            return new Vector2D(0, 0);
+        }
+        return new Vector2D(x / mag, y / mag);
     }
 
     @Override

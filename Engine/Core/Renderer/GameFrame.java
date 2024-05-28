@@ -5,6 +5,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import Engine.Global.Settings;
 import Engine.Global.Util;
@@ -91,16 +92,17 @@ public class GameFrame extends JFrame {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                // This method is called when the JFrame is resized
-                if (Settings.stretch) {
-                    // Calculate resize ratio if stretching is enabled
-                    Vector2D resizeRatio = new Vector2D(
-                        (double)(e.getComponent().getSize().width) / (double)(Settings.resolution.width),
-                        (double)(e.getComponent().getSize().height) / (double)(Settings.resolution.height)
-                    );
-                    resizeScene(resizeRatio); // Resize the scene components
-                }
-                Settings.resolution = e.getComponent().getSize(); // Update screen resolution in settings
+                SwingUtilities.invokeLater(() -> {
+                    if (Settings.stretch) { 
+                        JFrame frame = (JFrame) e.getComponent();
+                        Vector2D resizeRatio = new Vector2D(
+                            (double) frame.getContentPane().getSize().width / (double) Settings.resolution.width,
+                            (double) frame.getContentPane().getSize().height / (double) Settings.resolution.height
+                        );
+                        resizeScene(resizeRatio); // Resize the scene components
+                    }
+                    Settings.resolution = ((JFrame) e.getComponent()).getContentPane().getSize(); // Update screen resolution in settings
+                });
             }
         });
 

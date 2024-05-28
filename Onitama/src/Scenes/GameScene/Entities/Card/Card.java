@@ -37,6 +37,9 @@ public class Card extends GameObject {
 
     // need > 1
     private double animState = 2;
+    private boolean animating = false;
+    private double speed = 20;
+    private Vector2D direction;
     private Vector2D targetPos;
     private Vector2D initialPos;
 
@@ -51,9 +54,11 @@ public class Card extends GameObject {
     // }
 
     public void startAnim(Vector2D target) {
-        targetPos = target;
+        targetPos = target.clone();
+        initialPos = getPos();
         animState = 0;
-        initialPos = position.clone();
+        direction = targetPos.subtract(initialPos).normalize();
+        animating = true;
         // System.out.println("target = " + target + ", initial = " + initialPos);
     }
 
@@ -116,15 +121,11 @@ public class Card extends GameObject {
     @Override
     public void process(double delta) {
 
-        if (animState <= 1) {
-            
-            updatePosCard(new Vector2D(
-                initialPos.x + ((targetPos.x - initialPos.x) * animState),
-                initialPos.y + ((targetPos.y - initialPos.y) * animState)
-            ));
-            
-            // System.out.println("pos: " + position);
-            animState += 0.03;
+        if (animating && targetPos.subtract(getPos()).magnitude() > 10) {
+            updatePosCard(getPos().add(direction.multiply(speed)));
+        } else if (animating) {
+            updatePosCard(targetPos);
+            animating = false;
         }
 
         cardMap.setVisible(isVisible());
