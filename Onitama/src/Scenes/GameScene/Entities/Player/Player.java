@@ -314,17 +314,17 @@ public class Player extends GameObject {
 
         Vector2D cardPos;
 
-        // double selectedCardSpriteX = selectedCardSprite.getWidth() * getScale().x;
-        // double selectedCardSpriteY = selectedCardSprite.getHeight() * getScale().y;
+        double selectedCardSpriteX = selectedCardSprite.getWidth() * getScale().x;
+        double selectedCardSpriteY = selectedCardSprite.getHeight() * getScale().y;
         
-        // double idleCardSpriteX = idleCardSprite.getWidth() * getScale().x;
-        // double idleCardSpriteY = idleCardSprite.getHeight() * getScale().y;
+        double idleCardSpriteX = idleCardSprite.getWidth() * getScale().x;
+        double idleCardSpriteY = idleCardSprite.getHeight() * getScale().y;
 
-        double selectedCardSpriteX = selectedCardSprite.getWidth();
-        double selectedCardSpriteY = selectedCardSprite.getHeight();
+        // double selectedCardSpriteX = selectedCardSprite.getWidth();
+        // double selectedCardSpriteY = selectedCardSprite.getHeight();
         
-        double idleCardSpriteX = idleCardSprite.getWidth();
-        double idleCardSpriteY = idleCardSprite.getHeight();
+        // double idleCardSpriteX = idleCardSprite.getWidth();
+        // double idleCardSpriteY = idleCardSprite.getHeight();
 
         if (playerId == GameScene.RED_PLAYER) {
             cardPos = new Vector2D(
