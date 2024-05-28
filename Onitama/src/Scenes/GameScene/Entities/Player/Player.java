@@ -50,6 +50,11 @@ public class Player extends GameObject {
         this.playerId = playerId;
         initCards(card1, card2, stb);
         initPieces();
+        
+        this.card1.printPos();
+        this.card2.printPos();
+        this.standBy.printPos();
+
     }
 
     public int getPlayerId() {
@@ -211,6 +216,10 @@ public class Player extends GameObject {
     // 1. we set the position of selected to stanby
     // 2. we animate the selected position from standby to normal
     public Vector2D animSelected() {
+        card1.printPos();
+        card2.printPos();
+        standBy.printPos();
+
         Vector2D pos = selectedCard.position.clone();
         selectedCard.position = standBy.position.clone();
         selectedCard.startAnim(pos.clone());
@@ -299,18 +308,34 @@ public class Player extends GameObject {
     // so we duplicate the pos code
     public void resetPosCard() {
 
+        System.out.println(GameScene.gameBoard.getPos());
+        System.out.println(selectedCardSprite.getWidth());
+        System.out.println(selectedCardSprite.getHeight());
+
         Vector2D cardPos;
+
+        // double selectedCardSpriteX = selectedCardSprite.getWidth() * getScale().x;
+        // double selectedCardSpriteY = selectedCardSprite.getHeight() * getScale().y;
+        
+        // double idleCardSpriteX = idleCardSprite.getWidth() * getScale().x;
+        // double idleCardSpriteY = idleCardSprite.getHeight() * getScale().y;
+
+        double selectedCardSpriteX = selectedCardSprite.getWidth();
+        double selectedCardSpriteY = selectedCardSprite.getHeight();
+        
+        double idleCardSpriteX = idleCardSprite.getWidth();
+        double idleCardSpriteY = idleCardSprite.getHeight();
 
         if (playerId == GameScene.RED_PLAYER) {
             cardPos = new Vector2D(
                 
-                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*selectedCardSprite.getHeight()))
+                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSpriteX /2),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1 * selectedCardSpriteY))
             );
         } else {
             cardPos = new Vector2D(
-                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*idleCardSprite.getHeight()))
+                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSpriteX /2) + GameScene.gameBoard.getPos().getIntX() +  + GameScene.gameBoard.getSize().width),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1 * idleCardSpriteY))
             );
         }
 
@@ -319,13 +344,13 @@ public class Player extends GameObject {
 
         if (playerId == GameScene.RED_PLAYER) {
             cardPos = new Vector2D(
-                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
+                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSpriteX /2),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1 * idleCardSpriteY))
             );
         } else {
             cardPos = new Vector2D(
-                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
+                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSpriteX /2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().width),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSpriteY))
                 
             );
         }
@@ -335,8 +360,8 @@ public class Player extends GameObject {
 
         if (standBy != null) {
             cardPos = new Vector2D(
-                (Main.engine.getResolution().width/2) - (int)(idleCardSprite.getWidth()/2),
-                (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSprite.getHeight())
+                (Main.engine.getResolution().width/2) - (int)(idleCardSpriteX /2),
+                (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSpriteY)
             );
             this.standBy.updatePosCard(cardPos);
         }
@@ -345,6 +370,9 @@ public class Player extends GameObject {
 
 
     private void initCards(String card1Name, String card2Name, String standByName) {
+        
+        System.out.println(GameScene.gameBoard.getPos());
+
         idleCardSprite = new Sprite(
             new Texture(
                 Main.Palette.background, 
@@ -362,6 +390,10 @@ public class Player extends GameObject {
         );
         //selectedCardSprite.setBorder(5, playerId == GameScene.PLAYER1 ? Main.Palette.red.brighter() : Main.Palette.cyan.brighter(), 10);
         selectedCardSprite.setBorder(5, Main.Palette.selection.brighter(), 10);
+
+        
+        System.out.println(selectedCardSprite.getWidth());
+        System.out.println(selectedCardSprite.getHeight());
 
         standBySprite = new Sprite(
             new Texture(
@@ -386,13 +418,13 @@ public class Player extends GameObject {
         if (playerId == GameScene.RED_PLAYER) {
             cardPos = new Vector2D(
                 
-                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*selectedCardSprite.getHeight()))
+                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth() * getScale().x /2),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*selectedCardSprite.getHeight() * getScale().y ))
             );
         } else {
             cardPos = new Vector2D(
-                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*idleCardSprite.getHeight()))
+                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth() * getScale().x /2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().width),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*idleCardSprite.getHeight() * getScale().y ))
             );
         }
 
@@ -400,13 +432,13 @@ public class Player extends GameObject {
 
         if (playerId == GameScene.RED_PLAYER) {
             cardPos = new Vector2D(
-                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
+                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth() * getScale().x /2),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight() * getScale().y ))
             );
         } else {
             cardPos = new Vector2D(
-                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
+                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth() * getScale().x  /2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().width),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight() * getScale().y ))
                 
             );
         }
@@ -414,8 +446,8 @@ public class Player extends GameObject {
         this.card2 = new Card(card2Name, cardPos, idleCardSprite, this);
 
         cardPos = new Vector2D(
-            (Main.engine.getResolution().width/2) - (int)(idleCardSprite.getWidth()/2),
-            (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSprite.getHeight())
+            (Main.engine.getResolution().width/2) - (int)(idleCardSprite.getWidth() * getScale().x /2),
+            (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSprite.getHeight() * getScale().y )
         );
 
         if (standByName == null) {

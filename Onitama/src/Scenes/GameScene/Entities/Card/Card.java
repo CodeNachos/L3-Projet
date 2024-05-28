@@ -40,6 +40,9 @@ public class Card extends GameObject {
     private Vector2D targetPos;
     private Vector2D initialPos;
 
+    public void printPos() {
+        System.out.println(name + position);
+    }
 
     // @Override
     // public void resize(Vector2D ratio) {
