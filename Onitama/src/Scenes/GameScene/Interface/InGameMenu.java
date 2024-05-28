@@ -12,13 +12,14 @@ public class InGameMenu extends MenuFrame {
     BlurredArea blurredArea;
 
     public InGameMenu(Dimension area, Vector2D offset) {
+        
         super(area, offset);
 
         setMainColor(Main.Palette.selection);
         setAccentColor(Main.Palette.selection.brighter());
         setCurvature(20, 20);
 
-        BlurredArea blurredArea = new BlurredArea(Main.engine.getResolution(), BlurredArea.captureBackground(Main.gameScene));
+        blurredArea = new BlurredArea(Main.engine.getResolution(), BlurredArea.captureBackground(Main.gameScene));
         
         Main.gameScene.addComponent(blurredArea);
 
@@ -29,6 +30,7 @@ public class InGameMenu extends MenuFrame {
     @Override
     public void input(KeyEvent e) {
         if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_Q) {
+            Main.gameScene.removeComponent(blurredArea);
             Main.gameScene.removeComponent(this);
             Main.gameScene.setEnabledGUI(true);
         }
