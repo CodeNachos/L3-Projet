@@ -28,6 +28,8 @@ public class Main {
     public static void main(String[] args) {
 
         // Custom Settings
+        Settings.stretch = false;
+        Settings.resizable = false;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double aspectRatio = (double) screenSize.width / screenSize.height;
         //Settings.resolution = screenSize;

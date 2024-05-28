@@ -97,6 +97,8 @@ public class Scene extends JPanel {
      */
     public void removeComponent(GameObject comp) {
         components.remove(comp); // Remove the specified component from the list of components
+        remove(comp);
+        revalidate();
     }
 
     /**

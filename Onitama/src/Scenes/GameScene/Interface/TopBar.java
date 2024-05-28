@@ -77,6 +77,22 @@ public class TopBar extends MenuFrame {
         hintButton.setEnabled(state);
     }
 
+    public void setEnabledMenu(boolean state) {
+        menuButton.setEnabled(state);
+    }
+
+    public void setEnabledHelp(boolean state) {
+        helpButton.setEnabled(state);
+    }
+
+    public void setEnabledButtons(boolean state) {
+        setEnabledUndo(state);
+        setEnabledRedo(state);
+        setEnabledHint(state);
+        setEnabledMenu(state);
+        setEnabledHelp(state);
+    }
+
     
     private FlatButton createBaseButton(String content) {
         FlatButton button = new FlatButton(content);
@@ -154,7 +170,22 @@ public class TopBar extends MenuFrame {
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Util.printWarning("Not implemented");
+                Dimension menuArea = new Dimension(
+                    (int)(Main.engine.getResolution().width/4),
+                    (int)(Main.engine.getResolution().width/4)
+                );
+
+                Vector2D menuOffset = new Vector2D(
+                    (Main.engine.getResolution().width/2) - (menuArea.width/2),
+                    (Main.engine.getResolution().height/2) - (menuArea.height/2)
+                );
+
+                InGameMenu menu = new InGameMenu(menuArea, menuOffset);
+                Main.gameScene.addComponent(menu);
+                Main.gameScene.setComponentZOrder(menu, 0);
+                
+                Main.gameScene.setEnabledGUI(false);
+                //Util.printWarning("Not implemented");
             }
         });
 
@@ -189,17 +220,6 @@ public class TopBar extends MenuFrame {
 
     @Override
     public void process(double delta) {
-        //if (!Main.gameScene.history.canUndo()) {
-        //    undoButton.setEnabled(false);
-        //} else {
-        //    undoButton.setEnabled(true);
-        //}
-
-        //if (!Main.gameScene.history.canRedo()) {
-        //    redoButton.setEnabled(false);
-        //} else {
-        //    redoButton.setEnabled(true);
-        //}
 
 
     }

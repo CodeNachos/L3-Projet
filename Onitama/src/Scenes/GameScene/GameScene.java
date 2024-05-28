@@ -421,6 +421,7 @@ public class GameScene extends Scene {
 
     public static void updateInterfaceButtons(boolean state) {
         topBar.setEnabledHint(state);
+        topBar.setEnabledMenu(state);
         
         if (history.canUndo()) {
             topBar.setEnabledUndo(true);
@@ -433,6 +434,15 @@ public class GameScene extends Scene {
         } else {
             topBar.setEnabledRedo(false);
         }
+    }
+
+    public void setEnabledGUI(boolean state) {
+        player1.setCardsInteractable(state);
+        player1.setPiecesInteractable(state);
+        player2.setCardsInteractable(state);
+        player2.setPiecesInteractable(state);
+        gameBoard.setIteractable(state);
+        topBar.setEnabledButtons(state);
     }
 
     private void createBoard() {
