@@ -41,14 +41,14 @@ public class Card extends GameObject {
     private Vector2D initialPos;
 
 
-    @Override
-    public void resize(Vector2D ratio) {
-        super.resize(ratio);
-        if (targetPos != null && initialPos != null) {
-            targetPos = targetPos.multiply(ratio);
-            initialPos = initialPos.multiply(ratio);
-        }
-    }
+    // @Override
+    // public void resize(Vector2D ratio) {
+    //     super.resize(ratio);
+    //     if (targetPos != null && initialPos != null) {
+    //         targetPos = targetPos.multiply(ratio);
+    //         initialPos = initialPos.multiply(ratio);
+    //     }
+    // }
 
     public void startAnim(Vector2D target) {
         targetPos = target;
@@ -59,8 +59,6 @@ public class Card extends GameObject {
 
     public Card(String name, Vector2D position, Sprite sprite, Player player) {
         super(position, sprite);
-
-        
 
         this.player = player;
 
