@@ -45,8 +45,8 @@ public class Card extends GameObject {
     public void resize(Vector2D ratio) {
         super.resize(ratio);
         if (targetPos != null && initialPos != null) {
-            targetPos.multiply(ratio);
-            initialPos.multiply(ratio);
+            targetPos = targetPos.multiply(ratio);
+            initialPos = initialPos.multiply(ratio);
         }
     }
 

@@ -70,9 +70,10 @@ public class Vector2D implements Serializable {
         return new Vector2D(this.x * scalar, this.y * scalar);
     }
 
-    public void multiply(Vector2D other) {
-        this.x *= other.x;
-        this.y *= other.y;
+    public Vector2D multiply(Vector2D other) {
+        return new Vector2D(this.x * other.x, this.y * other.y);
+        // this.x *= other.x;
+        // this.y *= other.y;
     }
 
     public double magnitude() {
