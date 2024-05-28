@@ -89,13 +89,9 @@ public class Player extends GameObject {
                 GameScene.setAction(null);
                 Main.iaShouldWait = false;
             }
-            
             return;
         }
             
-
-       
-
         if (Main.iaShouldWait) {
             Main.iaShouldWait = false;
             iaWaitCounter = 2*60;
@@ -205,6 +201,32 @@ public class Player extends GameObject {
         return standBy.getName();
     }
 
+    // animate the standyCard
+    // to the selected position
+    // return the selected previous position
+    // the idea is to reuse the selected position
+    // to start animating the other player stanby card
+    // 
+    // How it works ?
+    // 1. we set the position of selected to stanby
+    // 2. we animate the selected position from standby to normal
+    public Vector2D animSelected() {
+        Vector2D pos = selectedCard.position.clone();
+        selectedCard.position = standBy.position.clone();
+        selectedCard.startAnim(pos.clone());
+
+        return pos.clone();
+    }
+
+    // set standby to selectedPos
+    // animate standy to normal
+    public void animStanby(Vector2D selectedPos) {
+        Vector2D normalStandbyPosition = standBy.position.clone();
+        standBy.position = selectedPos.clone();
+        standBy.startAnim(normalStandbyPosition);
+    }
+
+ 
     public void setStandBy(String stb) {
         standBy.setName(stb);
         standBy.setVisible(true);
@@ -271,6 +293,56 @@ public class Player extends GameObject {
 
         return false;
     }
+
+    // i tried to call this function
+    // after `initCards` but this doesn't works
+    // so we duplicate the pos code
+    public void resetPosCard() {
+
+        Vector2D cardPos;
+
+        if (playerId == GameScene.RED_PLAYER) {
+            cardPos = new Vector2D(
+                
+                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*selectedCardSprite.getHeight()))
+            );
+        } else {
+            cardPos = new Vector2D(
+                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*idleCardSprite.getHeight()))
+            );
+        }
+
+        this.card1.updatePosCard(cardPos);
+
+
+        if (playerId == GameScene.RED_PLAYER) {
+            cardPos = new Vector2D(
+                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
+            );
+        } else {
+            cardPos = new Vector2D(
+                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
+                
+            );
+        }
+
+        this.card2.updatePosCard(cardPos);
+
+
+        if (standBy != null) {
+            cardPos = new Vector2D(
+                (Main.engine.getResolution().width/2) - (int)(idleCardSprite.getWidth()/2),
+                (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSprite.getHeight())
+            );
+            this.standBy.updatePosCard(cardPos);
+        }
+    }
+
+
 
     private void initCards(String card1Name, String card2Name, String standByName) {
         idleCardSprite = new Sprite(

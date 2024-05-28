@@ -70,6 +70,12 @@ public class Vector2D implements Serializable {
         return new Vector2D(this.x * scalar, this.y * scalar);
     }
 
+    public Vector2D multiply(Vector2D other) {
+        return new Vector2D(this.x * other.x, this.y * other.y);
+        // this.x *= other.x;
+        // this.y *= other.y;
+    }
+
     public double magnitude() {
         return Math.sqrt(x * x + y * y);
     }
@@ -93,4 +99,6 @@ public class Vector2D implements Serializable {
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
+
+
 }
