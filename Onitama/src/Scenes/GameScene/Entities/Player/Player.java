@@ -210,18 +210,23 @@ public class Player extends GameObject {
     // 1. we set the position of selected to stanby
     // 2. we animate the selected position from standby to normal
     public Vector2D animSelected() {
-        Vector2D pos = selectedCard.getPos();
-        selectedCard.position = standBy.getPos();
+        Vector2D pos;
+        if (selectedCard == card1) {
+            pos = playerId == GameScene.RED_PLAYER ? GameScene.placeholderPlayer1Card1.position : GameScene.placeholderPlayer2Card1.position;
+        } else {
+            pos = playerId == GameScene.RED_PLAYER ? GameScene.placeholderPlayer1Card2.position : GameScene.placeholderPlayer2Card2.position;
+        }
+        selectedCard.setPos(standBy.getPos());
         selectedCard.startAnim(pos);
 
-        return pos.clone();
+        return pos;
     }
 
     // set standby to selectedPos
     // animate standy to normal
     public void animStanby(Vector2D selectedPos) {
-        Vector2D normalStandbyPosition = standBy.position.clone();
-        standBy.position = selectedPos.clone();
+        Vector2D normalStandbyPosition = GameScene.placeholderStandByCard.position;
+        standBy.setPos(selectedPos);
         standBy.startAnim(normalStandbyPosition);
     }
 

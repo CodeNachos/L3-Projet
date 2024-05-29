@@ -525,6 +525,12 @@ public class GameScene extends Scene {
             (Main.engine.getResolution().width/2) - (int)(cardSize/2),
             (int)(Main.engine.getResolution().height) -(int)(1.2*cardSize)
         ));
+
+        addComponent(placeholderPlayer1Card1);
+        addComponent(placeholderPlayer1Card2);
+        addComponent(placeholderPlayer2Card1);
+        addComponent(placeholderPlayer2Card2);
+        addComponent(placeholderStandByCard);
     }
 
     private void createPlayers() {

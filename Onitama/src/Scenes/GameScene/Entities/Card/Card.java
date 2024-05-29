@@ -39,9 +39,7 @@ public class Card extends GameObject {
     private double animState = 2;
     private boolean animating = false;
     private double speed = 20;
-    private Vector2D direction;
     private Vector2D targetPos;
-    private Vector2D initialPos;
 
 
     // @Override
@@ -54,10 +52,7 @@ public class Card extends GameObject {
     // }
 
     public void startAnim(Vector2D target) {
-        targetPos = target.clone();
-        initialPos = getPos();
-        animState = 0;
-        direction = targetPos.subtract(initialPos).normalize();
+        targetPos = target;
         animating = true;
         // System.out.println("target = " + target + ", initial = " + initialPos);
     }
@@ -122,6 +117,7 @@ public class Card extends GameObject {
     public void process(double delta) {
 
         if (animating && targetPos.subtract(getPos()).magnitude() > 10) {
+            Vector2D direction = targetPos.subtract(getPos()).normalize();
             updatePosCard(getPos().add(direction.multiply(speed)));
         } else if (animating) {
             updatePosCard(targetPos);
