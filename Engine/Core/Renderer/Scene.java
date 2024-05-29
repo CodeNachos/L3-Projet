@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.swing.JPanel;
 
@@ -25,11 +26,18 @@ public class Scene extends JPanel {
     // Scene composition
     public LinkedList<GameObject> components; // List of game objects in the scene
 
+    // Queued objects to be added
+    private Queue<GameObject> addQueue; 
+    // Qeueud objects to be removed
+    private Queue<GameObject> rmvQueue;
+
     /**
      * Constructs a new Scene instance.
      * Initializes the scene composition and sets up the controller for input events.
      */
     public Scene() {
+        addQueue = new LinkedList<>();  // Initialize the add queue
+        rmvQueue = new LinkedList<>();  // Initialize the remove queue
         components = new LinkedList<>(); // Initialize the list of components
         control = new Controller(this); // Create a new controller instance for input handling
         setLayout(null); // Set layout to null for manual component positioning
@@ -70,25 +78,7 @@ public class Scene extends JPanel {
      * @param comp The game object to add
      */
     public void addComponent(GameObject comp) {
-        add(comp); // Add the component to the panel
-        components.add(comp); // Add the component to the list of components
-    }
-
-    /**
-     * Adds a game object to the scene at the specified index.
-     * @param index The index at which to add the game object
-     * @param comp The game object to add
-     */
-    public void addComponent(int index, GameObject comp) {
-        components.add(index, comp); // Add the component to the list of components at the specified index
-    }
-
-    /**
-     * Removes the game object at the specified index from the scene.
-     * @param index The index of the game object to remove
-     */
-    public void removeComponent(int index) {
-        components.remove(index); // Remove the component from the list of components at the specified index
+        addQueue.add(comp); // Add component to queue to be added on next update
     }
 
     /**
@@ -96,9 +86,7 @@ public class Scene extends JPanel {
      * @param comp The game object to remove
      */
     public void removeComponent(GameObject comp) {
-        components.remove(comp); // Remove the specified component from the list of components
-        remove(comp);
-        revalidate();
+        rmvQueue.add(comp); // Add component to queue to be removed on next update
     }
 
     /**
@@ -107,6 +95,23 @@ public class Scene extends JPanel {
      * @param delta The time since the last update in seconds
      */
     public void update(double delta) {
+        if (!rmvQueue.isEmpty()) {
+            for (GameObject comp : rmvQueue) {
+                components.remove(comp); // Remove the specified component from the list of components
+                remove(comp);   // Effectively removes from JPanel
+            }
+            rmvQueue.clear();
+            revalidate();
+        }
+
+        if (!addQueue.isEmpty()) {
+            for (GameObject comp : addQueue) {
+                add(comp); // Add the component to the panel
+                components.add(comp); // Add the component to the list of components
+            }
+            addQueue.clear();
+        }
+
         for (GameObject obj : components) { // Iterate through all game objects in the scene
             if (obj instanceof TileMap) {
                 ((TileMap)obj).update(delta);

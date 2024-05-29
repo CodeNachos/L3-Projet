@@ -46,7 +46,7 @@ public class BlurredArea extends UIObject {
     @Override
     public void paintComponent(Graphics g) {
         if (blurredBackground != null) {
-            g.drawImage(blurredBackground, 0, 0, null);
+            g.drawImage(blurredBackground, 0, 0, getWidth(), getHeight(), null);
         }
         super.paintComponent(g);
     }

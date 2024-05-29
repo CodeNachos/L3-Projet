@@ -101,6 +101,7 @@ public class Card extends GameObject {
     }
 
     public void updatePosCard(Vector2D pos) {
+        Vector2D displacement = getPos();
         setPos(pos);
         cardMap.setPos(new Vector2D(
             position.x + getSize().width * 0.2,

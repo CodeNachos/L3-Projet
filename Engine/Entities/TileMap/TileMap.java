@@ -138,8 +138,8 @@ public class TileMap extends GameObject {
 
         // recalculate tile dimensions
         tileDimension = new Dimension(
-            (int)Math.ceil(scale.x * initialArea.width / mapDimension.width), // Calculate new width based on ratio
-            (int)Math.ceil(scale.y * initialArea.height / mapDimension.height) // Calculate new height based on ratio
+            (int)(scale.x * initialArea.width / mapDimension.width), // Calculate new width based on ratio
+            (int)(scale.y * initialArea.height / mapDimension.height) // Calculate new height based on ratio
         );
         // update tiles
         for (int l = 0; l < mapDimension.height; l++) {

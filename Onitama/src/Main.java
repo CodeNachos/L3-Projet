@@ -45,7 +45,7 @@ public class Main {
         
         if (testing) {
             gameScene = new GameScene(new Config(null, null));
-            Testing.test();
+            Testing.test(); 
         } else {
             newGameMenu = new NewGameMenuScene();
             // start engine

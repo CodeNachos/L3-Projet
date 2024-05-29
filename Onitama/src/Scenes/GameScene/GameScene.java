@@ -20,6 +20,7 @@ import Onitama.src.Scenes.GameScene.Scripts.History.History;
 import Onitama.src.Scenes.GameScene.Scripts.States.Action;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
+import Onitama.src.Scenes.GameScene.Interface.GameOverMenu;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.Entities.Board.Board;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece;
@@ -36,6 +37,7 @@ public class GameScene extends Scene {
     public static final int BLUE_PLAYER = 1; // blue
 
     public static int currentPlayer = RED_PLAYER;
+    public static int winner;
 
     public static GameObject placeholderPlayer1Card1;
     public static GameObject placeholderPlayer1Card2;
@@ -327,14 +329,14 @@ public class GameScene extends Scene {
 
         player1.setSelectedCard(null); player2.setSelectedCard(null);
 
-        changePlayer();
-
         if (gameOver()) {
-            System.out.println("Player " + (getNextPlayer() == GameScene.RED_PLAYER ? "RED" : "BLUE") + " won");
-            Main.engine.forceUpdate();
-            Main.engine.forceRefresh();
-            Main.engine.pause();
+            System.out.println("Player " + (currentPlayer == GameScene.RED_PLAYER ? "RED" : "BLUE") + " won");
+            winner = currentPlayer;
+            createGameOverMenu();
+            
         }
+
+        changePlayer(); 
 
         updateGUI();
 
@@ -671,5 +673,23 @@ public class GameScene extends Scene {
         leftPlayerFade.setCurvature(36, 36);
 
         addComponent(leftPlayerFade);
+    }
+
+    private void createGameOverMenu() {
+        Dimension menuArea = new Dimension(
+            (int)(Main.engine.getResolution().width / 2),
+            (int)(Main.engine.getResolution().height / 1.5)
+        );
+
+        Vector2D menuOffset = new Vector2D(
+            (Main.engine.getResolution().width/2) - (menuArea.width/2),
+            (Main.engine.getResolution().height/2) - (menuArea.height/2)
+        ); 
+
+        GameOverMenu menu = new GameOverMenu(menuArea, menuOffset);
+
+        addComponent(menu);
+
+        setEnabledGUI(false);
     }
 }

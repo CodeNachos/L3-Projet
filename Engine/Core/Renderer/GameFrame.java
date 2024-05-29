@@ -1,6 +1,7 @@
 package Engine.Core.Renderer;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -27,6 +28,7 @@ public class GameFrame extends JFrame {
      */
     public GameFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set default close operation
+        setMinimumSize(new Dimension(100,100));
         setTitle(Settings.applicationName); // Set window title
         setResizable(Settings.resizable); // Set window resizable according to settings
     }

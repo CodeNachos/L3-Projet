@@ -49,10 +49,10 @@ public class SmartAI extends AI {
 
         State s = Main.gameScene.getGameState();
 
-        int eval = minmax(s, true, difficulty,
-                           minusINF, plusINF);
-        System.err.println("Best score found: " + eval);
-        //minmax(Main.gameScene.getGameState(), true, difficulty, minusINF, plusINF);
+        //int eval = minmax(s, true, difficulty,
+        //                   minusINF, plusINF);
+        //System.err.println("Best score found: " + eval);
+        minmax(Main.gameScene.getGameState(), true, difficulty, minusINF, plusINF);
         return bestMove;
     }
 

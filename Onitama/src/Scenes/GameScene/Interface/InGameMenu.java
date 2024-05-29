@@ -39,8 +39,6 @@ public class InGameMenu extends MenuFrame {
         
         Main.gameScene.addComponent(blurredArea);
 
-        Main.gameScene.setComponentZOrder(blurredArea, 0);
-
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         add(Box.createVerticalGlue());
@@ -127,6 +125,14 @@ public class InGameMenu extends MenuFrame {
         button.setSize(20, 20);
         button.setFocusable(false);
         return button;
+    }
+
+    @Override
+    public void process(double delta) {
+        if (getParent().getComponentZOrder(this) > 1) {
+            getParent().setComponentZOrder(blurredArea, 1);
+            getParent().setComponentZOrder(this, 0);
+        }
     }
     
 }
