@@ -51,6 +51,7 @@ public class NewGameMenuScene extends Scene {
         
         selectionMenu.setMainColor(Main.Palette.selection.darker());
         selectionMenu.setAccentColor(Main.Palette.selection.darker());
+        selectionMenu.setCurvature(30, 30);
 
         GridBagConstraints gbc = new GridBagConstraints();
         selectionMenu.setLayout(new GridBagLayout());
@@ -181,7 +182,9 @@ public class NewGameMenuScene extends Scene {
         });
         
         addComponent(selectionMenu);
-        addComponent(new ColorArea(new Color(0,0,0,15), menuArea, menuOffset.add(new Vector2D(8,8))));
+        ColorArea shadow = new ColorArea(new Color(0,0,0,15), menuArea, menuOffset.add(new Vector2D(8,8)));
+        shadow.setCurvature(30, 30);
+        addComponent(shadow);
     }
 
     private void createStartButton() {
@@ -249,8 +252,7 @@ public class NewGameMenuScene extends Scene {
         mainMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.engine.setMainScene(new MainMenuScene());
-                Main.engine.setCurrentScene(Main.engine.getMainScene());
+                Main.engine.setCurrentScene(new MainMenuScene());
             }
             
         });
