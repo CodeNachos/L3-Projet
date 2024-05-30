@@ -20,6 +20,7 @@ import Engine.Structures.Vector2D;
 public class GameFrame extends JFrame {
 
     // Renderer Settings
+    private boolean isMaximized = false;
     private boolean fullscreen = Settings.fullscreen; // Indicates whether the game is running in fullscreen mode
     private Scene scene; // The current active scene
 
@@ -104,6 +105,15 @@ public class GameFrame extends JFrame {
                             (double) frame.getContentPane().getSize().height / (double) Settings.resolution.height
                         );
                         resizeScene(resizeRatio); // Resize the scene components
+                    }
+                    if ((((JFrame)(e.getComponent())).getExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH) {
+                        if (!isMaximized) {
+                            isMaximized = true;
+                            revalidate();
+                        }
+                    } else if (isMaximized) {
+                        isMaximized = false;
+                        revalidate();
                     }
                     Settings.resolution = ((JFrame) e.getComponent()).getContentPane().getSize(); // Update screen resolution in settings
                 });
