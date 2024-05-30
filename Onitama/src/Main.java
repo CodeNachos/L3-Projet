@@ -4,6 +4,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.SwingUtilities;
+
 import Engine.Core.Engines.GameEngine;
 import Engine.Core.Renderer.Scene;
 import Engine.Global.Settings;
@@ -11,6 +13,7 @@ import Engine.Global.Util;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.AI.Testing;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
+import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class Main {
@@ -23,7 +26,6 @@ public class Main {
     public static boolean iaShouldWait = false;
 
     public static GameScene gameScene;
-    public static Scene newGameMenu;
 
     public static void main(String[] args) {
 
@@ -47,9 +49,8 @@ public class Main {
             gameScene = new GameScene(new Config(null, null));
             Testing.test(); 
         } else {
-            newGameMenu = new NewGameMenuScene();
             // start engine
-            engine.setMainScene(newGameMenu);
+            engine.setCurrentScene(new MainMenuScene());
             engine.start();
         }
     }

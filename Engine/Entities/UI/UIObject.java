@@ -73,5 +73,4 @@ public abstract class UIObject extends GameObject {
         }
         setLocation((int)position.x, (int)position.y); // Set location of the UI object
     }
-    
 }

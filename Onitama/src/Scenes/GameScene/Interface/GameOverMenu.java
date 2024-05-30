@@ -18,7 +18,8 @@ import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
-import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
+import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 
 public class GameOverMenu extends MenuFrame {
     
@@ -118,7 +119,7 @@ public class GameOverMenu extends MenuFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 removeMenu();
-                Main.engine.setCurrentScene(Main.newGameMenu);
+                Main.engine.setCurrentScene(new NewGameMenuScene());
             }
             
         });
@@ -139,6 +140,14 @@ public class GameOverMenu extends MenuFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 5, 10, 20);
         add(mainMenuButton, gbc);
+
+        mainMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.engine.setCurrentScene(new MainMenuScene());    
+            }
+            
+        });
     }
 
     private void removeMenu() {

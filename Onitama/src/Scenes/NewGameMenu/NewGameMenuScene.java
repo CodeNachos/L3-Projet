@@ -15,6 +15,7 @@ import Engine.Structures.Vector2D;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
 import Onitama.src.Scenes.GameScene.Scripts.States.IADifficulty;
+import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 import Onitama.src.Main;
 
 public class NewGameMenuScene extends Scene {
@@ -50,6 +51,7 @@ public class NewGameMenuScene extends Scene {
         
         selectionMenu.setMainColor(Main.Palette.selection.darker());
         selectionMenu.setAccentColor(Main.Palette.selection.darker());
+        selectionMenu.setCurvature(30, 30);
 
         GridBagConstraints gbc = new GridBagConstraints();
         selectionMenu.setLayout(new GridBagLayout());
@@ -180,7 +182,9 @@ public class NewGameMenuScene extends Scene {
         });
         
         addComponent(selectionMenu);
-        addComponent(new ColorArea(new Color(0,0,0,15), menuArea, menuOffset.add(new Vector2D(8,8))));
+        ColorArea shadow = new ColorArea(new Color(0,0,0,15), menuArea, menuOffset.add(new Vector2D(8,8)));
+        shadow.setCurvature(30, 30);
+        addComponent(shadow);
     }
 
     private void createStartButton() {
@@ -244,6 +248,14 @@ public class NewGameMenuScene extends Scene {
         mainMenuButton.setCurvature(15, 15);
         mainMenuButton.setBorder(BorderFactory.createEmptyBorder());
         mainMenuButton.setFocusable(false);
+
+        mainMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.engine.setCurrentScene(new MainMenuScene());
+            }
+            
+        });
 
         Dimension buttonArea = new Dimension(
             (int)(Main.engine.getResolution().width /8),
