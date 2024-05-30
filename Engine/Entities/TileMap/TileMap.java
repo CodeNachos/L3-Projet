@@ -132,8 +132,8 @@ public class TileMap extends GameObject {
         scale.y = updatedValues.y; // Set scale y-coordinate
         // Update size based on scale
         this.setSize(
-            (int)(initialArea.width * scale.x), // Set width based on initial area width and scale
-            (int)(initialArea.height * scale.y) // Set height based on initial area height and scale
+            (int)Math.floor(initialArea.width * scale.x), // Set width based on initial area width and scale
+            (int)Math.floor(initialArea.height * scale.y) // Set height based on initial area height and scale
         );
 
         // recalculate tile dimensions
