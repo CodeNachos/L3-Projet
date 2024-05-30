@@ -45,7 +45,7 @@ public class Main {
         
         if (testing) {
             gameScene = new GameScene(new Config(null, null));
-            Testing.test();
+            Testing.test(); 
         } else {
             newGameMenu = new NewGameMenuScene();
             // start engine
@@ -62,6 +62,8 @@ public class Main {
             try {
                 // Load the font from the specified file
                 defaultFont = Font.createFont(Font.TRUETYPE_FONT, new File("Onitama/res/Fonts/monofonto.otf"));
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                ge.registerFont(defaultFont);
             } catch (FontFormatException | IOException e) {
                 e.printStackTrace();
                 defaultFont = new Font("Arial", Font.PLAIN, 12);
@@ -72,6 +74,8 @@ public class Main {
             try {
                 // Load the font from the specified file
                 unicodeFont = Font.createFont(Font.TRUETYPE_FONT, new File("Onitama/res/Fonts/Symbola.ttf"));
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                ge.registerFont(unicodeFont);
             } catch (FontFormatException | IOException e) {
                 e.printStackTrace();
                 unicodeFont = new Font("Arial", Font.PLAIN, 12);

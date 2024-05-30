@@ -182,7 +182,6 @@ public class TopBar extends MenuFrame {
 
                 InGameMenu menu = new InGameMenu(menuArea, menuOffset);
                 Main.gameScene.addComponent(menu);
-                Main.gameScene.setComponentZOrder(menu, 0);
                 
                 Main.gameScene.setEnabledGUI(false);
                 //Util.printWarning("Not implemented");

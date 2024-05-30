@@ -108,15 +108,15 @@ public class MenuFrame extends UIObject {
         updatedValues.setCoord(scale.x * ratio.x, scale.y * ratio.y);
         setScale(updatedValues);
 
-        for (Component c : getComponents()) {
-            Font font;
-            if (c instanceof JLabel) {
-                font = ((JLabel) c).getFont();
-                ((JLabel) c).setFont(font.deriveFont(font.getStyle(), (float) (font.getSize() * ratio.y)));
-            } else if (c instanceof JButton) {
-                font = ((JButton) c).getFont();
-                ((JButton) c).setFont(font.deriveFont(font.getStyle(), (float) (font.getSize() * ratio.y)));
-            }
-        }
+        //for (Component c : getComponents()) {
+        //    Font font;
+        //    if (c instanceof JLabel) {
+        //        font = ((JLabel) c).getFont();
+        //        ((JLabel) c).setFont(font.deriveFont(font.getStyle(), (float) (font.getSize() * ratio.y)));
+        //    } else if (c instanceof JButton) {
+        //        font = ((JButton) c).getFont();
+        //        ((JButton) c).setFont(font.deriveFont(font.getStyle(), (float) (font.getSize() * ratio.y)));
+        //    }
+        //}
     }
 }

@@ -101,6 +101,7 @@ public class Card extends GameObject {
     }
 
     public void updatePosCard(Vector2D pos) {
+        Vector2D displacement = getPos();
         setPos(pos);
         cardMap.setPos(new Vector2D(
             position.x + getSize().width * 0.2,
@@ -138,6 +139,12 @@ public class Card extends GameObject {
                 sprite = player.standBySprite;
         } else if (sprite != player.idleCardSprite) {
             sprite = player.idleCardSprite;
+        }
+
+        if (getParent().getComponentZOrder(this) != 5) {
+            getParent().setComponentZOrder(this, 5);
+            getParent().setComponentZOrder(cardMap, 4);
+            getParent().setComponentZOrder(cardLabel, 3);
         }
 
     }
@@ -189,9 +196,6 @@ public class Card extends GameObject {
         scene.addComponent(cardLabel);
         scene.addComponent(cardMap);
         scene.addComponent(this);
-        scene.setComponentZOrder(this, 0);
-        scene.setComponentZOrder(cardLabel, 0);
-        scene.setComponentZOrder(cardMap, 0);
     }
 
     private void createCardMap() {
