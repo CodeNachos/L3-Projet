@@ -15,6 +15,7 @@ import Engine.Structures.Vector2D;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
 import Onitama.src.Scenes.GameScene.Scripts.States.IADifficulty;
+import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 import Onitama.src.Main;
 
 public class NewGameMenuScene extends Scene {
@@ -244,6 +245,15 @@ public class NewGameMenuScene extends Scene {
         mainMenuButton.setCurvature(15, 15);
         mainMenuButton.setBorder(BorderFactory.createEmptyBorder());
         mainMenuButton.setFocusable(false);
+
+        mainMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.engine.setMainScene(new MainMenuScene());
+                Main.engine.setCurrentScene(Main.engine.getMainScene());
+            }
+            
+        });
 
         Dimension buttonArea = new Dimension(
             (int)(Main.engine.getResolution().width /8),

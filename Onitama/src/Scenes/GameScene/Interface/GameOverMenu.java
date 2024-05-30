@@ -19,6 +19,7 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class GameOverMenu extends MenuFrame {
     
@@ -118,7 +119,7 @@ public class GameOverMenu extends MenuFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 removeMenu();
-                Main.engine.setCurrentScene(Main.newGameMenu);
+                Main.engine.setCurrentScene(new NewGameMenuScene());
             }
             
         });

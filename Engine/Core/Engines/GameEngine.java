@@ -55,6 +55,10 @@ public class GameEngine implements Runnable {
         }
     }
 
+    public Scene getMainScene() {
+        return mainScene;
+    }
+
     /**
      * Sets the current active scene of the game.
      * @param scn The scene to set as current

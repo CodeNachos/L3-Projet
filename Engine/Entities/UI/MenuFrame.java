@@ -93,30 +93,4 @@ public class MenuFrame extends UIObject {
         // restore stroke
         g2d.setStroke(defaultStroke);
     }
-
-    /**
-     * Overrides the resize method to adjust the size of components within the menu frame.
-     * @param ratio The ratio by which to resize the menu frame
-     */
-    @Override
-    public void resize(Vector2D ratio) {
-        Vector2D updatedValues = new Vector2D();
-        // set relative position
-        updatedValues.setCoord(position.x * ratio.x, position.y * ratio.y);
-        setPos(updatedValues);
-        // set relative scaling
-        updatedValues.setCoord(scale.x * ratio.x, scale.y * ratio.y);
-        setScale(updatedValues);
-
-        //for (Component c : getComponents()) {
-        //    Font font;
-        //    if (c instanceof JLabel) {
-        //        font = ((JLabel) c).getFont();
-        //        ((JLabel) c).setFont(font.deriveFont(font.getStyle(), (float) (font.getSize() * ratio.y)));
-        //    } else if (c instanceof JButton) {
-        //        font = ((JButton) c).getFont();
-        //        ((JButton) c).setFont(font.deriveFont(font.getStyle(), (float) (font.getSize() * ratio.y)));
-        //    }
-        //}
-    }
 }

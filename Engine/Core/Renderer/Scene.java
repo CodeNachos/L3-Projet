@@ -104,7 +104,8 @@ public class Scene extends JPanel {
                 remove(comp);   // Effectively removes from JPanel
             }
             rmvQueue.clear();
-            revalidate();
+            
+            revalidate(); 
         }
 
         if (!addQueue.isEmpty()) {
@@ -113,7 +114,10 @@ public class Scene extends JPanel {
                 components.add(comp); // Add the component to the list of components
             }
             addQueue.clear();
+            
+            revalidate();
         }
+        
 
         for (GameObject obj : components) { // Iterate through all game objects in the scene
             if (obj instanceof TileMap) {
@@ -148,4 +152,6 @@ public class Scene extends JPanel {
             obj.resize(ratio); // Resize each component
         }
     }
+
+    
 }
