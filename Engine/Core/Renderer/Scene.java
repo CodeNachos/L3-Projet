@@ -1,5 +1,6 @@
 package Engine.Core.Renderer;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
@@ -50,10 +51,10 @@ public class Scene extends JPanel {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); // Get screen size
             setPreferredSize(screenSize); // Set preferred size to screen size
         } else {
-            //setPreferredSize(Settings.resolution); // Set preferred size to configured resolution
+            setPreferredSize(Settings.resolution); // Set preferred size to configured resolution
         }
 
-        setPreferredSize(Settings.resolution);
+        setBackground(Color.GRAY);
     }
 
     public Scene(Dimension resolution) {
@@ -71,6 +72,8 @@ public class Scene extends JPanel {
         } else {
             setPreferredSize(resolution); // Set preferred size to configured resolution
         }
+
+        setBackground(Color.GRAY);
     }
 
     /**

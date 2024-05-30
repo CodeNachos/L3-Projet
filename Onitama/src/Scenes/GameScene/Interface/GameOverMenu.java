@@ -3,52 +3,142 @@ package Onitama.src.Scenes.GameScene.Interface;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import Engine.Entities.UI.BlurredArea;
 import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.GameScene;
 
 public class GameOverMenu extends MenuFrame {
     
     BlurredArea blurredArea;
 
     JLabel winnerLabel;
+    FlatButton returnButton;
+    FlatButton newGameButton;
+    FlatButton mainMenuButton;
 
-    public GameOverMenu( Dimension area, Vector2D offset) {
+    GridBagConstraints gbc;
+
+    public GameOverMenu(Dimension area, Vector2D offset) {
         super(area, offset);
 
         setMainColor(Main.Palette.selection);
         setAccentColor(Main.Palette.selection.brighter());
         setCurvature(20, 20);
+        setBorderWidth(6);
 
         blurredArea = new BlurredArea(Main.engine.getResolution(), BlurredArea.captureBackground(Main.gameScene));
     
         Main.gameScene.addComponent(blurredArea);
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new GridBagLayout());
 
-        add(Box.createVerticalGlue());
+        gbc = new GridBagConstraints();
 
         createWinnerLabel();
-
-        add(Box.createVerticalGlue());
+        createReturnButton();
+        createNewGameButton();
+        createMainMenuButton();
     }
 
     private void createWinnerLabel() {
-        winnerLabel = new JLabel("GAME OVER!");
-        winnerLabel.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 32));
+        String labelText = "<html><center><span style='font-family:" + Main.FontManager.getDefaultCustomFont(Font.ITALIC, 38).getFamily() + ";'>" + "Game<br>Over!</span></center></html>";
+        winnerLabel = new JLabel(labelText);
+        winnerLabel.setHorizontalAlignment(JLabel.CENTER);
+        winnerLabel.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 38));
         winnerLabel.setForeground(Main.Palette.foreground);
+    
+        gbc.gridx = 0;
+        gbc.gridy = 1; // Adjusted to start from the top
+        gbc.gridwidth = 3;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.weightx = 1.0; // Adjusted to make it span full width
+        gbc.weighty = 0.4; // Adjusted to take only 20% of the available vertical space
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(20, 20, 20, 20);
+        add(winnerLabel, gbc);
+    }
+    
+    private void createReturnButton() {
+        returnButton = createBaseButton("Return");
+        returnButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
+        returnButton.setForeground(Main.Palette.foreground);
+        returnButton.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    
+        gbc.gridx = 1;
+        gbc.gridy = 0; // Adjusted to place below the winnerLabel
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.weightx = 1.0; // Adjusted to make it span full width
+        gbc.weighty = 0.2; // Adjusted to take only 20% of the available vertical space
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.insets = new Insets(10, 20, 0, 20);
+        add(returnButton, gbc);
 
-        winnerLabel.setAlignmentX(CENTER_ALIGNMENT);
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeMenu();
+            }
+            
+        });
+    }
+    
+    private void createNewGameButton() {
+        newGameButton = createBaseButton("New Game");
+        newGameButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
+        newGameButton.setForeground(Main.Palette.foreground);
+    
+        gbc.gridx = 1;
+        gbc.gridy = 2; // Adjusted to place below the winnerLabel
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.weightx = 1.0; // Adjusted to make it span full width
+        gbc.weighty = 0.2; // Adjusted to take only 20% of the available vertical space
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 20, 10, 5);
+        add(newGameButton, gbc);
 
-        add(winnerLabel);
+        newGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeMenu();
+                Main.engine.setCurrentScene(Main.newGameMenu);
+            }
+            
+        });
+    }
+    
+    private void createMainMenuButton() {
+        mainMenuButton = createBaseButton("Main Menu");
+        mainMenuButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
+        mainMenuButton.setForeground(Main.Palette.foreground);
+    
+        gbc.gridx = 2;
+        gbc.gridy = 2; // Adjusted to place below the winnerLabel
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.weightx = 1.0; // Adjusted to make it span full width
+        gbc.weighty = 0.2; // Adjusted to take only 20% of the available vertical space
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 5, 10, 20);
+        add(mainMenuButton, gbc);
     }
 
     private void removeMenu() {
@@ -64,13 +154,13 @@ public class GameOverMenu extends MenuFrame {
         button.setMainColor(Main.Palette.selection.brighter());
         button.setAccentColor(new Color(255,255,255,25));
         button.setCurvature(20, 20);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        button.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
         button.setSize(20, 20);
         button.setFocusable(false);
+        button.setHorizontalAlignment(SwingConstants.CENTER);
         return button;
     }
 
-    
     @Override
     public void process(double delta) {
         if (getParent().getComponentZOrder(this) > 1) {
@@ -78,5 +168,4 @@ public class GameOverMenu extends MenuFrame {
             getParent().setComponentZOrder(this, 0);
         }
     }
-    
 }

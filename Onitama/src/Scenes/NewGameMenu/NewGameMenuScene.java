@@ -19,9 +19,7 @@ import Onitama.src.Main;
 
 public class NewGameMenuScene extends Scene {
 
-
-
-    Config initialConfig = new Config(IADifficulty.HARD, IADifficulty.HARD);
+    Config initialConfig = new Config(IADifficulty.HUMAN, IADifficulty.HUMAN);
 
     public NewGameMenuScene() {
 
