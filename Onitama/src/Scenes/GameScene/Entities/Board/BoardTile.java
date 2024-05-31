@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import Engine.Entities.TileMap.Tile;
 import Engine.Entities.TileMap.TileMap;
 import Engine.Structures.Sprite;
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Main;
 
@@ -70,8 +71,8 @@ public class BoardTile extends Tile {
                     pieceOwned = false;
                 } else { 
                     pieceOwned = (
-                        (GameScene.getCurrentPlayer() == GameScene.RED_PLAYER && tilePiece.isRed()) ||
-                        (GameScene.getCurrentPlayer() == GameScene.BLUE_PLAYER && tilePiece.isBlue())
+                        (GameScene.getCurrentPlayer() == Constants.RED_PLAYER && tilePiece.isRed()) ||
+                        (GameScene.getCurrentPlayer() == Constants.BLUE_PLAYER && tilePiece.isBlue())
                     );
                 }
                 
@@ -117,8 +118,8 @@ public class BoardTile extends Tile {
         }
 
         else if (tilePiece != null &&
-            (GameScene.getCurrentPlayer() == GameScene.RED_PLAYER && tilePiece.isRed() ||
-            GameScene.getCurrentPlayer() == GameScene.BLUE_PLAYER && tilePiece.isBlue())
+            (GameScene.getCurrentPlayer() == Constants.RED_PLAYER && tilePiece.isRed() ||
+            GameScene.getCurrentPlayer() == Constants.BLUE_PLAYER && tilePiece.isBlue())
         ) {
             
             if (!((Board)parentMap).isSelectedTile(mapPosition)) {

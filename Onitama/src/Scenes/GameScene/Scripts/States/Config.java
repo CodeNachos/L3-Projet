@@ -3,12 +3,15 @@ package Onitama.src.Scenes.GameScene.Scripts.States;
 public class Config {
 
 
-    public IADifficulty redDifficulty;
-    public IADifficulty blueDifficulty;
+    public PlayerType redDifficulty;
+    public PlayerType blueDifficulty;
 
-    public Config(IADifficulty redDiff, IADifficulty blueDiff) {
-        redDifficulty = redDiff;
-        blueDifficulty = blueDiff;
+    public int firstPlayer;
+
+    public Config(PlayerType redDiff, PlayerType blueDiff, int firstPlayer) {
+        this.redDifficulty = redDiff;
+        this.blueDifficulty = blueDiff;
+        this.firstPlayer = firstPlayer;
     }
 
 }

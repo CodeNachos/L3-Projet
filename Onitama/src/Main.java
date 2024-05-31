@@ -46,7 +46,7 @@ public class Main {
 
         
         if (testing) {
-            gameScene = new GameScene(new Config(null, null));
+            gameScene = new GameScene(new Config(null, null, 0));
             Testing.test(); 
         } else {
             // start engine

@@ -14,6 +14,7 @@ import Engine.Entities.GameObject;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.Entities.Player.Player;
@@ -173,7 +174,7 @@ public class Card extends GameObject {
 
     public void updateCard() {
         if (player == null)
-            cardMap.populateActions(name, GameScene.RED_PLAYER);
+            cardMap.populateActions(name, Constants.RED_PLAYER);
         else 
             cardMap.populateActions(name, player.getPlayerId());
     }

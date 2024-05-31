@@ -1,5 +1,6 @@
 package Onitama.src.Scenes.GameScene.Scripts.AI;
 
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece.PieceType;
@@ -30,8 +31,8 @@ public class Match {
     Match(SmartAI red, SmartAI blue) {
         this.red = red;
         this.blue = blue;
-        this.red.selfID = GameScene.RED_PLAYER;
-        this.blue.selfID = GameScene.BLUE_PLAYER;
+        this.red.selfID = Constants.RED_PLAYER;
+        this.blue.selfID = Constants.BLUE_PLAYER;
     }
 
     List<String> generateCards() {
@@ -78,12 +79,12 @@ public class Match {
     }
 
     void fight() {
-        State game = new State(generateRed(), generateBlue(), generateCards(), GameScene.RED_PLAYER);
+        State game = new State(generateRed(), generateBlue(), generateCards(), Constants.RED_PLAYER);
         Action turn;
 
         length = 0;
         while (!game.isGameOver() && length < 100) {
-            if (game.getCurrentPlayer() == GameScene.RED_PLAYER)
+            if (game.getCurrentPlayer() == Constants.RED_PLAYER)
                 turn = red.play(game);
             else
                 turn = blue.play(game);
@@ -93,7 +94,7 @@ public class Match {
 
         if (length > 9000)
             winner = null;
-        else if (game.getNextPlayer() == GameScene.RED_PLAYER)
+        else if (game.getNextPlayer() == Constants.RED_PLAYER)
             winner = red;
         else
             winner = blue;

@@ -314,7 +314,7 @@ public class GameScene extends Scene {
             }
         }
 
-        if (currentPlayer == GameScene.RED_PLAYER) {
+        if (currentPlayer == Constants.RED_PLAYER) {
             player1.movePiece(getSelectedPiece(), getSelectedAction());
             
         } else {
@@ -330,7 +330,7 @@ public class GameScene extends Scene {
         player1.setSelectedCard(null); player2.setSelectedCard(null);
 
         if (gameOver()) {
-            System.out.println("Player " + (currentPlayer == GameScene.RED_PLAYER ? "RED" : "BLUE") + " won");
+            System.out.println("Player " + (currentPlayer == Constants.RED_PLAYER ? "RED" : "BLUE") + " won");
             winner = currentPlayer;
             createGameOverMenu();
             

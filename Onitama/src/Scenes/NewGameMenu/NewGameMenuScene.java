@@ -12,15 +12,16 @@ import Engine.Entities.UI.ColorArea;
 import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
-import Onitama.src.Scenes.GameScene.Scripts.States.IADifficulty;
+import Onitama.src.Scenes.GameScene.Scripts.States.PlayerType;
 import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 import Onitama.src.Main;
 
 public class NewGameMenuScene extends Scene {
 
-    Config initialConfig = new Config(IADifficulty.HUMAN, IADifficulty.HUMAN);
+    Config initialConfig = new Config(PlayerType.HUMAN, PlayerType.HUMAN, Constants.RED_PLAYER);
 
     public NewGameMenuScene() {
 
@@ -204,11 +205,11 @@ public class NewGameMenuScene extends Scene {
                 
                 Main.gameScene = new GameScene(initialConfig);
 
-                if (initialConfig.redDifficulty != IADifficulty.HUMAN) {
-                    Main.gameScene.enablePlayerAI(GameScene.RED_PLAYER, initialConfig.redDifficulty.deatph());
+                if (initialConfig.redDifficulty != PlayerType.HUMAN) {
+                    Main.gameScene.enablePlayerAI(Constants.RED_PLAYER, initialConfig.redDifficulty.deatph());
                 }
-                if (initialConfig.blueDifficulty != IADifficulty.HUMAN) {
-                    Main.gameScene.enablePlayerAI(GameScene.BLUE_PLAYER, initialConfig.blueDifficulty.deatph());
+                if (initialConfig.blueDifficulty != PlayerType.HUMAN) {
+                    Main.gameScene.enablePlayerAI(Constants.BLUE_PLAYER, initialConfig.blueDifficulty.deatph());
                 }
 
               

@@ -9,6 +9,7 @@ import Engine.Global.Util;
 import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Entities.Card.Card;
 import Onitama.src.Scenes.GameScene.Scripts.AI.AI;
@@ -212,9 +213,9 @@ public class Player extends GameObject {
     public Vector2D animSelected() {
         Vector2D pos;
         if (selectedCard == card1) {
-            pos = playerId == GameScene.RED_PLAYER ? GameScene.placeholderPlayer1Card1.position : GameScene.placeholderPlayer2Card1.position;
+            pos = playerId == Constants.RED_PLAYER ? GameScene.placeholderPlayer1Card1.position : GameScene.placeholderPlayer2Card1.position;
         } else {
-            pos = playerId == GameScene.RED_PLAYER ? GameScene.placeholderPlayer1Card2.position : GameScene.placeholderPlayer2Card2.position;
+            pos = playerId == Constants.RED_PLAYER ? GameScene.placeholderPlayer1Card2.position : GameScene.placeholderPlayer2Card2.position;
         }
         selectedCard.setPos(standBy.getPos());
         selectedCard.startAnim(pos);
@@ -257,7 +258,7 @@ public class Player extends GameObject {
 
     public void loadPieces(PieceType[][] pieces) {
         Sprite kingSprite, pawnSprite;
-        if (playerId == GameScene.RED_PLAYER) {
+        if (playerId == Constants.RED_PLAYER) {
             kingSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redKing.png"));   
             pawnSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redPawn.png"));   
         } else {
@@ -287,7 +288,7 @@ public class Player extends GameObject {
     }
 
     private boolean ownPiece(PieceType p) {
-        if (playerId == GameScene.RED_PLAYER) {
+        if (playerId == Constants.RED_PLAYER) {
             if (p == PieceType.RED_KING || p == PieceType.RED_PAWN)
                 return true;
         } else {
@@ -305,7 +306,7 @@ public class Player extends GameObject {
 
         Vector2D cardPos;
 
-        if (playerId == GameScene.RED_PLAYER) {
+        if (playerId == Constants.RED_PLAYER) {
             cardPos = new Vector2D(
                 
                 (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2),
@@ -321,7 +322,7 @@ public class Player extends GameObject {
         this.card1.updatePosCard(cardPos);
 
 
-        if (playerId == GameScene.RED_PLAYER) {
+        if (playerId == Constants.RED_PLAYER) {
             cardPos = new Vector2D(
                 (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2),
                 (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
@@ -386,7 +387,7 @@ public class Player extends GameObject {
 
         Vector2D cardPos;
 
-        if (playerId == GameScene.RED_PLAYER) {
+        if (playerId == Constants.RED_PLAYER) {
             cardPos = GameScene.placeholderPlayer1Card1.getPos();
         } else {
             cardPos = GameScene.placeholderPlayer2Card1.getPos();
@@ -394,7 +395,7 @@ public class Player extends GameObject {
 
         this.card1 = new Card(card1Name, cardPos, idleCardSprite, this);
 
-        if (playerId == GameScene.RED_PLAYER) {
+        if (playerId == Constants.RED_PLAYER) {
             cardPos = GameScene.placeholderPlayer1Card2.getPos();
         } else {
             cardPos = GameScene.placeholderPlayer2Card2.getPos();
@@ -415,7 +416,7 @@ public class Player extends GameObject {
 
     private void initPieces() {
         Sprite kingSprite, pawnSprite;
-        if (playerId == GameScene.RED_PLAYER) {
+        if (playerId == Constants.RED_PLAYER) {
             kingSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redKing.png"));   
             pawnSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redPawn.png"));   
         } else {
@@ -424,14 +425,14 @@ public class Player extends GameObject {
         }
         pieceMap = new PieceMap(GameScene.gameBoard.getSize(), GameScene.gameBoard.getPos(), this);
 
-        int line = playerId == GameScene.RED_PLAYER ? 4 : 0;
+        int line = playerId == Constants.RED_PLAYER ? 4 : 0;
 
         pieces = new ArrayList<>();
-        pieces.add(new Piece(pieceMap, (playerId == GameScene.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(0, line), pawnSprite));
-        pieces.add(new Piece(pieceMap, (playerId == GameScene.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(1, line), pawnSprite));
-        pieces.add(new Piece(pieceMap, (playerId == GameScene.RED_PLAYER ? PieceType.RED_KING : PieceType.BLUE_KING), new Vector2D(2, line), kingSprite));
-        pieces.add(new Piece(pieceMap, (playerId == GameScene.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(3, line), pawnSprite));
-        pieces.add(new Piece(pieceMap, (playerId == GameScene.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(4, line), pawnSprite));
+        pieces.add(new Piece(pieceMap, (playerId == Constants.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(0, line), pawnSprite));
+        pieces.add(new Piece(pieceMap, (playerId == Constants.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(1, line), pawnSprite));
+        pieces.add(new Piece(pieceMap, (playerId == Constants.RED_PLAYER ? PieceType.RED_KING : PieceType.BLUE_KING), new Vector2D(2, line), kingSprite));
+        pieces.add(new Piece(pieceMap, (playerId == Constants.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(3, line), pawnSprite));
+        pieces.add(new Piece(pieceMap, (playerId == Constants.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(4, line), pawnSprite));
 
         pieceMap.updatePieces();
 
