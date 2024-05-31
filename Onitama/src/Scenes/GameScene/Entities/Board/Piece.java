@@ -26,15 +26,19 @@ public class Piece extends Tile {
     int animationStep = 0;
     double timeCounter = 0.;
 
+    Vector2D initialPos;
+
 
     public Piece(PieceMap map, PieceType type, Vector2D position, Sprite sprite) {
         super(map, position.getIntY(), position.getIntX(), sprite);
         this.type = type;
+        initialPos = getPos();
     }
 
     public Piece(PieceType type, Vector2D position) {
         super(position.getIntY(), position.getIntX());
         this.type = type;
+        initialPos = getPos();
     }
 
     public PieceType getType() {
@@ -99,8 +103,13 @@ public class Piece extends Tile {
             animation = animations[1];
 
         }
-        else if (Main.gameScene.getCurrentPlayer() == GameScene.BLUE_PLAYER && isBlue()){
+        else if (Main.gameScene.getCurrentPlayer() == GameScene.BLUE_PLAYER && isBlue()) {
             animation = animations[2];
+        }
+        if ((Main.gameScene.getCurrentPlayer() == GameScene.RED_PLAYER && isBlue()) || 
+            (Main.gameScene.getCurrentPlayer()== GameScene.BLUE_PLAYER && isRed()))
+        {
+            //setPos(initialPos);
         }
         if (animation != null) {
             if (timeCounter <= 0) {
