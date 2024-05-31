@@ -14,6 +14,7 @@ import Engine.Entities.GameObject;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.Entities.Player.Player;
@@ -35,6 +36,27 @@ public class Card extends GameObject {
 
     private boolean interactable = true;
 
+    // need > 1
+    private double animState = 2;
+    private boolean animating = false;
+    private double speed = 20;
+    private Vector2D targetPos;
+
+
+    // @Override
+    // public void resize(Vector2D ratio) {
+    //     super.resize(ratio);
+    //     if (targetPos != null && initialPos != null) {
+    //         targetPos = targetPos.multiply(ratio);
+    //         initialPos = initialPos.multiply(ratio);
+    //     }
+    // }
+
+    public void startAnim(Vector2D target) {
+        targetPos = target;
+        animating = true;
+        // System.out.println("target = " + target + ", initial = " + initialPos);
+    }
 
     public Card(String name, Vector2D position, Sprite sprite, Player player) {
         super(position, sprite);
@@ -79,9 +101,31 @@ public class Card extends GameObject {
         return player.getPlayerId();
     }
 
+    public void updatePosCard(Vector2D pos) {
+        Vector2D displacement = getPos();
+        setPos(pos);
+        cardMap.setPos(new Vector2D(
+            position.x + getSize().width * 0.2,
+            position.y + getSize().height * 0.12
+        ));
+
+        cardLabel.setPos(new Vector2D(
+            position.x + getSize().width * 0.15,
+            position.y + getSize().height * 0.7 
+        ));
+    }
+
     @Override
     public void process(double delta) {
-        
+
+        if (animating && targetPos.subtract(getPos()).magnitude() > 10) {
+            Vector2D direction = targetPos.subtract(getPos()).normalize();
+            updatePosCard(getPos().add(direction.multiply(speed)));
+        } else if (animating) {
+            updatePosCard(targetPos);
+            animating = false;
+        }
+
         cardMap.setVisible(isVisible());
         cardLabel.setVisible(isVisible());
 
@@ -97,6 +141,7 @@ public class Card extends GameObject {
         } else if (sprite != player.idleCardSprite) {
             sprite = player.idleCardSprite;
         }
+
     }
 
     @Override
@@ -129,7 +174,7 @@ public class Card extends GameObject {
 
     public void updateCard() {
         if (player == null)
-            cardMap.populateActions(name, GameScene.RED_PLAYER);
+            cardMap.populateActions(name, Constants.RED_PLAYER);
         else 
             cardMap.populateActions(name, player.getPlayerId());
     }

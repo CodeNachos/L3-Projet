@@ -10,6 +10,7 @@ import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 
@@ -46,7 +47,7 @@ public class CardMap extends TileMap {
         }
 
         CardInfo cardInfo = GameScene.getGameCards().get(name);
-        List<Vector2D> actions = player == GameScene.RED_PLAYER ? cardInfo.getRedMovement() : cardInfo.getBlueMovement();
+        List<Vector2D> actions = player == Constants.RED_PLAYER ? cardInfo.getRedMovement() : cardInfo.getBlueMovement();
 
         for (int l = 0; l < mapDimension.height ; l++) {
             for (int c = 0; c < mapDimension.width; c++) {

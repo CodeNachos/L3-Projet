@@ -4,6 +4,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.SwingUtilities;
+
 import Engine.Core.Engines.GameEngine;
 import Engine.Core.Renderer.Scene;
 import Engine.Global.Settings;
@@ -11,6 +13,7 @@ import Engine.Global.Util;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.AI.Testing;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
+import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class Main {
@@ -23,11 +26,14 @@ public class Main {
     public static boolean iaShouldWait = false;
 
     public static GameScene gameScene;
-    public static Scene newGameMenu;
+
+    public static MainMenuScene mainMenuScene;
 
     public static void main(String[] args) {
 
         // Custom Settings
+        Settings.stretch = true;
+        Settings.resizable = true;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double aspectRatio = (double) screenSize.width / screenSize.height;
         //Settings.resolution = screenSize;
@@ -42,12 +48,12 @@ public class Main {
 
         
         if (testing) {
-            gameScene = new GameScene(new Config(null, null));
-            Testing.test();
+            gameScene = new GameScene(new Config(null, null, 0));
+            Testing.test(); 
         } else {
-            newGameMenu = new NewGameMenuScene();
             // start engine
-            engine.setMainScene(newGameMenu);
+            mainMenuScene = new MainMenuScene();
+            engine.setCurrentScene(mainMenuScene);
             engine.start();
         }
     }
@@ -60,6 +66,8 @@ public class Main {
             try {
                 // Load the font from the specified file
                 defaultFont = Font.createFont(Font.TRUETYPE_FONT, new File("Onitama/res/Fonts/monofonto.otf"));
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                ge.registerFont(defaultFont);
             } catch (FontFormatException | IOException e) {
                 e.printStackTrace();
                 defaultFont = new Font("Arial", Font.PLAIN, 12);
@@ -70,6 +78,8 @@ public class Main {
             try {
                 // Load the font from the specified file
                 unicodeFont = Font.createFont(Font.TRUETYPE_FONT, new File("Onitama/res/Fonts/Symbola.ttf"));
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                ge.registerFont(unicodeFont);
             } catch (FontFormatException | IOException e) {
                 e.printStackTrace();
                 unicodeFont = new Font("Arial", Font.PLAIN, 12);

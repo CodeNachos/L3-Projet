@@ -63,11 +63,13 @@ public class Tile extends GameObject {
             return;
         }
         
+        parentMap.removeTile(getLine(), getColumn());
         mapPosition = pos.clone();
         setPos(new Vector2D(
             getColumn() * parentMap.tileDimension.width, // Calculate x-coordinate based on column and tile width
             getLine() * parentMap.tileDimension.height // Calculate y-coordinate based on line and tile height
         ));
+        parentMap.addTile(getLine(), getColumn(), this);
     }
 
     /**

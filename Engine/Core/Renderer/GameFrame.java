@@ -1,10 +1,13 @@
 package Engine.Core.Renderer;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import Engine.Global.Settings;
 import Engine.Global.Util;
@@ -17,6 +20,7 @@ import Engine.Structures.Vector2D;
 public class GameFrame extends JFrame {
 
     // Renderer Settings
+    private boolean isMaximized = false;
     private boolean fullscreen = Settings.fullscreen; // Indicates whether the game is running in fullscreen mode
     private Scene scene; // The current active scene
 
@@ -26,8 +30,10 @@ public class GameFrame extends JFrame {
      */
     public GameFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set default close operation
+        setMinimumSize(new Dimension(100,100));
         setTitle(Settings.applicationName); // Set window title
         setResizable(Settings.resizable); // Set window resizable according to settings
+        getContentPane().setBackground(Color.BLACK);
     }
 
     /**
@@ -91,16 +97,26 @@ public class GameFrame extends JFrame {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                // This method is called when the JFrame is resized
-                if (Settings.stretch) {
-                    // Calculate resize ratio if stretching is enabled
-                    Vector2D resizeRatio = new Vector2D(
-                        (double)(e.getComponent().getSize().width) / (double)(Settings.resolution.width),
-                        (double)(e.getComponent().getSize().height) / (double)(Settings.resolution.height)
-                    );
-                    resizeScene(resizeRatio); // Resize the scene components
-                }
-                Settings.resolution = e.getComponent().getSize(); // Update screen resolution in settings
+                SwingUtilities.invokeLater(() -> {
+                    if (Settings.stretch) { 
+                        JFrame frame = (JFrame) e.getComponent();
+                        Vector2D resizeRatio = new Vector2D(
+                            (double) frame.getContentPane().getSize().width / (double) Settings.resolution.width,
+                            (double) frame.getContentPane().getSize().height / (double) Settings.resolution.height
+                        );
+                        resizeScene(resizeRatio); // Resize the scene components
+                    }
+                    if ((((JFrame)(e.getComponent())).getExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH) {
+                        if (!isMaximized) {
+                            isMaximized = true;
+                            revalidate();
+                        }
+                    } else if (isMaximized) {
+                        isMaximized = false;
+                        revalidate();
+                    }
+                    Settings.resolution = ((JFrame) e.getComponent()).getContentPane().getSize(); // Update screen resolution in settings
+                });
             }
         });
 

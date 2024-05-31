@@ -4,7 +4,6 @@ import java.awt.event.*;
 
 import Engine.Entities.GameObject;
 import Engine.Entities.TileMap.TileMap;
-import Engine.Global.Settings;
 
 public class KeyboardAdapter implements KeyListener {
     Controller controller;
@@ -20,11 +19,7 @@ public class KeyboardAdapter implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == Settings.fullscreen_key) {
-            Settings.fullscreen = !Settings.fullscreen;
-        } else {
-            forwardKeyEvent(e);
-        }
+        forwardKeyEvent(e);
     }
 
     @Override

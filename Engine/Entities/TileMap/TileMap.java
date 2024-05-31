@@ -76,6 +76,7 @@ public class TileMap extends GameObject {
      */
     public void addTile(int l, int c, Tile newTile) {
         gridmap[l][c] = newTile; // Add the specified tile object to the grid
+        
     }
 
     /**
@@ -117,9 +118,6 @@ public class TileMap extends GameObject {
     public void setScale(Vector2D newscale) {
         Vector2D ratio = new Vector2D(newscale.x / scale.x, newscale.y/scale.y);
         resize(ratio);
-        //scale.x = newscale.x; // Set scale x-coordinate
-        //scale.y = newscale.y; // Set scale y-coordinate
-        //updateSize(); // Update size based on scale
     }
 
     @Override
@@ -134,14 +132,14 @@ public class TileMap extends GameObject {
         scale.y = updatedValues.y; // Set scale y-coordinate
         // Update size based on scale
         this.setSize(
-            (int)(initialArea.width * scale.x), // Set width based on initial area width and scale
-            (int)(initialArea.height * scale.y) // Set height based on initial area height and scale
+            (int)Math.floor(initialArea.width * scale.x), // Set width based on initial area width and scale
+            (int)Math.floor(initialArea.height * scale.y) // Set height based on initial area height and scale
         );
 
         // recalculate tile dimensions
         tileDimension = new Dimension(
-            (int)Math.ceil(ratio.x * getSize().width / mapDimension.width), // Calculate new width based on ratio
-            (int)Math.ceil(ratio.y * getSize().height / mapDimension.height) // Calculate new height based on ratio
+            (int)(scale.x * initialArea.width / mapDimension.width), // Calculate new width based on ratio
+            (int)(scale.y * initialArea.height / mapDimension.height) // Calculate new height based on ratio
         );
         // update tiles
         for (int l = 0; l < mapDimension.height; l++) {

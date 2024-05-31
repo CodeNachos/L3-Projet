@@ -3,31 +3,51 @@ package Onitama.src.Scenes.NewGameMenu;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import Engine.Core.Renderer.Scene;
 import Engine.Entities.UI.ColorArea;
 import Engine.Entities.UI.FlatButton;
+import Engine.Entities.UI.FlatToggleButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
-import Onitama.src.Scenes.GameScene.Scripts.States.IADifficulty;
+import Onitama.src.Scenes.GameScene.Scripts.States.PlayerType;
+import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 import Onitama.src.Main;
 
-public class NewGameMenuScene extends Scene {
+public class NewGameMenuScene extends Scene implements ItemListener {
 
-
-
-    Config initialConfig = new Config(IADifficulty.HUMAN, IADifficulty.HARD);
+    Config gameConfig = new Config(PlayerType.HUMAN, PlayerType.HUMAN, Constants.RED_PLAYER);
+    
+    FlatToggleButton redFirstButton;
+    FlatToggleButton blueFirstButton;
 
     public NewGameMenuScene() {
-
        createSelectionMenu();
        createStartButton();
        createMainMenuButton();
+
+        // Add background
+        ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
+        addComponent(background);
+    }
+
+    public NewGameMenuScene(Config config) {
+        gameConfig = config.clone();
+
+        createSelectionMenu();
+        createStartButton();
+        createMainMenuButton();
 
         // Add background
         ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
@@ -52,6 +72,7 @@ public class NewGameMenuScene extends Scene {
         
         selectionMenu.setMainColor(Main.Palette.selection.darker());
         selectionMenu.setAccentColor(Main.Palette.selection.darker());
+        selectionMenu.setCurvature(30, 30);
 
         GridBagConstraints gbc = new GridBagConstraints();
         selectionMenu.setLayout(new GridBagLayout());
@@ -82,7 +103,7 @@ public class NewGameMenuScene extends Scene {
         selectionMenu.add(leftButtonPlayer1, gbc);
 
         
-        JLabel player1Label = new JLabel(initialConfig.redDifficulty.toString(), SwingConstants.CENTER);
+        JLabel player1Label = new JLabel(gameConfig.redDifficulty.toString(), SwingConstants.CENTER);
         player1Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
         player1Label.setForeground(Main.Palette.red);
         player1Label.setPreferredSize(new Dimension(80,20));
@@ -118,7 +139,7 @@ public class NewGameMenuScene extends Scene {
         selectionMenu.add(leftButtonPlayer2, gbc);
 
         
-        JLabel player2Label = new JLabel(initialConfig.blueDifficulty.toString(), SwingConstants.CENTER);
+        JLabel player2Label = new JLabel(gameConfig.blueDifficulty.toString(), SwingConstants.CENTER);
         player2Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
         player2Label.setForeground(Main.Palette.cyan);
         player2Label.setPreferredSize(new Dimension(80,20));
@@ -140,13 +161,65 @@ public class NewGameMenuScene extends Scene {
         gbc.ipady = 10;
         selectionMenu.add(rightButtonPlayer2, gbc);
 
+        JLabel firstTitle = new JLabel("First Player");
+        firstTitle.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 22));
+        firstTitle.setForeground(Main.Palette.foreground);
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 3;
+        gbc.insets = new Insets(10,10,5,10);
+        selectionMenu.add(firstTitle, gbc);
+
+        // Create the panel to hold the toggle buttons
+        JPanel toggleButtonPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints panelGbc = new GridBagConstraints();
+        toggleButtonPanel.setBackground(new Color(0,0,0,0));
+        // Create the first toggle button
+        redFirstButton = new FlatToggleButton("RED", true);
+        redFirstButton.setMainColor(Main.Palette.selection);
+        redFirstButton.setAccentColor(Main.Palette.selection.brighter());
+        redFirstButton.setForeground(Main.Palette.foreground);
+        redFirstButton.setCurvature(10, 10);
+        redFirstButton.setFocusable(false);
+        redFirstButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10,10));
+        redFirstButton.addItemListener(this);
+
+        // Create the second toggle button
+        blueFirstButton = new FlatToggleButton("BLUE", false);
+        blueFirstButton.setMainColor(Main.Palette.selection.darker());
+        blueFirstButton.setAccentColor(Main.Palette.selection.brighter());
+        blueFirstButton.setForeground(Main.Palette.foreground);
+        blueFirstButton.setCurvature(10, 10);
+        blueFirstButton.setFocusable(false);
+        blueFirstButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10,10));
+        blueFirstButton.addItemListener(this);
+
+        // Set constraints and add the first button to the panel
+        panelGbc.gridx = 0;
+        panelGbc.gridy = 0;
+        panelGbc.weightx = 0.5;
+        panelGbc.fill = GridBagConstraints.HORIZONTAL;
+        toggleButtonPanel.add(redFirstButton, panelGbc);
+
+        // Set constraints and add the second button to the panel
+        panelGbc.gridx = 1;
+        toggleButtonPanel.add(blueFirstButton, panelGbc);
+
+        // Set constraints for the main layout and add the panel to the main container
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.ipady = 10;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5,10,10,10);
+        selectionMenu.add(toggleButtonPanel, gbc);
+
 
         leftButtonPlayer1.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                initialConfig.redDifficulty = initialConfig.redDifficulty.previous();
-                player1Label.setText(initialConfig.redDifficulty.toString());
+                gameConfig.redDifficulty = gameConfig.redDifficulty.previous();
+                player1Label.setText(gameConfig.redDifficulty.toString());
             }
             
         });
@@ -155,8 +228,8 @@ public class NewGameMenuScene extends Scene {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                initialConfig.redDifficulty = initialConfig.redDifficulty.next();
-                player1Label.setText(initialConfig.redDifficulty.toString());
+                gameConfig.redDifficulty = gameConfig.redDifficulty.next();
+                player1Label.setText(gameConfig.redDifficulty.toString());
             }
             
         });
@@ -165,8 +238,8 @@ public class NewGameMenuScene extends Scene {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                initialConfig.blueDifficulty = initialConfig.blueDifficulty.previous();
-                player2Label.setText(initialConfig.blueDifficulty.toString());
+                gameConfig.blueDifficulty = gameConfig.blueDifficulty.previous();
+                player2Label.setText(gameConfig.blueDifficulty.toString());
             }
             
         });
@@ -175,14 +248,16 @@ public class NewGameMenuScene extends Scene {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                initialConfig.blueDifficulty = initialConfig.blueDifficulty.next();
-                player2Label.setText(initialConfig.blueDifficulty.toString());
+                gameConfig.blueDifficulty = gameConfig.blueDifficulty.next();
+                player2Label.setText(gameConfig.blueDifficulty.toString());
             }
             
         });
         
         addComponent(selectionMenu);
-        addComponent(new ColorArea(new Color(0,0,0,15), menuArea, menuOffset.add(new Vector2D(8,8))));
+        ColorArea shadow = new ColorArea(new Color(0,0,0,15), menuArea, menuOffset.add(new Vector2D(8,8)));
+        shadow.setCurvature(30, 30);
+        addComponent(shadow);
     }
 
     private void createStartButton() {
@@ -200,16 +275,7 @@ public class NewGameMenuScene extends Scene {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                Main.gameScene = new GameScene(initialConfig);
-
-                if (initialConfig.redDifficulty != IADifficulty.HUMAN) {
-                    Main.gameScene.enablePlayerAI(GameScene.RED_PLAYER, initialConfig.redDifficulty.deatph());
-                }
-                if (initialConfig.blueDifficulty != IADifficulty.HUMAN) {
-                    Main.gameScene.enablePlayerAI(GameScene.BLUE_PLAYER, initialConfig.blueDifficulty.deatph());
-                }
-
-              
+                Main.gameScene = new GameScene(gameConfig);              
                 Main.engine.setCurrentScene(Main.gameScene);
             }
             
@@ -247,6 +313,14 @@ public class NewGameMenuScene extends Scene {
         mainMenuButton.setBorder(BorderFactory.createEmptyBorder());
         mainMenuButton.setFocusable(false);
 
+        mainMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.engine.setCurrentScene(new MainMenuScene());
+            }
+            
+        });
+
         Dimension buttonArea = new Dimension(
             (int)(Main.engine.getResolution().width /8),
             (int)(Main.engine.getResolution().height/10)
@@ -267,5 +341,20 @@ public class NewGameMenuScene extends Scene {
         buttonFrame.add(mainMenuButton);
 
         addComponent(buttonFrame);
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getItem() == redFirstButton) {
+            blueFirstButton.setSelected(false);
+            blueFirstButton.setMainColor(Main.Palette.selection.darker());
+            redFirstButton.setMainColor(Main.Palette.selection);
+            gameConfig.firstPlayer = Constants.RED_PLAYER;
+        } else {
+            redFirstButton.setSelected(false);
+            blueFirstButton.setMainColor(Main.Palette.selection);
+            redFirstButton.setMainColor(Main.Palette.selection.darker());
+            gameConfig.firstPlayer = Constants.BLUE_PLAYER;
+        }
     }
 }

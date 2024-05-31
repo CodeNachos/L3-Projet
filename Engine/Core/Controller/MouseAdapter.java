@@ -3,6 +3,8 @@ package Engine.Core.Controller;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import Engine.Entities.GameObject;
 import Engine.Entities.TileMap.Tile;
@@ -42,18 +44,23 @@ public class MouseAdapter implements MouseListener {
 
     // sends mouse event to concerned game object in current scene
     private void forwardMouseEvent(MouseEvent e) {
+        List<GameObject> targetObjects = new ArrayList<>();
+
+        // Collect objects that should receive the event
         for (GameObject obj : controller.scene.components) {
-            // check if is target object
+            // Check if is target object
             if (obj.getBounds().contains(e.getPoint())) {
-                // if obj is tile map send event to tiles
-                if (obj instanceof TileMap) {
-                    TileMap mapObj = (TileMap)obj;
-                    forwardMouseEventToTiles(mapObj, e);
-                
-                // else default treatment
-                } else {
-                    obj.input(e);
-                }
+                targetObjects.add(obj);
+            }
+        }
+
+        // Forward the event to the collected objects
+        for (GameObject obj : targetObjects) {
+            if (obj instanceof TileMap) {
+                TileMap mapObj = (TileMap) obj;
+                forwardMouseEventToTiles(mapObj, e);
+            } else {
+                obj.input(e);
             }
         }
     }

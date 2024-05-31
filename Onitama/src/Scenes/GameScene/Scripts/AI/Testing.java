@@ -1,12 +1,13 @@
 package Onitama.src.Scenes.GameScene.Scripts.AI;
 
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 
 public class Testing {
     public static void test() {
 
-        SmartAI red = new SmartAI(2, GameScene.RED_PLAYER, new int[] {168, 703, 74, 550});
-        SmartAI blue = new SmartAI(2, GameScene.BLUE_PLAYER, new int[] {4, 3, 2, 1});
+        SmartAI red = new SmartAI(5, Constants.RED_PLAYER, new int[] {4, 3, 2, 1});
+        SmartAI blue = new SmartAI(3, Constants.BLUE_PLAYER, new int[] {4, 3, 2, 1});
         //SmartAI blue = new SmartAI(5, GameScene.PLAYER2, new int[] {1, 1, 1, 1});
         int nbRed = 0, nbBlue = 0;
         for (int round = 0; round < 100; round++) {

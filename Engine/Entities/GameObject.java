@@ -186,7 +186,7 @@ public abstract class GameObject extends JComponent {
                 (int)Math.ceil(sprite.getHeight() * scale.y) // Set height based on sprite height and scale
             );
         } else {
-            this.setSize(0, 0); // Set size to zero if no sprite is set
+            this.setSize(0, 0); // Set size to 0 if no sprite is set
         }
     }
 

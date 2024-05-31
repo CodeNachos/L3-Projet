@@ -9,6 +9,7 @@ import Engine.Global.Util;
 import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Entities.Card.Card;
 import Onitama.src.Scenes.GameScene.Scripts.AI.AI;
@@ -78,7 +79,6 @@ public class Player extends GameObject {
 
     @Override
     public void process(double delta) {
-
         if (GameScene.getCurrentPlayer() != this.playerId) {
             aiAction = null;
             return;
@@ -89,13 +89,9 @@ public class Player extends GameObject {
                 GameScene.setAction(null);
                 Main.iaShouldWait = false;
             }
-            
             return;
         }
             
-
-       
-
         if (Main.iaShouldWait) {
             Main.iaShouldWait = false;
             iaWaitCounter = 2*60;
@@ -205,6 +201,37 @@ public class Player extends GameObject {
         return standBy.getName();
     }
 
+    // animate the standyCard
+    // to the selected position
+    // return the selected previous position
+    // the idea is to reuse the selected position
+    // to start animating the other player stanby card
+    // 
+    // How it works ?
+    // 1. we set the position of selected to stanby
+    // 2. we animate the selected position from standby to normal
+    public Vector2D animSelected() {
+        Vector2D pos;
+        if (selectedCard == card1) {
+            pos = playerId == Constants.RED_PLAYER ? GameScene.placeholderPlayer1Card1.position : GameScene.placeholderPlayer2Card1.position;
+        } else {
+            pos = playerId == Constants.RED_PLAYER ? GameScene.placeholderPlayer1Card2.position : GameScene.placeholderPlayer2Card2.position;
+        }
+        selectedCard.setPos(standBy.getPos());
+        selectedCard.startAnim(pos);
+
+        return pos;
+    }
+
+    // set standby to selectedPos
+    // animate standy to normal
+    public void animStanby(Vector2D selectedPos) {
+        Vector2D normalStandbyPosition = GameScene.placeholderStandByCard.position;
+        standBy.setPos(selectedPos);
+        standBy.startAnim(normalStandbyPosition);
+    }
+
+ 
     public void setStandBy(String stb) {
         standBy.setName(stb);
         standBy.setVisible(true);
@@ -231,7 +258,7 @@ public class Player extends GameObject {
 
     public void loadPieces(PieceType[][] pieces) {
         Sprite kingSprite, pawnSprite;
-        if (playerId == GameScene.RED_PLAYER) {
+        if (playerId == Constants.RED_PLAYER) {
             kingSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redKing.png"));   
             pawnSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redPawn.png"));   
         } else {
@@ -261,7 +288,7 @@ public class Player extends GameObject {
     }
 
     private boolean ownPiece(PieceType p) {
-        if (playerId == GameScene.RED_PLAYER) {
+        if (playerId == Constants.RED_PLAYER) {
             if (p == PieceType.RED_KING || p == PieceType.RED_PAWN)
                 return true;
         } else {
@@ -271,6 +298,55 @@ public class Player extends GameObject {
 
         return false;
     }
+
+    // i tried to call this function
+    // after `initCards` but this doesn't works
+    // so we duplicate the pos code
+    public void resetPosCard() {
+
+        Vector2D cardPos;
+
+        if (playerId == Constants.RED_PLAYER) {
+            cardPos = new Vector2D(
+                
+                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*selectedCardSprite.getHeight()))
+            );
+        } else {
+            cardPos = new Vector2D(
+                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*idleCardSprite.getHeight()))
+            );
+        }
+
+        this.card1.updatePosCard(cardPos);
+
+
+        if (playerId == Constants.RED_PLAYER) {
+            cardPos = new Vector2D(
+                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
+            );
+        } else {
+            cardPos = new Vector2D(
+                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
+                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
+            );
+        }
+
+        this.card2.updatePosCard(cardPos);
+
+
+        if (standBy != null) {
+            cardPos = new Vector2D(
+                (Main.engine.getResolution().width/2) - (int)(idleCardSprite.getWidth()/2),
+                (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSprite.getHeight())
+            );
+            this.standBy.updatePosCard(cardPos);
+        }
+    }
+
+
 
     private void initCards(String card1Name, String card2Name, String standByName) {
         idleCardSprite = new Sprite(
@@ -311,40 +387,23 @@ public class Player extends GameObject {
 
         Vector2D cardPos;
 
-        if (playerId == GameScene.RED_PLAYER) {
-            cardPos = new Vector2D(
-                
-                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*selectedCardSprite.getHeight()))
-            );
+        if (playerId == Constants.RED_PLAYER) {
+            cardPos = GameScene.placeholderPlayer1Card1.getPos();
         } else {
-            cardPos = new Vector2D(
-                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(selectedCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) - (1.1*idleCardSprite.getHeight()))
-            );
+            cardPos = GameScene.placeholderPlayer2Card1.getPos();
         }
 
         this.card1 = new Card(card1Name, cardPos, idleCardSprite, this);
 
-        if (playerId == GameScene.RED_PLAYER) {
-            cardPos = new Vector2D(
-                (int)(GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
-            );
+        if (playerId == Constants.RED_PLAYER) {
+            cardPos = GameScene.placeholderPlayer1Card2.getPos();
         } else {
-            cardPos = new Vector2D(
-                (int)((GameScene.gameBoard.getPos().getIntX()/2) - (int)(idleCardSprite.getWidth()/2) + GameScene.gameBoard.getPos().getIntX() + GameScene.gameBoard.getSize().height),
-                (int)(GameScene.gameBoard.getPos().getIntY() + (GameScene.gameBoard.getSize().height / 2) + (0.1*idleCardSprite.getHeight()))
-                
-            );
+            cardPos = GameScene.placeholderPlayer2Card2.getPos();
         }
 
         this.card2 = new Card(card2Name, cardPos, idleCardSprite, this);
 
-        cardPos = new Vector2D(
-            (Main.engine.getResolution().width/2) - (int)(idleCardSprite.getWidth()/2),
-            (int)(Main.engine.getResolution().height) -(int)(1.2*idleCardSprite.getHeight())
-        );
+        cardPos = GameScene.placeholderStandByCard.getPos();
 
         if (standByName == null) {
             standBy = new Card(null, cardPos, standBySprite, this);
@@ -357,7 +416,7 @@ public class Player extends GameObject {
 
     private void initPieces() {
         Sprite kingSprite, pawnSprite;
-        if (playerId == GameScene.RED_PLAYER) {
+        if (playerId == Constants.RED_PLAYER) {
             kingSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redKing.png"));   
             pawnSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redPawn.png"));   
         } else {
@@ -366,14 +425,14 @@ public class Player extends GameObject {
         }
         pieceMap = new PieceMap(GameScene.gameBoard.getSize(), GameScene.gameBoard.getPos(), this);
 
-        int line = playerId == GameScene.RED_PLAYER ? 4 : 0;
+        int line = playerId == Constants.RED_PLAYER ? 4 : 0;
 
         pieces = new ArrayList<>();
-        pieces.add(new Piece(pieceMap, (playerId == GameScene.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(0, line), pawnSprite));
-        pieces.add(new Piece(pieceMap, (playerId == GameScene.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(1, line), pawnSprite));
-        pieces.add(new Piece(pieceMap, (playerId == GameScene.RED_PLAYER ? PieceType.RED_KING : PieceType.BLUE_KING), new Vector2D(2, line), kingSprite));
-        pieces.add(new Piece(pieceMap, (playerId == GameScene.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(3, line), pawnSprite));
-        pieces.add(new Piece(pieceMap, (playerId == GameScene.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(4, line), pawnSprite));
+        pieces.add(new Piece(pieceMap, (playerId == Constants.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(0, line), pawnSprite));
+        pieces.add(new Piece(pieceMap, (playerId == Constants.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(1, line), pawnSprite));
+        pieces.add(new Piece(pieceMap, (playerId == Constants.RED_PLAYER ? PieceType.RED_KING : PieceType.BLUE_KING), new Vector2D(2, line), kingSprite));
+        pieces.add(new Piece(pieceMap, (playerId == Constants.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(3, line), pawnSprite));
+        pieces.add(new Piece(pieceMap, (playerId == Constants.RED_PLAYER ? PieceType.RED_PAWN : PieceType.BLUE_PAWN), new Vector2D(4, line), pawnSprite));
 
         pieceMap.updatePieces();
 

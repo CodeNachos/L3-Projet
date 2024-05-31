@@ -72,6 +72,9 @@ public class History {
     }
 
     public void resetGame() {
+        if (initialGameState == null) {
+            return;
+        }
         GameScene.loadGameState(initialGameState);
         clearRecord();
     }
