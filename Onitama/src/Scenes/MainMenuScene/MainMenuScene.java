@@ -205,9 +205,8 @@ public class MainMenuScene extends Scene {
                 );
 
                 HowToPlayMenu menu = new HowToPlayMenu(menuArea, menuOffset);
-                Main.gameScene.addComponent(menu);
+                Main.engine.getCurrentScene().addComponent(menu);
                 
-                Main.gameScene.setEnabledGUI(false);
             }
             
         });
