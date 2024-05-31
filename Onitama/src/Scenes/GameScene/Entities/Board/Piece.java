@@ -112,7 +112,7 @@ public class Piece extends Tile {
             animationStep = 0;
             timeCounter = 0.02;
         }
-        else if (animation != animations[0] && 
+        else if (animation != null && animation != animations[0] && 
             ((Main.gameScene.getCurrentPlayer() == Constants.RED_PLAYER && isBlue()) || 
             (Main.gameScene.getCurrentPlayer()== Constants.BLUE_PLAYER && isRed())))
         {

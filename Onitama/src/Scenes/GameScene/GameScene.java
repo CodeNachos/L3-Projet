@@ -65,6 +65,9 @@ public class GameScene extends Scene {
         
         // Pick game cards 
         chooseCards();
+
+        // Set player player
+        currentPlayer = config.firstPlayer;
         
         // Instantiate game entities
         createBoard();

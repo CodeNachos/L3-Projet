@@ -14,4 +14,9 @@ public class Config {
         this.firstPlayer = firstPlayer;
     }
 
+    @Override
+    public Config clone() {
+        return new Config(redDifficulty, blueDifficulty, firstPlayer);
+    }
+
 }
