@@ -113,6 +113,48 @@ public class GameScene extends Scene {
 
         // Set player player
         currentPlayer = gameConfig.firstPlayer;
+
+        // Instantiate game entities
+        createBoard();
+        createCardPlaceholders();
+        createPlayersFade();
+        createPlayers();
+
+        // Set player types
+        if (gameConfig.redDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.RED_PLAYER, gameConfig.redDifficulty.deatph());
+        }
+        if (gameConfig.blueDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.BLUE_PLAYER, gameConfig.blueDifficulty.deatph());
+        }
+
+        player1.addToScene(this);
+        player2.addToScene(this);
+        addComponent(gameBoard);
+
+        // Add GUI
+        createGUI();
+
+        // Add background
+        ColorArea background = new ColorArea(Main.Palette.background,
+                new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
+        addComponent(background);
+
+        history = new History();
+
+        loadGameState(state);
+
+        updateGUI();
+    }
+
+    public GameScene(State state, History hist) {
+        gameConfig = new Config(PlayerType.HUMAN, PlayerType.HUMAN, 0);
+
+        // Pick game cards 
+        loadCards(state.getGameCards());
+
+        // Set player player
+        currentPlayer = gameConfig.firstPlayer;
         
         // Instantiate game entities
         createBoard();
@@ -139,7 +181,7 @@ public class GameScene extends Scene {
         ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
         addComponent(background);
 
-        history = new History();
+        history = hist;
 
         loadGameState(state);
         

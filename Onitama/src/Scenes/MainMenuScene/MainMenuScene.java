@@ -26,6 +26,7 @@ import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Interface.InGameMenu;
+import Onitama.src.Scenes.GameScene.Scripts.History.History;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
@@ -229,7 +230,8 @@ public class MainMenuScene extends Scene {
                     GZIPInputStream gzipIn = new GZIPInputStream(new BufferedInputStream(fileIn));
                         ObjectInputStream in = new ObjectInputStream(gzipIn)) {
                     State state = (State) in.readObject();
-                    Main.gameScene = new GameScene(state);
+                    History hisotry = (History) in.readObject();
+                    Main.gameScene = new GameScene(state, hisotry);
                     Main.engine.setCurrentScene(Main.gameScene);
                     
 

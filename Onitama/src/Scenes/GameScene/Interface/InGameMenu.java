@@ -141,6 +141,7 @@ public class InGameMenu extends MenuFrame {
 				GZIPOutputStream gzipOut = new GZIPOutputStream(new BufferedOutputStream(fileOut));
 				ObjectOutputStream out = new ObjectOutputStream(gzipOut)) {
                     out.writeObject(Main.gameScene.getGameState());
+                    out.writeObject(GameScene.history);
                     saveMessage.setVisible(true);
                     timer.start();
 						
