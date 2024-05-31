@@ -208,7 +208,6 @@ public class MainMenuScene extends Scene {
                 Main.engine.getCurrentScene().addComponent(menu);
                 
             }
-            
         });
 
         quitButton.addActionListener(new ActionListener() {
@@ -222,7 +221,7 @@ public class MainMenuScene extends Scene {
 
     private FlatButton createBaseButton(String content) {
         FlatButton button = new FlatButton(content);
-        button.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 26));
+        button.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 18));
         button.setForeground(Main.Palette.foreground);
         button.setMainColor(Main.Palette.selection);
         button.setAccentColor(new Color(255,255,255,25));
