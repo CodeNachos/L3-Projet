@@ -3,6 +3,12 @@ package Onitama.src.Scenes.MainMenuScene;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.LinkedList;
+import java.util.zip.GZIPInputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -16,7 +22,9 @@ import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Interface.InGameMenu;
+import Onitama.src.Scenes.GameScene.Scripts.States.State;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class MainMenuScene extends Scene {
@@ -207,6 +215,32 @@ public class MainMenuScene extends Scene {
                 HowToPlayMenu menu = new HowToPlayMenu(menuArea, menuOffset);
                 Main.engine.getCurrentScene().addComponent(menu);
                 
+            }
+            
+        });
+
+        loadButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try (FileInputStream fileIn = new FileInputStream("Onitama/savefiles/gameSave1.txt");
+                    GZIPInputStream gzipIn = new GZIPInputStream(new BufferedInputStream(fileIn));
+                        ObjectInputStream in = new ObjectInputStream(gzipIn)) {
+                    State state = (State) in.readObject();
+                    Main.gameScene = new GameScene();
+                    Main.gameScene.loadGameState(state);
+                    Main.engine.setCurrentScene(Main.gameScene);
+                    
+
+                } catch (IOException e1)
+                {
+                    e1.printStackTrace();        
+                } catch (ClassNotFoundException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+
+
             }
             
         });

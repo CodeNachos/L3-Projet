@@ -20,6 +20,7 @@ public class HowToPlayMenu extends MenuFrame {
 
         blurredArea = new BlurredArea(Main.engine.getResolution(), BlurredArea.captureBackground(Main.mainMenuScene));
         
+<<<<<<< Updated upstream
         Main.engine.getCurrentScene().addComponent(blurredArea);
     }
 
@@ -29,6 +30,9 @@ public class HowToPlayMenu extends MenuFrame {
             getParent().setComponentZOrder(blurredArea, 1);
             getParent().setComponentZOrder(this, 0);
         }
+=======
+        Main.mainMenuScene.addComponent(blurredArea);
+>>>>>>> Stashed changes
     }
     
 }
