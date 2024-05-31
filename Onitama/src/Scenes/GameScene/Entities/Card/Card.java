@@ -141,12 +141,6 @@ public class Card extends GameObject {
             sprite = player.idleCardSprite;
         }
 
-        if (getParent().getComponentZOrder(this) != 5) {
-            getParent().setComponentZOrder(this, 5);
-            getParent().setComponentZOrder(cardMap, 4);
-            getParent().setComponentZOrder(cardLabel, 3);
-        }
-
     }
 
     @Override
