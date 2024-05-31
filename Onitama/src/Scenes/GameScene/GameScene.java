@@ -105,6 +105,45 @@ public class GameScene extends Scene {
         updateGUI();
     }
 
+    public GameScene(State state) {
+        gameConfig = new Config(PlayerType.HUMAN, PlayerType.HUMAN, 0);
+
+        // Pick game cards 
+        loadCards(state.getGameCards());
+
+        // Set player player
+        currentPlayer = gameConfig.firstPlayer;
+        
+        // Instantiate game entities
+        createBoard();
+        createCardPlaceholders();
+        createPlayersFade();
+        createPlayers();
+
+        // Set player types
+        if (gameConfig.redDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.RED_PLAYER, gameConfig.redDifficulty.deatph());
+        }
+        if (gameConfig.blueDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.BLUE_PLAYER, gameConfig.blueDifficulty.deatph());
+        }
+
+        player1.addToScene(this);
+        player2.addToScene(this);
+        addComponent(gameBoard);
+
+        // Add GUI
+        createGUI();
+        
+        // Add background
+        ColorArea background = new ColorArea(Main.Palette.background, new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
+        addComponent(background);
+
+        history = new History();
+        
+        updateGUI();
+    }
+
     public GameScene() {
         JsonReader jReader = new JsonReader();
         List<CardInfo> listOfCards = jReader.readJson("Onitama/res/Cards/cards.json");
@@ -507,6 +546,30 @@ public class GameScene extends Scene {
             }
         }
         return;
+    }
+
+    private void loadCards(List<String> cards) {
+        JsonReader jReader = new JsonReader();
+        List<CardInfo> listOfCards = jReader.readJson("Onitama/res/Cards/cards.json");
+
+        gameCards = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
+
+        gameCards.put(cards.get(0), listOfCards.get(findCard(listOfCards, cards.get(0))));
+        gameCards.put(cards.get(1), listOfCards.get(findCard(listOfCards, cards.get(1))));
+        gameCards.put(cards.get(2), listOfCards.get(findCard(listOfCards, cards.get(2))));
+        gameCards.put(cards.get(3), listOfCards.get(findCard(listOfCards, cards.get(3))));
+        gameCards.put(cards.get(4), listOfCards.get(findCard(listOfCards, cards.get(4))));
+    }
+
+    private int findCard(List<CardInfo> listOfCards, String card) {
+        for (CardInfo c : listOfCards) {
+            if (c.getName().equals(card)) {
+                return listOfCards.indexOf(c);
+            }
+        }
+        
+        return -1;
     }
 
     private void createCardPlaceholders() {

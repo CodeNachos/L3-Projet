@@ -22,8 +22,11 @@ import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.Constants;
+import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Interface.InGameMenu;
+import Onitama.src.Scenes.GameScene.Scripts.States.Config;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
@@ -226,7 +229,7 @@ public class MainMenuScene extends Scene {
                     GZIPInputStream gzipIn = new GZIPInputStream(new BufferedInputStream(fileIn));
                         ObjectInputStream in = new ObjectInputStream(gzipIn)) {
                     State state = (State) in.readObject();
-                    Main.gameScene = new GameScene();
+                    Main.gameScene = new GameScene(state);
                     Main.gameScene.loadGameState(state);
                     Main.engine.setCurrentScene(Main.gameScene);
                     
