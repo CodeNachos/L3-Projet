@@ -92,6 +92,7 @@ public class Piece extends Tile {
                 (Main.gameScene.getCurrentPlayer() == Constants.BLUE_PLAYER && isRed())
             ) {
                 animation = animations[0];
+                animationStep = 0;
                 timeCounter = 0.02;
             }
         }
@@ -99,19 +100,26 @@ public class Piece extends Tile {
 
     @Override
     public void process(double delta) {
-        if (Main.gameScene.getCurrentPlayer() == GameScene.RED_PLAYER && isRed())
+        if (animation == null && Main.gameScene.getCurrentPlayer() == Constants.RED_PLAYER && isRed())
         {
             animation = animations[1];
+            animationStep = 0;
+            timeCounter = 0.02;
 
         }
-        else if (Main.gameScene.getCurrentPlayer() == GameScene.BLUE_PLAYER && isBlue()) {
+        else if (animation == null && Main.gameScene.getCurrentPlayer() == Constants.BLUE_PLAYER && isBlue()) {
             animation = animations[2];
+            animationStep = 0;
+            timeCounter = 0.02;
         }
-        if ((Main.gameScene.getCurrentPlayer() == GameScene.RED_PLAYER && isBlue()) || 
-            (Main.gameScene.getCurrentPlayer()== GameScene.BLUE_PLAYER && isRed()))
+        else if (animation != animations[0] && 
+            ((Main.gameScene.getCurrentPlayer() == Constants.RED_PLAYER && isBlue()) || 
+            (Main.gameScene.getCurrentPlayer()== Constants.BLUE_PLAYER && isRed())))
         {
-            //setPos(initialPos);
+            setMapPosition(mapPosition);
+            animation = null;
         }
+        
         if (animation != null) {
             if (timeCounter <= 0) {
                 setPos(getPos().add(animation[animationStep]));

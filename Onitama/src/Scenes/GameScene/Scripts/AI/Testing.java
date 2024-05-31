@@ -1,5 +1,6 @@
 package Onitama.src.Scenes.GameScene.Scripts.AI;
 
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 
 public class Testing {

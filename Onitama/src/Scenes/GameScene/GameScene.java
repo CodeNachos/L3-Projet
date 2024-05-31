@@ -30,13 +30,8 @@ import Onitama.src.Scenes.GameScene.Entities.Card.CardPlaceholder;
 import Onitama.src.Scenes.GameScene.Entities.Player.Player;
 
 public class GameScene extends Scene {
-    public static final Vector2D RED_THRONE = new Vector2D(2, 4);
-    public static final Vector2D BLUE_THRONE = new Vector2D(2, 0);
 
-    public static final int RED_PLAYER = 0; // red
-    public static final int BLUE_PLAYER = 1; // blue
-
-    public static int currentPlayer = RED_PLAYER;
+    public static int currentPlayer = Constants.RED_PLAYER;
     public static int winner;
 
     public static GameObject placeholderPlayer1Card1;
@@ -108,13 +103,13 @@ public class GameScene extends Scene {
         cards.add(player1.getSecondCard());
         cards.add(player2.getFirstCard());
         cards.add(player2.getSecondCard());
-        if (currentPlayer == RED_PLAYER) {
+        if (currentPlayer == Constants.RED_PLAYER) {
             cards.add(player1.getStandByCard());
         } else {
             cards.add(player2.getStandByCard());
         }
 
-        return new State(getPlayerPieces(RED_PLAYER), getPlayerPieces(BLUE_PLAYER), cards, currentPlayer);
+        return new State(getPlayerPieces(Constants.RED_PLAYER), getPlayerPieces(Constants.BLUE_PLAYER), cards, currentPlayer);
     }
 
     public static void loadGameState(State s) {
@@ -128,11 +123,11 @@ public class GameScene extends Scene {
 
     public void enablePlayerAI(int player, int difficulty) {
         switch (player) {
-            case RED_PLAYER:
+            case Constants.RED_PLAYER:
                 player1.enableAI(difficulty);
                 break;
             
-            case BLUE_PLAYER:
+            case Constants.BLUE_PLAYER:
                 player2.enableAI(difficulty);
                 break;
 
@@ -214,9 +209,9 @@ public class GameScene extends Scene {
     public static ArrayList<Piece> getPlayerPieces(int player) {
         ArrayList<Piece> pieces = null;
 
-        if (player == RED_PLAYER) {
+        if (player == Constants.RED_PLAYER) {
             pieces = player1.getPieces();
-        } else if (player == BLUE_PLAYER) {
+        } else if (player == Constants.BLUE_PLAYER) {
             pieces = player2.getPieces();
         } else {
             Util.printError("Invalid player");
@@ -239,13 +234,13 @@ public class GameScene extends Scene {
 
     private static boolean conqueredKing() {
         for (Piece p : player1.getPieces()) {
-            if (p.getType() == PieceType.RED_KING && p.getPosition().equals(BLUE_THRONE)) {
+            if (p.getType() == PieceType.RED_KING && p.getPosition().equals(Constants.BLUE_THRONE)) {
                 return true;
             }
         }
 
         for (Piece p : player2.getPieces()) {
-            if (p.getType() == PieceType.BLUE_KING && p.getPosition().equals(RED_THRONE)) {
+            if (p.getType() == PieceType.BLUE_KING && p.getPosition().equals(Constants.RED_THRONE)) {
                 return true;
             }
         }
@@ -276,7 +271,7 @@ public class GameScene extends Scene {
     }
 
     public static void exchangeCards() {
-        if (currentPlayer == RED_PLAYER) {
+        if (currentPlayer == Constants.RED_PLAYER) {
             Vector2D selectedPos = player1.animSelected();
             player2.setStandBy(getSelectedCard().getName());
             getSelectedCard().setName(player1.getStandByCard());
@@ -323,8 +318,6 @@ public class GameScene extends Scene {
         
         gameBoard.setSelectedTile(null); gameBoard.setSelectedAction(null);
 
-        player1.update(); player2.update();
-
         exchangeCards();
 
         player1.setSelectedCard(null); player2.setSelectedCard(null);
@@ -351,7 +344,7 @@ public class GameScene extends Scene {
             return;
         }
 
-        if (currentPlayer == RED_PLAYER) {
+        if (currentPlayer == Constants.RED_PLAYER) {
             player1.setSelectedCardByName(act.getCard());
         } else {
             player2.setSelectedCardByName(act.getCard());
@@ -369,7 +362,7 @@ public class GameScene extends Scene {
     }
 
     public static void updateTurnLabels() {
-        if (currentPlayer == RED_PLAYER) {
+        if (currentPlayer == Constants.RED_PLAYER) {
             leftTurnLabel.setRedTurn();
             rightTurnLabel.clearTurn();
         } else {
@@ -379,7 +372,7 @@ public class GameScene extends Scene {
     }
 
     public static void updatePlayerFade() {
-        if (currentPlayer == RED_PLAYER) {
+        if (currentPlayer == Constants.RED_PLAYER) {
             leftPlayerFade.setVisible(false);
             rightPlayerFade.setVisible(true);
         } else {
@@ -389,7 +382,7 @@ public class GameScene extends Scene {
     }
 
     public static void updateStandByCardArrows() {
-        if (currentPlayer == RED_PLAYER) {
+        if (currentPlayer == Constants.RED_PLAYER) {
             leftArrow.toggleLeftArrow();
             rightArrow.clearArrow();
         } else {
@@ -399,7 +392,7 @@ public class GameScene extends Scene {
     }
 
     public static void updateIteractableEntities() {
-        if (currentPlayer == RED_PLAYER) {
+        if (currentPlayer == Constants.RED_PLAYER) {
             if (player1.isAiEnabled()) {
                 player1.setCardsInteractable(false);
                 player1.setPiecesInteractable(false);
@@ -538,11 +531,11 @@ public class GameScene extends Scene {
     private void createPlayers() {
         Iterator<String> cardIter = gameCards.keySet().iterator();
         
-        player1 = new Player(RED_PLAYER, cardIter.next(), cardIter.next(), null);
+        player1 = new Player(Constants.RED_PLAYER, cardIter.next(), cardIter.next(), null);
 
-        player2 = new Player(BLUE_PLAYER, cardIter.next(), cardIter.next(), null);
+        player2 = new Player(Constants.BLUE_PLAYER, cardIter.next(), cardIter.next(), null);
 
-        if (currentPlayer == RED_PLAYER) {
+        if (currentPlayer == Constants.RED_PLAYER) {
             player1.setStandBy(cardIter.next());
             player2.removeStandBy();
         } else {
