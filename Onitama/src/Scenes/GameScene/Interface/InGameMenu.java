@@ -18,6 +18,8 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class InGameMenu extends MenuFrame {
     BlurredArea blurredArea;
@@ -26,6 +28,7 @@ public class InGameMenu extends MenuFrame {
     FlatButton resumeButton;
     FlatButton settingsButton;
     FlatButton quitButton;
+    FlatButton newGameButton;
 
     public InGameMenu(Dimension area, Vector2D offset) {
         
@@ -55,6 +58,11 @@ public class InGameMenu extends MenuFrame {
 
         add(Box.createVerticalStrut(6));
 
+        newGameButton = createBaseButton("New Game");
+        newGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(newGameButton);
+        add(Box.createVerticalStrut(6));
+
         settingsButton = createBaseButton("Settings");
         settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(settingsButton);
@@ -81,6 +89,16 @@ public class InGameMenu extends MenuFrame {
                 Main.gameScene.history.resetGame();
                 removeMenu();
             }
+            
+        });
+
+        newGameButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.engine.setCurrentScene(new NewGameMenuScene());
+            }
+            
             
         });
 
