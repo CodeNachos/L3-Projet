@@ -275,16 +275,7 @@ public class NewGameMenuScene extends Scene implements ItemListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                Main.gameScene = new GameScene(gameConfig);
-
-                if (gameConfig.redDifficulty != PlayerType.HUMAN) {
-                    Main.gameScene.enablePlayerAI(Constants.RED_PLAYER, gameConfig.redDifficulty.deatph());
-                }
-                if (gameConfig.blueDifficulty != PlayerType.HUMAN) {
-                    Main.gameScene.enablePlayerAI(Constants.BLUE_PLAYER, gameConfig.blueDifficulty.deatph());
-                }
-
-              
+                Main.gameScene = new GameScene(gameConfig);              
                 Main.engine.setCurrentScene(Main.gameScene);
             }
             
