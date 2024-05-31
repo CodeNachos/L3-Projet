@@ -1,25 +1,13 @@
 package Onitama.src.Scenes.MainMenuScene;
 
-import java.awt.Color;
-import java.awt.Component;
+
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-
+import Engine.Core.Renderer.Scene;
 import Engine.Entities.UI.BlurredArea;
-import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
-import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
-import Onitama.src.Scenes.GameScene.GameScene;
-import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class HowToPlayMenu extends MenuFrame {
 
@@ -32,7 +20,15 @@ public class HowToPlayMenu extends MenuFrame {
 
         blurredArea = new BlurredArea(Main.engine.getResolution(), BlurredArea.captureBackground(Main.mainMenuScene));
         
-        Main.gameScene.addComponent(blurredArea);
+        Main.engine.getCurrentScene().addComponent(blurredArea);
+    }
+
+    @Override
+    public void process(double delta) {
+        if (getParent().getComponentZOrder(this) > 1) {
+            getParent().setComponentZOrder(blurredArea, 1);
+            getParent().setComponentZOrder(this, 0);
+        }
     }
     
 }
