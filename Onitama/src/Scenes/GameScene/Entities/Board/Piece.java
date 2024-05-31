@@ -27,14 +27,19 @@ public class Piece extends Tile {
     int animationStep = 0;
     double timeCounter = 0.;
 
+    Vector2D initialPos;
+
+
     public Piece(PieceMap map, PieceType type, Vector2D position, Sprite sprite) {
         super(map, position.getIntY(), position.getIntX(), sprite);
         this.type = type;
+        initialPos = getPos();
     }
 
     public Piece(PieceType type, Vector2D position) {
         super(position.getIntY(), position.getIntX());
         this.type = type;
+        initialPos = getPos();
     }
 
     public PieceType getType() {
@@ -94,6 +99,19 @@ public class Piece extends Tile {
 
     @Override
     public void process(double delta) {
+        if (Main.gameScene.getCurrentPlayer() == GameScene.RED_PLAYER && isRed())
+        {
+            animation = animations[1];
+
+        }
+        else if (Main.gameScene.getCurrentPlayer() == GameScene.BLUE_PLAYER && isBlue()) {
+            animation = animations[2];
+        }
+        if ((Main.gameScene.getCurrentPlayer() == GameScene.RED_PLAYER && isBlue()) || 
+            (Main.gameScene.getCurrentPlayer()== GameScene.BLUE_PLAYER && isRed()))
+        {
+            //setPos(initialPos);
+        }
         if (animation != null) {
             if (timeCounter <= 0) {
                 setPos(getPos().add(animation[animationStep]));
@@ -116,5 +134,35 @@ public class Piece extends Tile {
         new Vector2D(-2,0)
     };
 
-    private Vector2D[][] animations = {invalidAnimation};
+    private Vector2D[] validRedAnimations = {
+        new Vector2D(0, -2),
+        new Vector2D(0, -1),
+        new Vector2D(0,1),
+        new Vector2D(0,2),        
+        new Vector2D(0, 4),
+        new Vector2D(0, 2),
+        new Vector2D(0, 1),
+        new Vector2D(0,-1),            
+        new Vector2D(0, -2),
+        new Vector2D(0, -2),
+        new Vector2D(0,-2),
+    };
+
+    private Vector2D[] validBlueAnimations = {
+        new Vector2D(0, 2),
+        new Vector2D(0, 1),
+        new Vector2D(0, -1),
+        new Vector2D(0, -2),
+        new Vector2D(0, -4),
+        new Vector2D(0, -2),
+        new Vector2D(0, -1),
+        new Vector2D(0, 1),                
+        new Vector2D(0, 2),
+        new Vector2D(0, 2),
+        new Vector2D(0,2),                
+    };
+
+
+
+    private Vector2D[][] animations = {invalidAnimation, validRedAnimations, validBlueAnimations};
 }
