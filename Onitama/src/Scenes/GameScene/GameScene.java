@@ -19,6 +19,7 @@ import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 import Onitama.src.Scenes.GameScene.Scripts.History.History;
 import Onitama.src.Scenes.GameScene.Scripts.States.Action;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
+import Onitama.src.Scenes.GameScene.Scripts.States.PlayerType;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
 import Onitama.src.Scenes.GameScene.Interface.GameOverMenu;
 import Onitama.src.Main;
@@ -30,6 +31,8 @@ import Onitama.src.Scenes.GameScene.Entities.Card.CardPlaceholder;
 import Onitama.src.Scenes.GameScene.Entities.Player.Player;
 
 public class GameScene extends Scene {
+
+    public Config gameConfig;
 
     public static int currentPlayer = Constants.RED_PLAYER;
     public static int winner;
@@ -63,17 +66,28 @@ public class GameScene extends Scene {
     public GameScene(Config config) {
         // Create game
         
+        // Set game config
+        gameConfig = config.clone();
+
         // Pick game cards 
         chooseCards();
 
         // Set player player
-        currentPlayer = config.firstPlayer;
+        currentPlayer = gameConfig.firstPlayer;
         
         // Instantiate game entities
         createBoard();
         createCardPlaceholders();
         createPlayersFade();
         createPlayers();
+
+        // Set player types
+        if (gameConfig.redDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.RED_PLAYER, gameConfig.redDifficulty.deatph());
+        }
+        if (gameConfig.blueDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.BLUE_PLAYER, gameConfig.blueDifficulty.deatph());
+        }
 
         player1.addToScene(this);
         player2.addToScene(this);
