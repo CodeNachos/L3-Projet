@@ -230,7 +230,6 @@ public class MainMenuScene extends Scene {
                         ObjectInputStream in = new ObjectInputStream(gzipIn)) {
                     State state = (State) in.readObject();
                     Main.gameScene = new GameScene(state);
-                    Main.gameScene.loadGameState(state);
                     Main.engine.setCurrentScene(Main.gameScene);
                     
 

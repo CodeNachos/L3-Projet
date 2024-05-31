@@ -140,6 +140,8 @@ public class GameScene extends Scene {
         addComponent(background);
 
         history = new History();
+
+        loadGameState(state);
         
         updateGUI();
     }
