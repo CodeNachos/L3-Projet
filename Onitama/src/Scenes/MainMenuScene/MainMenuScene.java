@@ -16,6 +16,7 @@ import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.Interface.InGameMenu;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class MainMenuScene extends Scene {
@@ -104,11 +105,11 @@ public class MainMenuScene extends Scene {
         buttonsFrame = new MenuFrame(
             new Dimension(
                 (int)(Main.engine.getResolution().width/2),
-                (int)(Main.engine.getResolution().height/2)
+                (int)(Main.engine.getResolution().height/1.5)
             ),
             new Vector2D(
                 (int)((Main.engine.getResolution().width/2) - Main.engine.getResolution().width/4),
-                (int)((Main.engine.getResolution().height/2))
+                (int)((Main.engine.getResolution().height/2.8))
             )
         );
 
@@ -119,6 +120,10 @@ public class MainMenuScene extends Scene {
 
 
         FlatButton newGameButton = createBaseButton("New Game");
+
+        FlatButton howToPlayButton = createBaseButton("How To Play");
+
+        FlatButton loadButton = createBaseButton("Load");
         
         FlatButton quitButton = createBaseButton("Quit");
 
@@ -130,6 +135,14 @@ public class MainMenuScene extends Scene {
         newGameButton.setPreferredSize(buttonSize);
         newGameButton.setMaximumSize(buttonSize);
         newGameButton.setMinimumSize(buttonSize);
+
+        howToPlayButton.setPreferredSize(buttonSize);
+        howToPlayButton.setMaximumSize(buttonSize);
+        howToPlayButton.setMinimumSize(buttonSize);
+
+        loadButton.setPreferredSize(buttonSize);
+        loadButton.setMaximumSize(buttonSize);
+        loadButton.setMinimumSize(buttonSize);
 
         quitButton.setPreferredSize(buttonSize);
         quitButton.setMaximumSize(buttonSize);
@@ -143,12 +156,27 @@ public class MainMenuScene extends Scene {
 
         Box buttonBox2 = Box.createHorizontalBox();
         buttonBox2.add(Box.createHorizontalGlue());
-        buttonBox2.add(quitButton);
+        buttonBox2.add(howToPlayButton);
         buttonBox2.add(Box.createHorizontalGlue());
+
+        Box buttonBox3 = Box.createHorizontalBox();
+        buttonBox3.add(Box.createHorizontalGlue());
+        buttonBox3.add(loadButton);
+        buttonBox3.add(Box.createHorizontalGlue());
+
+        Box buttonBox4 = Box.createHorizontalBox();
+        buttonBox4.add(Box.createHorizontalGlue());
+        buttonBox4.add(quitButton);
+        buttonBox4.add(Box.createHorizontalGlue());
 
         buttonsFrame.add(buttonBox1);
         buttonsFrame.add(Box.createVerticalStrut(6));
         buttonsFrame.add(buttonBox2);
+        buttonsFrame.add(Box.createVerticalStrut(6));
+        buttonsFrame.add(buttonBox3);
+        buttonsFrame.add(Box.createVerticalStrut(6));
+        buttonsFrame.add(buttonBox4);
+        //buttonsFrame.add(Box.createVerticalStrut(6));
 
         buttonsFrame.add(Box.createVerticalGlue());
         
@@ -158,6 +186,28 @@ public class MainMenuScene extends Scene {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Main.engine.setCurrentScene(new NewGameMenuScene());
+            }
+            
+        });
+
+        howToPlayButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 Dimension menuArea = new Dimension(
+                    (int)(Main.engine.getResolution().width/4),
+                    (int)(Main.engine.getResolution().width/4)
+                );
+
+                Vector2D menuOffset = new Vector2D(
+                    (Main.engine.getResolution().width/2) - (menuArea.width/2),
+                    (Main.engine.getResolution().height/2) - (menuArea.height/2)
+                );
+
+                HowToPlayMenu menu = new HowToPlayMenu(menuArea, menuOffset);
+                Main.gameScene.addComponent(menu);
+                
+                Main.gameScene.setEnabledGUI(false);
             }
             
         });

@@ -7,10 +7,18 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.zip.GZIPOutputStream;
+
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.Timer;
 
 import Engine.Entities.UI.BlurredArea;
 import Engine.Entities.UI.FlatButton;
@@ -29,6 +37,9 @@ public class InGameMenu extends MenuFrame {
     FlatButton settingsButton;
     FlatButton quitButton;
     FlatButton newGameButton;
+    FlatButton saveButton;
+    JLabel saveMessage;
+    Timer timer;
 
     public InGameMenu(Dimension area, Vector2D offset) {
         
@@ -63,6 +74,11 @@ public class InGameMenu extends MenuFrame {
         add(newGameButton);
         add(Box.createVerticalStrut(6));
 
+        saveButton = createBaseButton("Save");
+        saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(saveButton);
+        add(Box.createVerticalStrut(6));
+
         settingsButton = createBaseButton("Settings");
         settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(settingsButton);
@@ -74,6 +90,21 @@ public class InGameMenu extends MenuFrame {
         add(quitButton);
 
         add(Box.createVerticalGlue());
+
+        saveMessage = new JLabel("Game successfully saved!");
+        saveMessage.setForeground(Color.GREEN);
+        saveMessage.setVisible(false);
+        add(saveMessage);
+        saveMessage.setAlignmentX(Component.LEFT_ALIGNMENT);
+        saveMessage.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+        timer = new Timer(2000, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveMessage.setVisible(false);
+            }
+        });
+        timer.setRepeats(false);
 
         resumeButton.addActionListener(new ActionListener() {
             @Override
@@ -99,6 +130,26 @@ public class InGameMenu extends MenuFrame {
                 Main.engine.setCurrentScene(new NewGameMenuScene());
             }
             
+            
+        });
+
+        saveButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try (FileOutputStream fileOut = new FileOutputStream("gameSave1.txt");
+				GZIPOutputStream gzipOut = new GZIPOutputStream(new BufferedOutputStream(fileOut));
+				ObjectOutputStream out = new ObjectOutputStream(gzipOut)) {
+                    out.writeObject(Main.gameScene.getGameState());
+                    saveMessage.setVisible(true);
+                    timer.start();
+						
+			    } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                e1.printStackTrace();
+                }
+
+            }
             
         });
 

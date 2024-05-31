@@ -27,6 +27,8 @@ public class Main {
 
     public static GameScene gameScene;
 
+    public static MainMenuScene mainMenuScene;
+
     public static void main(String[] args) {
 
         // Custom Settings
@@ -50,7 +52,8 @@ public class Main {
             Testing.test(); 
         } else {
             // start engine
-            engine.setCurrentScene(new MainMenuScene());
+            mainMenuScene = new MainMenuScene();
+            engine.setCurrentScene(mainMenuScene);
             engine.start();
         }
     }

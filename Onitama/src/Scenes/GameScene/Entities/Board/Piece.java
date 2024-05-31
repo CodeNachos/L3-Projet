@@ -103,14 +103,14 @@ public class Piece extends Tile {
         if (animation == null && Main.gameScene.getCurrentPlayer() == Constants.RED_PLAYER && isRed())
         {
             animation = animations[1];
-            animationStep = 0;
-            timeCounter = 0.02;
+            //animationStep = 0;
+            //timeCounter = 0.02;
 
         }
         else if (animation == null && Main.gameScene.getCurrentPlayer() == Constants.BLUE_PLAYER && isBlue()) {
             animation = animations[2];
-            animationStep = 0;
-            timeCounter = 0.02;
+            //animationStep = 0;
+            //timeCounter = 0.02;
         }
         else if (animation != null && animation != animations[0] && 
             ((Main.gameScene.getCurrentPlayer() == Constants.RED_PLAYER && isBlue()) || 
