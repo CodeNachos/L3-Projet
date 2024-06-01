@@ -1,5 +1,6 @@
 package Onitama.src.Scenes.GameScene.Scripts.History;
 
+import java.io.Serializable;
 import java.util.Stack;
 
 import Engine.Global.Util;
@@ -7,7 +8,7 @@ import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
 import Onitama.src.Main;
 
-public class History {
+public class History implements Serializable {
     // stack of played moves
     private Stack<State> undo;
 

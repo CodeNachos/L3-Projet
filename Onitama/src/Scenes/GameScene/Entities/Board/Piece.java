@@ -1,6 +1,10 @@
 package Onitama.src.Scenes.GameScene.Entities.Board;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+
+import javax.swing.Timer;
 
 import Engine.Entities.TileMap.Tile;
 import Engine.Structures.Sprite;
@@ -28,18 +32,38 @@ public class Piece extends Tile {
     double timeCounter = 0.;
 
     Vector2D initialPos;
+    Timer timer;
+    boolean enableAnimations = false;
 
 
     public Piece(PieceMap map, PieceType type, Vector2D position, Sprite sprite) {
         super(map, position.getIntY(), position.getIntX(), sprite);
         this.type = type;
         initialPos = getPos();
+        timer = new Timer(10000,new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                enableAnimations = true;
+            }
+            
+        });
+        timer.start();
     }
 
     public Piece(PieceType type, Vector2D position) {
         super(position.getIntY(), position.getIntX());
         this.type = type;
         initialPos = getPos();
+        timer = new Timer(8000,new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                enableAnimations = true;
+            }
+            
+        });
+        timer.start();
     }
 
     public PieceType getType() {
@@ -119,21 +143,24 @@ public class Piece extends Tile {
             setMapPosition(mapPosition);
             animation = null;
         }
-        
-        if (animation != null) {
-            if (timeCounter <= 0) {
-                setPos(getPos().add(animation[animationStep]));
-                animationStep++;
-                if (animationStep == animation.length) {
-                    animation = null;
-                    animationStep = 0;
+        if (enableAnimations) {
+            if (animation != null) {
+                if (timeCounter <= 0) {
+                    setPos(getPos().add(animation[animationStep]));
+                    animationStep++;
+                    if (animationStep == animation.length) {
+                        animation = null;
+                        animationStep = 0;
+                        enableAnimations = false;
+                    } else {
+                        timeCounter = 0.02;
+                    }
                 } else {
-                    timeCounter = 0.02;
+                    timeCounter -= delta;
                 }
-            } else {
-                timeCounter -= delta;
-            }
+            }    
         }
+        
     }
 
     private Vector2D[] invalidAnimation = {

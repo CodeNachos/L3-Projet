@@ -3,6 +3,12 @@ package Onitama.src.Scenes.MainMenuScene;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.LinkedList;
+import java.util.zip.GZIPInputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -16,7 +22,13 @@ import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.Constants;
+import Onitama.src.Scenes.GameScene.Constants.PlayerType;
+import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Interface.InGameMenu;
+import Onitama.src.Scenes.GameScene.Scripts.History.History;
+import Onitama.src.Scenes.GameScene.Scripts.States.Config;
+import Onitama.src.Scenes.GameScene.Scripts.States.State;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class MainMenuScene extends Scene {
@@ -208,6 +220,31 @@ public class MainMenuScene extends Scene {
                 Main.engine.getCurrentScene().addComponent(menu);
                 
             }
+        });
+
+        loadButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try (FileInputStream fileIn = new FileInputStream("Onitama/savefiles/gameSave1.txt");
+                    GZIPInputStream gzipIn = new GZIPInputStream(new BufferedInputStream(fileIn));
+                        ObjectInputStream in = new ObjectInputStream(gzipIn)) {
+                    State state = (State) in.readObject();
+                    History hisotry = (History) in.readObject();
+                    Main.gameScene = new GameScene(state, hisotry);
+                    Main.engine.setCurrentScene(Main.gameScene);
+                    
+
+                } catch (IOException e1)
+                {
+                    e1.printStackTrace();        
+                } catch (ClassNotFoundException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+
+
+            }
             
         });
 
@@ -222,7 +259,7 @@ public class MainMenuScene extends Scene {
 
     private FlatButton createBaseButton(String content) {
         FlatButton button = new FlatButton(content);
-        button.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 26));
+        button.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 18));
         button.setForeground(Main.Palette.foreground);
         button.setMainColor(Main.Palette.selection);
         button.setAccentColor(new Color(255,255,255,25));

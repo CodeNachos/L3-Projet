@@ -2,6 +2,8 @@ package Engine.Core.Controller;
 
 import java.awt.Rectangle;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import Engine.Entities.GameObject;
 import Engine.Entities.TileMap.Tile;
@@ -25,7 +27,17 @@ public class MotionAdapter implements MouseMotionListener {
     }
 
     private void handleBoundEvents(MouseEvent e) {
+        List<GameObject> targetObjects = new ArrayList<>();
+
+        // Collect objects that should receive the event
         for (GameObject obj : controller.scene.components) {
+            // Check if is target object
+            if (obj.getBounds().contains(e.getPoint())) {
+                targetObjects.add(obj);
+            }
+        }
+
+        for (GameObject obj : targetObjects) {
             // check if is target object
             if (obj.getBounds().contains(e.getPoint())) {
                 if (obj instanceof TileMap) {
