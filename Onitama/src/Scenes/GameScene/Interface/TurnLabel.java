@@ -19,6 +19,8 @@ public class TurnLabel extends MenuFrame {
     private int counter;
     private int player;
 
+    private Dimension currentResolution;
+
     private static String[] labels = {"   Red's turn", "    Blue's turn"};
 
     public TurnLabel(Dimension area, Vector2D offset) {
@@ -37,7 +39,9 @@ public class TurnLabel extends MenuFrame {
 
         add(Box.createVerticalGlue()); // Add vertical glue for top spacing
         add(turnLabel);
-        add(Box.createVerticalGlue()); // Add vertical glue for bottom spacing
+        add(Box.createVerticalGlue()); // Add vertical glue for bottom spacing\
+
+        currentResolution = Main.engine.getResolution();
     }
 
     public void setBlueTurn() {
@@ -68,6 +72,16 @@ public class TurnLabel extends MenuFrame {
         } else {
             counter--;
         }
+
+        if (!currentResolution.equals(Main.initialResolution)) {
+            Vector2D resizeRatio = new Vector2D(
+                (double) Main.engine.getResolution().width / (double) Main.initialResolution.width,
+                (double) Main.engine.getResolution().height / (double) Main.initialResolution.height
+            );
+            turnLabel.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, (int)(18 * resizeRatio.y)));
+        }
+        
+        currentResolution = Main.engine.getResolution();
     }
     
 }

@@ -17,6 +17,8 @@ public class StandByArrow extends MenuFrame {
 
     JLabel arrowLabel;
 
+    private Dimension currentResolution;
+
     public StandByArrow(Dimension area, Vector2D offset) {
         super(area, offset);
 
@@ -36,6 +38,8 @@ public class StandByArrow extends MenuFrame {
         add(Box.createVerticalGlue()); // Add vertical glue for top spacing
         add(arrowLabel);
         add(Box.createVerticalGlue()); // Add vertical glue for bottom spacing
+
+        currentResolution = Main.engine.getResolution();
     }
 
     public void toggleLeftArrow() {
@@ -48,6 +52,19 @@ public class StandByArrow extends MenuFrame {
 
     public void clearArrow() {
         arrowLabel.setText("");
+    }
+
+    @Override
+    public void process(double delta) {
+        if (!currentResolution.equals(Main.initialResolution)) {
+            Vector2D resizeRatio = new Vector2D(
+                (double) Main.engine.getResolution().width / (double) Main.initialResolution.width,
+                (double) Main.engine.getResolution().height / (double) Main.initialResolution.height
+            );
+            arrowLabel.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, (int)(24 * resizeRatio.y)));
+        }
+        
+        currentResolution = Main.engine.getResolution();
     }
     
 }

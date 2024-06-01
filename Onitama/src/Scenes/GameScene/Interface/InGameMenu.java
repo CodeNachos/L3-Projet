@@ -47,7 +47,7 @@ public class InGameMenu extends MenuFrame {
         
         super(area, offset);
 
-        setMainColor(new Color(68,71,90,220));
+        setMainColor(Main.Palette.selection);
         setAccentColor(Main.Palette.selection.brighter());
         setCurvature(20, 20);
 
