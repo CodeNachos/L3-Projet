@@ -47,7 +47,7 @@ public class SmartAI extends AI {
     @Override
     public Action play() {
 
-        State s = Main.gameScene.getGameState();
+        //State s = Main.gameScene.getGameState();
 
         //int eval = minmax(s, true, difficulty,
         //                   minusINF, plusINF);

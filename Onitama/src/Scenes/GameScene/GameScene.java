@@ -61,7 +61,7 @@ public class GameScene extends Scene {
 
     public static TopBar topBar;
 
-    public static History history;
+    public History history;
 
     public GameScene(Config config) {
         // Create game
@@ -482,7 +482,7 @@ public class GameScene extends Scene {
         gameBoard.setSelectedAction(act.getMove());
     }
 
-    public static void updateGUI() {
+    public void updateGUI() {
         updatePlayerFade();
         updateTurnLabels();
         updateStandByCardArrows();
@@ -519,7 +519,7 @@ public class GameScene extends Scene {
         }
     }
 
-    public static void updateIteractableEntities() {
+    public void updateIteractableEntities() {
         if (currentPlayer == Constants.RED_PLAYER) {
             if (player1.isAiEnabled()) {
                 player1.setCardsInteractable(false);
@@ -555,7 +555,7 @@ public class GameScene extends Scene {
         }
     }
 
-    public static void updateInterfaceButtons(boolean state) {
+    public void updateInterfaceButtons(boolean state) {
         topBar.setEnabledHint(state);
         
         if (history.canUndo()) {

@@ -180,7 +180,7 @@ public class InGameMenu extends MenuFrame {
 				GZIPOutputStream gzipOut = new GZIPOutputStream(new BufferedOutputStream(fileOut));
 				ObjectOutputStream out = new ObjectOutputStream(gzipOut)) {
                     out.writeObject(Main.gameScene.getGameState());
-                    out.writeObject(GameScene.history);
+                    out.writeObject(Main.gameScene.history);
                     saveMessage.setForeground(Main.Palette.green);
                     saveMessage.setText("Game saved!");
                     timer.start();

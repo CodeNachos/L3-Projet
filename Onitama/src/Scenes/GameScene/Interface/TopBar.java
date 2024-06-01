@@ -14,6 +14,8 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.Scripts.AI.SmartAI;
+import Onitama.src.Scenes.GameScene.Scripts.States.Action;
 
 
 public class TopBar extends MenuFrame {
@@ -112,7 +114,6 @@ public class TopBar extends MenuFrame {
         undoButton = createBaseButton("↩");
         undoButton.setToolTipText("Undo");
 
-        //undoButton.setEnabled(GameScene.canUndo());
         undoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -129,7 +130,6 @@ public class TopBar extends MenuFrame {
         redoButton = createBaseButton("↪");
         redoButton.setToolTipText("Redo");
 
-        //redoButton.setEnabled(GameScene.canRedo());
         redoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -152,7 +152,9 @@ public class TopBar extends MenuFrame {
         hintButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Util.printWarning("Not implemented");
+                SmartAI hintAI = new SmartAI(2, Main.gameScene.getCurrentPlayer());
+                Action hint = hintAI.play();
+                Main.gameScene.setAction(hint);
             }
         });
 

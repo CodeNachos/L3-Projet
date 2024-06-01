@@ -108,7 +108,7 @@ public class Player extends GameObject {
         if (aiAction == null) {
             aiAction = ai.play();
             GameScene.setAction(aiAction);
-            counter = 2*60; // 1 second delay
+            counter = 2*60; // 2 second delay
             return;
         }
         
