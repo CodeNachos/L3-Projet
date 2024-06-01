@@ -172,7 +172,7 @@ public class TopBar extends MenuFrame {
             public void actionPerformed(ActionEvent e) {
                 Dimension menuArea = new Dimension(
                     (int)(Main.engine.getResolution().width/3.5),
-                    (int)(Main.engine.getResolution().width/3.5)
+                    (int)(Main.engine.getResolution().width/3.2)
                 );
 
                 Vector2D menuOffset = new Vector2D(

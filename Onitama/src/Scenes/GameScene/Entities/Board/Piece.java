@@ -40,7 +40,7 @@ public class Piece extends Tile {
         super(map, position.getIntY(), position.getIntX(), sprite);
         this.type = type;
         initialPos = getPos();
-        timer = new Timer(10000,new ActionListener() {
+        timer = new Timer(5000,new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -55,7 +55,7 @@ public class Piece extends Tile {
         super(position.getIntY(), position.getIntX());
         this.type = type;
         initialPos = getPos();
-        timer = new Timer(8000,new ActionListener() {
+        timer = new Timer(5000,new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -118,6 +118,7 @@ public class Piece extends Tile {
                 animation = animations[0];
                 animationStep = 0;
                 timeCounter = 0.02;
+                enableAnimations = true;
             }
         }
     }

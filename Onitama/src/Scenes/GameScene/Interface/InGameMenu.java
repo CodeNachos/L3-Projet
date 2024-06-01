@@ -41,11 +41,13 @@ public class InGameMenu extends MenuFrame {
     JLabel saveMessage;
     Timer timer;
 
+    private int processCount = 0;
+
     public InGameMenu(Dimension area, Vector2D offset) {
         
         super(area, offset);
 
-        setMainColor(Main.Palette.selection);
+        setMainColor(new Color(68,71,90,220));
         setAccentColor(Main.Palette.selection.brighter());
         setCurvature(20, 20);
 
@@ -56,14 +58,15 @@ public class InGameMenu extends MenuFrame {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         add(Box.createVerticalGlue());
-        
+        add(Box.createVerticalStrut(10));
+
         resumeButton = createBaseButton(" Resume ");
         resumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(resumeButton);
 
         add(Box.createVerticalStrut(6));
         
-        restartButton = createBaseButton("Restart ");
+        restartButton = createBaseButton("Restart");
         restartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(restartButton);
 
@@ -85,23 +88,56 @@ public class InGameMenu extends MenuFrame {
 
         add(Box.createVerticalStrut(6));
         
-        quitButton = createBaseButton("  Quit  ");
+        quitButton = createBaseButton("Quit");
         quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(quitButton);
 
-        add(Box.createVerticalGlue());
-
-        saveMessage = new JLabel("Game successfully saved!");
-        saveMessage.setForeground(Color.GREEN);
-        saveMessage.setVisible(false);
-        add(saveMessage);
-        saveMessage.setAlignmentX(Component.LEFT_ALIGNMENT);
+        saveMessage = new JLabel(" ");
+        saveMessage.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 14));
+        saveMessage.setForeground(Main.Palette.foreground);
+        saveMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
         saveMessage.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+        saveMessage.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
+
+        add(Box.createVerticalGlue());
+        add(saveMessage);
+
+        // Calculate the maximum width needed
+        int maxWidth = settingsButton.getPreferredSize().width;
+
+        // Set the maximum width for all buttons
+        Dimension buttonSize = new Dimension(maxWidth, newGameButton.getPreferredSize().height);
+
+        resumeButton.setPreferredSize(buttonSize);
+        resumeButton.setMaximumSize(buttonSize);
+        resumeButton.setMinimumSize(buttonSize);
+
+        restartButton.setPreferredSize(buttonSize);
+        restartButton.setMaximumSize(buttonSize);
+        restartButton.setMinimumSize(buttonSize);
+
+        newGameButton.setPreferredSize(buttonSize);
+        newGameButton.setMaximumSize(buttonSize);
+        newGameButton.setMinimumSize(buttonSize);
+
+        saveButton.setPreferredSize(buttonSize);
+        saveButton.setMaximumSize(buttonSize);
+        saveButton.setMinimumSize(buttonSize);
+
+        settingsButton.setPreferredSize(buttonSize);
+        settingsButton.setMaximumSize(buttonSize);
+        settingsButton.setMinimumSize(buttonSize);
+
+        quitButton.setPreferredSize(buttonSize);
+        quitButton.setMaximumSize(buttonSize);
+        quitButton.setMinimumSize(buttonSize);
+
+        
         timer = new Timer(2000, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveMessage.setVisible(false);
+                saveMessage.setText(" ");
             }
         });
         timer.setRepeats(false);
@@ -109,6 +145,7 @@ public class InGameMenu extends MenuFrame {
         resumeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Main.engine.resume();
                 removeMenu();
             }
             
@@ -117,6 +154,7 @@ public class InGameMenu extends MenuFrame {
         restartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Main.engine.resume();
                 Main.gameScene.history.resetGame();
                 removeMenu();
             }
@@ -127,6 +165,7 @@ public class InGameMenu extends MenuFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                removeMenu();
                 Main.engine.setCurrentScene(new NewGameMenuScene());
             }
             
@@ -142,12 +181,15 @@ public class InGameMenu extends MenuFrame {
 				ObjectOutputStream out = new ObjectOutputStream(gzipOut)) {
                     out.writeObject(Main.gameScene.getGameState());
                     out.writeObject(GameScene.history);
-                    saveMessage.setVisible(true);
+                    saveMessage.setForeground(Main.Palette.green);
+                    saveMessage.setText("Game saved!");
                     timer.start();
 						
 			    } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                e1.printStackTrace();
+                    e1.printStackTrace();
+                    saveMessage.setForeground(Main.Palette.orange);
+                    saveMessage.setText("Error while saving game");
+                    timer.start();
                 }
 
             }
@@ -179,6 +221,7 @@ public class InGameMenu extends MenuFrame {
     }
 
     private void removeMenu() {
+        Main.engine.resume();
         Main.gameScene.removeComponent(blurredArea);
         Main.gameScene.removeComponent(this);
         Main.gameScene.setEnabledGUI(true);
@@ -203,6 +246,12 @@ public class InGameMenu extends MenuFrame {
             getParent().setComponentZOrder(blurredArea, 1);
             getParent().setComponentZOrder(this, 0);
         }
+        
+        if (processCount == 2) {
+            Main.engine.pause();
+        }
+
+        processCount++;
     }
     
 }

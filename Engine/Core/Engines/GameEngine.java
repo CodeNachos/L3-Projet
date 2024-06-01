@@ -126,7 +126,7 @@ public class GameEngine implements Runnable {
         double deltaFrame = 0; // Initialize the time since the last frame
         double deltaUpdate = 0; // Initialize the time since the last update
 
-        while(running) { // Main game loop
+        while(true) { // Main game loop
             long currentTime = System.nanoTime(); // Get the current time in nanoseconds
 
             double deltaTime = currentTime - previousTime;
@@ -136,13 +136,15 @@ public class GameEngine implements Runnable {
             previousTime = currentTime; // Update previous time
 
             if (deltaUpdate >= 1) { // If it's time for an update
-                updateScene((deltaTime / fixupdate) / 100); // Update the scene
+                if (running)
+                    updateScene((deltaTime / fixupdate) / 100); // Update the scene
                 ups++; // Increment updates per second counter
                 deltaUpdate--; // Reset the update timer
             }
 
             if (deltaFrame >= 1) { // If it's time for a frame
-                gframe.refresh(); // Refresh the game frame
+                if (running)
+                    gframe.refresh(); // Refresh the game frame
                 fps++; // Increment frames per second counter
                 deltaFrame--; // Reset the frame timer
             }
@@ -178,8 +180,10 @@ public class GameEngine implements Runnable {
      */
     public void resume() {
         running = true; // Continue the game loop
-        run();
+    }
 
+    public boolean isPaused() {
+        return !running;
     }
 
     /**

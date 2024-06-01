@@ -15,12 +15,20 @@ public class State implements Serializable {
     // gameCards -> [p1:c1, p1:c2, p2:c1, p2:c2, stand by]
     public List<String> gameCards;
     public int currentPlayer;
+    public Config config = null;
 
 
     public State(ArrayList<Piece> p1p, ArrayList<Piece> p2p, List<String> cards, int currentPlayer) {
         this.currentPlayer = currentPlayer;
         this.gameCards = new ArrayList<>(cards);;
         createBoard(new ArrayList<>(p1p), new ArrayList<>(p2p));
+    }
+
+    public State(ArrayList<Piece> p1p, ArrayList<Piece> p2p, List<String> cards, int currentPlayer, Config config) {
+        this.currentPlayer = currentPlayer;
+        this.gameCards = new ArrayList<>(cards);;
+        createBoard(new ArrayList<>(p1p), new ArrayList<>(p2p));
+        this.config = config.clone();
     }
 
     private State() { }
@@ -81,6 +89,10 @@ public class State implements Serializable {
 
     public List<String> getGameCards() {
         return gameCards;
+    }
+
+    public Config getGameConfig() {
+        return config.clone();
     }
 
     

@@ -1,8 +1,10 @@
 package Onitama.src.Scenes.GameScene.Scripts.States;
 
+import java.io.Serializable;
+
 import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 
-public class Config {
+public class Config implements Serializable {
 
 
     public PlayerType redDifficulty;

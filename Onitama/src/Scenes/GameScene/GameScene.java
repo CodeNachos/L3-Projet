@@ -209,12 +209,22 @@ public class GameScene extends Scene {
             cards.add(player2.getStandByCard());
         }
 
-        return new State(getPlayerPieces(Constants.RED_PLAYER), getPlayerPieces(Constants.BLUE_PLAYER), cards, currentPlayer);
+        return new State(getPlayerPieces(Constants.RED_PLAYER), getPlayerPieces(Constants.BLUE_PLAYER), cards, currentPlayer, gameConfig);
     }
 
-    public static void loadGameState(State s) {
+    public void loadGameState(State s) {
+        gameConfig = s.getGameConfig();
+        
         player1.loadState(s);
         player2.loadState(s);
+
+        // Set player types
+        if (gameConfig.redDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.RED_PLAYER, gameConfig.redDifficulty.deatph());
+        }
+        if (gameConfig.blueDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.BLUE_PLAYER, gameConfig.blueDifficulty.deatph());
+        }
 
         currentPlayer = s.getCurrentPlayer();
 
@@ -547,7 +557,6 @@ public class GameScene extends Scene {
 
     public static void updateInterfaceButtons(boolean state) {
         topBar.setEnabledHint(state);
-        topBar.setEnabledMenu(state);
         
         if (history.canUndo()) {
             topBar.setEnabledUndo(true);
@@ -812,8 +821,8 @@ public class GameScene extends Scene {
 
     private void createGameOverMenu() {
         Dimension menuArea = new Dimension(
-            (int)(Main.engine.getResolution().width / 2),
-            (int)(Main.engine.getResolution().height / 1.5)
+            (int)(Main.engine.getResolution().width / 3),
+            (int)(Main.engine.getResolution().height / 2)
         );
 
         Vector2D menuOffset = new Vector2D(

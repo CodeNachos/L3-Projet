@@ -140,7 +140,7 @@ public class MainMenuScene extends Scene {
         FlatButton quitButton = createBaseButton("Quit");
 
         // Calculate the maximum width needed
-        int maxWidth = Math.max(newGameButton.getPreferredSize().width, quitButton.getPreferredSize().width);
+        int maxWidth = howToPlayButton.getPreferredSize().width;
 
         // Set the maximum width for all buttons
         Dimension buttonSize = new Dimension(maxWidth, newGameButton.getPreferredSize().height);
@@ -181,6 +181,7 @@ public class MainMenuScene extends Scene {
         buttonBox4.add(quitButton);
         buttonBox4.add(Box.createHorizontalGlue());
 
+        buttonsFrame.add(Box.createVerticalGlue());
         buttonsFrame.add(buttonBox1);
         buttonsFrame.add(Box.createVerticalStrut(6));
         buttonsFrame.add(buttonBox2);
@@ -188,6 +189,7 @@ public class MainMenuScene extends Scene {
         buttonsFrame.add(buttonBox3);
         buttonsFrame.add(Box.createVerticalStrut(6));
         buttonsFrame.add(buttonBox4);
+        buttonsFrame.add(Box.createVerticalGlue());
         //buttonsFrame.add(Box.createVerticalStrut(6));
 
         buttonsFrame.add(Box.createVerticalGlue());
@@ -239,7 +241,6 @@ public class MainMenuScene extends Scene {
                 {
                     e1.printStackTrace();        
                 } catch (ClassNotFoundException e1) {
-                        // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
 
