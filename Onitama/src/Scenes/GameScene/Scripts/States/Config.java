@@ -1,5 +1,7 @@
 package Onitama.src.Scenes.GameScene.Scripts.States;
 
+import Onitama.src.Scenes.GameScene.Constants.PlayerType;
+
 public class Config {
 
 

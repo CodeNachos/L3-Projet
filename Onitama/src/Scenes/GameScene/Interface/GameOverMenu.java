@@ -19,6 +19,8 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
+import Onitama.src.Scenes.GameScene.Constants;
+import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 
 public class GameOverMenu extends MenuFrame {
@@ -176,5 +178,33 @@ public class GameOverMenu extends MenuFrame {
             getParent().setComponentZOrder(blurredArea, 1);
             getParent().setComponentZOrder(this, 0);
         }
+    }
+
+    private String getWinnerText() {
+        String winnerText = "";
+
+        if (
+            Main.gameScene.getPlayerType(Constants.RED_PLAYER) != PlayerType.HUMAN && 
+            Main.gameScene.getPlayerType(Constants.BLUE_PLAYER) != PlayerType.HUMAN
+        ) {
+            if (Main.gameScene.getWinner() == Constants.RED_PLAYER) {
+                winnerText = "IA RED WON";
+            } else {
+                winnerText = "IA BLUE WON";
+            }
+        } else if (
+            Main.gameScene.getPlayerType(Constants.RED_PLAYER) != PlayerType.HUMAN ||
+            Main.gameScene.getPlayerType(Constants.BLUE_PLAYER) != PlayerType.HUMAN
+        ) {
+            if (isWinner(Constants.RED_PLAYER) && Main.gameScene.getPlayerType(Constants.RED_PLAYER) == PlayerType.HUMAN) {
+                
+            }
+        }
+        
+        return winnerText;
+    }
+
+    private boolean isWinner(int player) {
+        return (Main.gameScene.getWinner() == player);
     }
 }

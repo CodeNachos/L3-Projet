@@ -19,10 +19,10 @@ import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 import Onitama.src.Scenes.GameScene.Scripts.History.History;
 import Onitama.src.Scenes.GameScene.Scripts.States.Action;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
-import Onitama.src.Scenes.GameScene.Scripts.States.PlayerType;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
 import Onitama.src.Scenes.GameScene.Interface.GameOverMenu;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 import Onitama.src.Scenes.GameScene.Entities.Board.Board;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece.PieceType;
@@ -156,6 +156,22 @@ public class GameScene extends Scene {
 
     public static int getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public PlayerType getPlayerType(int player) {
+        if (player == Constants.RED_PLAYER) {
+            return gameConfig.redDifficulty;
+        } else {
+            return gameConfig.blueDifficulty;
+        }
+    }
+
+    public int getWinner() {
+        if (!gameOver()) {
+            return -1;
+        }
+
+        return winner;
     }
 
     public static HashMap<String, CardInfo> getGameCards() {
@@ -332,6 +348,8 @@ public class GameScene extends Scene {
         } else {
             player2.movePiece(getSelectedPiece(), getSelectedAction());
         }
+
+        player1.update(); player2.update();
         
         gameBoard.setSelectedTile(null); gameBoard.setSelectedAction(null);
 

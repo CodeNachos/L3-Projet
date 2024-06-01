@@ -7,7 +7,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -19,9 +18,9 @@ import Engine.Entities.UI.FlatToggleButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Scenes.GameScene.Constants;
+import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
-import Onitama.src.Scenes.GameScene.Scripts.States.PlayerType;
 import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 import Onitama.src.Main;
 
