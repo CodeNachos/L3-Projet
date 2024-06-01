@@ -26,6 +26,8 @@ public class TopBar extends MenuFrame {
     FlatButton hintButton;
     FlatButton redoButton;
     FlatButton helpButton;
+
+    private Dimension currentResolution;
     
     public TopBar(Dimension area, Vector2D offset) {
         super(area, offset);
@@ -65,6 +67,8 @@ public class TopBar extends MenuFrame {
         createHelpButton();
 
         add(Box.createHorizontalGlue());
+
+        currentResolution = Main.engine.getResolution();
     }
 
     public void setEnabledUndo(boolean state) {
@@ -221,7 +225,19 @@ public class TopBar extends MenuFrame {
 
     @Override
     public void process(double delta) {
-
+        if (!currentResolution.equals(Main.initialResolution)) {
+            Vector2D resizeRatio = new Vector2D(
+                (double) Main.engine.getResolution().width / (double) Main.initialResolution.width,
+                (double) Main.engine.getResolution().height / (double) Main.initialResolution.height
+            );
+            menuButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, (int)(26 * resizeRatio.y)));
+            undoButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, (int)(16 * resizeRatio.y)));
+            redoButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, (int)(16 * resizeRatio.y)));
+            hintButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, (int)(16 * resizeRatio.y)));
+            helpButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, (int)(18 * resizeRatio.y)));
+        }
+        
+        currentResolution = Main.engine.getResolution();
 
     }
 

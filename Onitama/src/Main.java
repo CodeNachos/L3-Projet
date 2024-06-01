@@ -4,22 +4,20 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.SwingUtilities;
-
 import Engine.Core.Engines.GameEngine;
-import Engine.Core.Renderer.Scene;
 import Engine.Global.Settings;
 import Engine.Global.Util;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.AI.Testing;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
 import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
-import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class Main {
     private static boolean testing = false;
 
     public static GameEngine engine;
+
+    public static Dimension initialResolution;
 
     // this field is set to true if
     // undo or redo was clicked
@@ -39,6 +37,8 @@ public class Main {
         //Settings.resolution = screenSize;
         Settings.resolution = new Dimension((int)(aspectRatio*600),600);
         Settings.applicationName = "Onitama";
+
+        initialResolution = Settings.resolution;
 
         // create engine
         engine = new GameEngine();

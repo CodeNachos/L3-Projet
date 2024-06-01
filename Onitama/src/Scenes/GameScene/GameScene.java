@@ -451,10 +451,10 @@ public class GameScene extends Scene {
         player1.setSelectedCard(null); player2.setSelectedCard(null);
 
         if (gameOver()) {
-            System.out.println("Player " + (currentPlayer == Constants.RED_PLAYER ? "RED" : "BLUE") + " won");
+            //System.out.println("Player " + (currentPlayer == Constants.RED_PLAYER ? "RED" : "BLUE") + " won");
             winner = currentPlayer;
             createGameOverMenu();
-            
+             
         }
 
         changePlayer(); 

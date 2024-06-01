@@ -4,6 +4,8 @@ package Onitama.src.Scenes.GameScene.Entities.Card;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
@@ -37,10 +39,13 @@ public class Card extends GameObject {
     private boolean interactable = true;
 
     // need > 1
-    private double animState = 2;
     private boolean animating = false;
     private double speed = 20;
     private Vector2D targetPos;
+
+    private Dimension currentResolution;
+
+    private boolean firstRun = true;
 
 
     // @Override
@@ -76,6 +81,8 @@ public class Card extends GameObject {
         createCardLabel();
 
         updateCard();
+
+        currentResolution = Main.engine.getResolution();
     }
 
     public void setName(String name) {
@@ -102,7 +109,6 @@ public class Card extends GameObject {
     }
 
     public void updatePosCard(Vector2D pos) {
-        Vector2D displacement = getPos();
         setPos(pos);
         cardMap.setPos(new Vector2D(
             position.x + getSize().width * 0.2,
@@ -140,6 +146,26 @@ public class Card extends GameObject {
                 sprite = player.standBySprite;
         } else if (sprite != player.idleCardSprite) {
             sprite = player.idleCardSprite;
+        }
+
+
+        if (!currentResolution.equals(Main.engine.getResolution())) {
+            Vector2D resizeRatio = new Vector2D(
+                (double) Main.engine.getResolution().width / (double) Main.initialResolution.width,
+                (double) Main.engine.getResolution().height / (double) Main.initialResolution.height
+            );
+            ((JLabel)(cardLabel.getComponent(0))).setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, (int)(16 * resizeRatio.y)));
+        }
+
+        currentResolution = Main.engine.getResolution();
+
+        if (firstRun) {
+            firstRun = false;
+            if (Main.engine.getCurrentScene().getComponentZOrder(this) > 1) {
+                Main.engine.getCurrentScene().setComponentZOrder(cardLabel, 1);
+                Main.engine.getCurrentScene().setComponentZOrder(cardMap, 2);
+                Main.engine.getCurrentScene().setComponentZOrder(this, 3);
+            }
         }
 
     }
@@ -213,17 +239,29 @@ public class Card extends GameObject {
             position.x + getSize().width * 0.15,
             position.y + getSize().height * 0.7 
         ));
-
+    
         cardLabel.setMainColor(new Color(0,0,0,0));
         cardLabel.setAccentColor(new Color(0,0,0,0));
+        
+        // Set the layout manager to GridBagLayout
+        cardLabel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.weightx = 1.0; // Make the label take up horizontal space
+        gbc.weighty = 1.0; // Make the label take up vertical space
         
         JLabel label = new JLabel(name);
         label.setAlignmentX(CENTER_ALIGNMENT);
         label.setForeground(Main.Palette.foreground);
         label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
         label.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-        cardLabel.add(label);
+        
+        // Add the label to the cardLabel with the constraints
+        cardLabel.add(label, gbc);
     }
+
 
     private void zoomIn() {
         originalScale = getScale();
@@ -235,8 +273,8 @@ public class Card extends GameObject {
             position.x + getSize().width * 0.15,
             position.y + getSize().height * 0.7 
         ));
-        Font font = ((JLabel)cardLabel.getComponent(0)).getFont();
-        ((JLabel)cardLabel.getComponent(0)).setFont(font.deriveFont(font.getStyle(), 17));
+        //Font font = ((JLabel)cardLabel.getComponent(0)).getFont();
+        //((JLabel)cardLabel.getComponent(0)).setFont(font.deriveFont(font.getStyle(), 17));
 
         cardMap.setScale(scale);
         cardMap.setPos(new Vector2D(
@@ -254,8 +292,8 @@ public class Card extends GameObject {
             position.x + getSize().width * 0.15,
             position.y + getSize().height * 0.7 
         ));
-        Font font = ((JLabel)cardLabel.getComponent(0)).getFont();
-        ((JLabel)cardLabel.getComponent(0)).setFont(font.deriveFont(font.getStyle(), 15));
+        //Font font = ((JLabel)cardLabel.getComponent(0)).getFont();
+        //((JLabel)cardLabel.getComponent(0)).setFont(font.deriveFont(font.getStyle(), 15));
 
         cardMap.setScale(scale);
         cardMap.setPos(new Vector2D(

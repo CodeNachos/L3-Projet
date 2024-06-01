@@ -112,7 +112,8 @@ public class BoardTile extends Tile {
                 ((Board)parentMap).setSelectedAction(mapPosition);
                 Main.gameScene.updateMatch();
             } else {
-                ((Board)parentMap).setSelectedAction(null);
+                Main.gameScene.updateMatch();
+                //((Board)parentMap).setSelectedAction(null);
             }
 
         }

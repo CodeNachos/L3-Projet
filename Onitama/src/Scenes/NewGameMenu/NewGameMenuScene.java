@@ -174,7 +174,8 @@ public class NewGameMenuScene extends Scene implements ItemListener {
         GridBagConstraints panelGbc = new GridBagConstraints();
         toggleButtonPanel.setBackground(new Color(0,0,0,0));
         // Create the first toggle button
-        redFirstButton = new FlatToggleButton("RED", true);
+        redFirstButton = new FlatToggleButton("red", true);
+        redFirstButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
         redFirstButton.setMainColor(Main.Palette.selection);
         redFirstButton.setAccentColor(Main.Palette.selection.brighter());
         redFirstButton.setForeground(Main.Palette.foreground);
@@ -184,7 +185,8 @@ public class NewGameMenuScene extends Scene implements ItemListener {
         redFirstButton.addItemListener(this);
 
         // Create the second toggle button
-        blueFirstButton = new FlatToggleButton("BLUE", false);
+        blueFirstButton = new FlatToggleButton("blue", false);
+        blueFirstButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
         blueFirstButton.setMainColor(Main.Palette.selection.darker());
         blueFirstButton.setAccentColor(Main.Palette.selection.brighter());
         blueFirstButton.setForeground(Main.Palette.foreground);

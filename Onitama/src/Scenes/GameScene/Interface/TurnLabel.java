@@ -19,7 +19,7 @@ public class TurnLabel extends MenuFrame {
     private int counter;
     private int player;
 
-    private static String[] labels = {"   Red to play", "    Blue to play"};
+    private static String[] labels = {"   Red's turn", "    Blue's turn"};
 
     public TurnLabel(Dimension area, Vector2D offset) {
         super(area, offset);

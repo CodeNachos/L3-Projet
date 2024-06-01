@@ -225,6 +225,7 @@ public class InGameMenu extends MenuFrame {
         Main.gameScene.removeComponent(blurredArea);
         Main.gameScene.removeComponent(this);
         Main.gameScene.setEnabledGUI(true);
+        Main.gameScene.updateGUI();
     }
 
     private FlatButton createBaseButton(String content) {
