@@ -135,7 +135,7 @@ public class MainMenuScene extends Scene {
 
         FlatButton howToPlayButton = createBaseButton("How To Play");
 
-        FlatButton loadButton = createBaseButton("Load");
+        FlatButton loadButton = createBaseButton("Load Game");
         
         FlatButton quitButton = createBaseButton("Quit");
 

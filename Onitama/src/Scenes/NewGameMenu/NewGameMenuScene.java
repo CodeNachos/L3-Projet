@@ -59,7 +59,7 @@ public class NewGameMenuScene extends Scene implements ItemListener {
         // Compute field area
         Dimension menuArea = new Dimension(
             (int)(Main.engine.getResolution().width /3),
-            (int)(Main.engine.getResolution().height/2)
+            (int)(Main.engine.getResolution().height/1.6)
         );
 
         Vector2D menuOffset = new Vector2D(
@@ -103,9 +103,9 @@ public class NewGameMenuScene extends Scene implements ItemListener {
 
         
         JLabel player1Label = new JLabel(gameConfig.redDifficulty.toString(), SwingConstants.CENTER);
-        player1Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
+        player1Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 18));
         player1Label.setForeground(Main.Palette.red);
-        player1Label.setPreferredSize(new Dimension(80,20));
+        player1Label.setPreferredSize(new Dimension(140,40));
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.ipady = 0;
@@ -139,9 +139,9 @@ public class NewGameMenuScene extends Scene implements ItemListener {
 
         
         JLabel player2Label = new JLabel(gameConfig.blueDifficulty.toString(), SwingConstants.CENTER);
-        player2Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
+        player2Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 18));
         player2Label.setForeground(Main.Palette.cyan);
-        player2Label.setPreferredSize(new Dimension(80,20));
+        player2Label.setPreferredSize(new Dimension(140,40));
         gbc.gridx = 1;
         gbc.gridy = 5;
         gbc.ipady = 0;
@@ -166,7 +166,7 @@ public class NewGameMenuScene extends Scene implements ItemListener {
         gbc.gridx = 0;
         gbc.gridy = 6;
         gbc.gridwidth = 3;
-        gbc.insets = new Insets(10,10,5,10);
+        gbc.insets = new Insets(20,10,5,10);
         selectionMenu.add(firstTitle, gbc);
 
         // Create the panel to hold the toggle buttons
@@ -175,7 +175,7 @@ public class NewGameMenuScene extends Scene implements ItemListener {
         toggleButtonPanel.setBackground(new Color(0,0,0,0));
         // Create the first toggle button
         redFirstButton = new FlatToggleButton("red", true);
-        redFirstButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
+        redFirstButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
         redFirstButton.setMainColor(Main.Palette.selection);
         redFirstButton.setAccentColor(Main.Palette.selection.brighter());
         redFirstButton.setForeground(Main.Palette.foreground);
@@ -186,7 +186,7 @@ public class NewGameMenuScene extends Scene implements ItemListener {
 
         // Create the second toggle button
         blueFirstButton = new FlatToggleButton("blue", false);
-        blueFirstButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
+        blueFirstButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
         blueFirstButton.setMainColor(Main.Palette.selection.darker());
         blueFirstButton.setAccentColor(Main.Palette.selection.brighter());
         blueFirstButton.setForeground(Main.Palette.foreground);
@@ -210,6 +210,7 @@ public class NewGameMenuScene extends Scene implements ItemListener {
         gbc.gridx = 0;
         gbc.gridy = 7;
         gbc.ipady = 10;
+        gbc.gridwidth = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5,10,10,10);
         selectionMenu.add(toggleButtonPanel, gbc);
@@ -256,7 +257,7 @@ public class NewGameMenuScene extends Scene implements ItemListener {
         });
         
         addComponent(selectionMenu);
-        ColorArea shadow = new ColorArea(new Color(0,0,0,15), menuArea, menuOffset.add(new Vector2D(8,8)));
+        ColorArea shadow = new ColorArea(new Color(0,0,0,15), menuArea, menuOffset.add(new Vector2D(8,6)));
         shadow.setCurvature(30, 30);
         addComponent(shadow);
     }

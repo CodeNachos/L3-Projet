@@ -27,22 +27,34 @@ public class MotionAdapter implements MouseMotionListener {
     }
 
     private void handleBoundEvents(MouseEvent e) {
-        for (GameObject obj : controller.scene.components) {
-            // check if is target object
-            if (obj.getBounds().contains(e.getPoint())) {
-                if (obj instanceof TileMap) {
-                    // if obj is tile map send event to tiles
-                    TileMap mapObj = (TileMap)obj;
-                    forwardBoundEventToTiles(mapObj, e);
-                }
+        List<GameObject> targetObjects = new ArrayList<>();
+        List<GameObject> otherObjects = new ArrayList<>();
 
-                if (obj.cursorIn)
-                    continue;
-                
-                obj.cursorIn = true; 
-                obj.input(generateMouseEntered(e, obj));
-                
-            } else if (obj.cursorIn) {
+        for (GameObject obj : controller.scene.components) {
+            // Check if is target object
+            if (obj.getBounds().contains(e.getPoint())) {
+                targetObjects.add(obj);
+            } else {
+                otherObjects.add(obj);
+            }
+        }
+
+        for (GameObject obj : targetObjects) {
+            if (obj instanceof TileMap) {
+                // if obj is tile map send event to tiles
+                TileMap mapObj = (TileMap)obj;
+                forwardBoundEventToTiles(mapObj, e);
+            }
+
+            if (obj.cursorIn)
+                continue;
+            
+            obj.cursorIn = true; 
+            obj.input(generateMouseEntered(e, obj));
+        }
+
+        for (GameObject obj : otherObjects) {
+            if (obj.cursorIn) {
                 if (obj instanceof TileMap) {
                     // if obj is tile map send event to tiles
                     TileMap mapObj = (TileMap)obj;

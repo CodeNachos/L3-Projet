@@ -77,7 +77,7 @@ public class InGameMenu extends MenuFrame {
         add(newGameButton);
         add(Box.createVerticalStrut(6));
 
-        saveButton = createBaseButton("Save");
+        saveButton = createBaseButton("Save Game");
         saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(saveButton);
         add(Box.createVerticalStrut(6));
@@ -103,7 +103,7 @@ public class InGameMenu extends MenuFrame {
         add(saveMessage);
 
         // Calculate the maximum width needed
-        int maxWidth = settingsButton.getPreferredSize().width;
+        int maxWidth = saveButton.getPreferredSize().width + 40;
 
         // Set the maximum width for all buttons
         Dimension buttonSize = new Dimension(maxWidth, newGameButton.getPreferredSize().height);
