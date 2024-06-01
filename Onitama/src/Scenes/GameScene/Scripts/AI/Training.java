@@ -3,17 +3,17 @@ package Onitama.src.Scenes.GameScene.Scripts.AI;
 import java.util.Hashtable;
 import java.util.Random;
 
-import static java.lang.Math.abs;
-
 /**
  * Training
  */
 public class Training {
-    static Random random = new Random();
-    static int difficulty = 2;
-    static int populationSize = 20;
-    static int survivalSize = 5;
+    static int difficulty = 1;
+    static int populationSize = 40;
+    static int survivalSize = 10;
     static int numberStep = 1000;
+    static int newMemberSize = 4;
+    static int maxWeight = 1000;
+    static Random random = new Random();
     static SmartAI[] population = new SmartAI[populationSize];
     static SmartAI[] survivors = new SmartAI[survivalSize];
     static Hashtable<SmartAI, Double> fitness = new Hashtable<>();
@@ -21,7 +21,7 @@ public class Training {
     static SmartAI generateAI() {
         int[] weights = new int[SmartAI.NB_METHOD];
         for (int i = 0; i < SmartAI.NB_METHOD; i++)
-            weights[i] = random.nextInt();
+            weights[i] = random.nextInt(maxWeight);
         return new SmartAI(difficulty, 0, weights);
     }
 
@@ -41,11 +41,10 @@ public class Training {
             weights[i] = original.weights[i];
 
         for (int i = 0; i < SmartAI.NB_METHOD; i++) {
-            int variation = random.nextInt(abs(weights[i])/10);
             if (random.nextBoolean())
-                weights[i] += variation;
+                weights[i] += random.nextInt(weights[i]/100 + 1);
             else
-                weights[i] -= variation; 
+                weights[i] -= random.nextInt(weights[i]/100 + 1); 
         }
         
         return new SmartAI(difficulty, 0, weights);
@@ -53,20 +52,25 @@ public class Training {
 
     static void calculateFitness() {
         fitness.clear();
-        for (int i = 0; i < populationSize; i++) {
+        for (int i = 0; i < populationSize; i++)
+            fitness.put(population[i], 0.);
+
+        for (int i = 0; i < populationSize-1; i++) {
             SmartAI target = population[i];
-            double score = 0;
-            for (int j = 0; j < populationSize; j++) {
-                Match match = new Match(target, population[j]);
+            for (int j = i+1; j < populationSize; j++) {
+                SmartAI opponent = population[j];
+                Match match = new Match(target, opponent);
                 match.fight();
                 if (match.length == 100)
-                    score = 0;
-                else if (target == match.winner)
-                    score += 1;
-                else
-                    score += -1;
+                    continue;
+                else if (target == match.winner){
+                    fitness.put(target, fitness.get(target)+(100-match.length));
+                    fitness.put(opponent, fitness.get(opponent)+(-100+match.length));
+                } else {
+                    fitness.put(target, fitness.get(target)+(-100+match.length));
+                    fitness.put(opponent, fitness.get(opponent)+(100-match.length));
+                }
             }
-            fitness.put(target, score);
         }
     }
 
@@ -90,9 +94,13 @@ public class Training {
     
     static void crossover() {
         for (int i = 0; i < populationSize; i++) {
-            int fatherIndex = random.nextInt(survivalSize);
-            int motherIndex = random.nextInt(survivalSize);
-            population[i] = mate(survivors[fatherIndex], survivors[motherIndex]);
+            if (i < newMemberSize)
+                population[i] = generateAI();
+            else {
+                int fatherIndex = random.nextInt(survivalSize);
+                int motherIndex = random.nextInt(survivalSize);
+                population[i] = mate(survivors[fatherIndex], survivors[motherIndex]);
+            }
         }
     }
 
