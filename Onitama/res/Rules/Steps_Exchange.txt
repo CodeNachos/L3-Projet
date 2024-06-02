@@ -1,0 +1,3 @@
+After making a move, the player takes the move card they used and places it to the right of the board, where the fifth move card was. They then take the fifth move card and place it on their side, adding it to their set of two move cards. This card exchange happens at the end of each turn, ensuring that players always have two move cards to choose from at the start of their turn.
+
+The next player then takes their turn, following the same steps of moving and then exchanging cards. The game continues in this manner until one player wins.
