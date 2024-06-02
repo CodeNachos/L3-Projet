@@ -13,8 +13,11 @@ build:
 # Currently, the jar method will only work if jar libs are in the current directory
 # when calling java
 jar:
-	# jar cfe Onitama.jar Onitama.src.Main -C out .
-	jar cfm Onitama.jar MANIFEST.MF -C out . -C Onitama/libs .
+	mkdir -p temp
+	cp -r Onitama/libs/json-simple-1.1.1.jar temp/
+	cd temp && jar xf json-simple-1.1.1.jar
+	jar cfm Onitama.jar MANIFEST.MF -C out . -C temp .
+	rm -rf temp
 
 run-jar: jar
 	# java -jar Onitama.jar -classpath ./Onitama/libs/json-simple-1.1.1.jar

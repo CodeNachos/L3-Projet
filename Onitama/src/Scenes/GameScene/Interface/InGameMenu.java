@@ -176,7 +176,7 @@ public class InGameMenu extends MenuFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                try (FileOutputStream fileOut = new FileOutputStream("Onitama/savefiles/gameSave1.txt");
+                try (FileOutputStream fileOut = new FileOutputStream("Onitama/savefiles/game.save");
 				GZIPOutputStream gzipOut = new GZIPOutputStream(new BufferedOutputStream(fileOut));
 				ObjectOutputStream out = new ObjectOutputStream(gzipOut)) {
                     out.writeObject(Main.gameScene.getGameState());
