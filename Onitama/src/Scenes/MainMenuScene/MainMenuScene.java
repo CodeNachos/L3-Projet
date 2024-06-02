@@ -42,7 +42,7 @@ public class MainMenuScene extends Scene {
         //createTitleShadow();
         createButtons();
 
-        Sprite titleSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/Title.png"));
+        Sprite titleSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/Title_byMayaShieda.png"));
         GameObject title = new GameObject();
         title.setSprite(titleSprite);
         title.setScale(new Vector2D(0.4, 0.4));
@@ -50,7 +50,6 @@ public class MainMenuScene extends Scene {
             (int)(Main.engine.getResolution().width/2 - title.getSize().width/2),
             (int)(Main.engine.getResolution().height * 0.1)
         );
-
         addComponent(title);
 
         // Add foreground
@@ -151,6 +150,8 @@ public class MainMenuScene extends Scene {
         FlatButton howToPlayButton = createBaseButton("How To Play");
         
         FlatButton quitButton = createBaseButton("Quit");
+        quitButton.setMainColor(new Color(100,0,0,10));
+        quitButton.setAccentColor(new Color(255,100,100,100));
 
         // Calculate the maximum width needed
         int maxWidth = howToPlayButton.getPreferredSize().width;
@@ -221,18 +222,6 @@ public class MainMenuScene extends Scene {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                 Dimension menuArea = new Dimension(
-                    (int)(Main.engine.getResolution().width/4),
-                    (int)(Main.engine.getResolution().width/4)
-                );
-
-                Vector2D menuOffset = new Vector2D(
-                    (Main.engine.getResolution().width/2) - (menuArea.width/2),
-                    (Main.engine.getResolution().height/2) - (menuArea.height/2)
-                );
-
-                //HowToPlayMenu menu = new HowToPlayMenu(menuArea, menuOffset);
-                //Main.engine.getCurrentScene().addComponent(menu);
                 Main.engine.setCurrentScene(new HowToPlayScene(Main.engine.getCurrentScene()));
             }
         });

@@ -10,6 +10,8 @@ import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -243,16 +245,23 @@ public class HowToPlayScene extends Scene implements ItemListener {
         return button;
     }
 
-    private String readFile(String filePath) {
+    private String readFile(String resourcePath) {
         StringBuilder contentBuilder = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+
+        // Use ClassLoader to load the resource
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+
             String line;
             while ((line = br.readLine()) != null) {
                 contentBuilder.append(line).append("\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.err.println("Resource not found: " + resourcePath);
         }
+
         return contentBuilder.toString();
     }
 
