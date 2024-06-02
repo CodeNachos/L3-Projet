@@ -17,9 +17,13 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import Engine.Core.Renderer.Scene;
+import Engine.Entities.GameObject;
 import Engine.Entities.UI.ColorArea;
 import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
+import Engine.Entities.UI.UIObject;
+import Engine.Global.Util;
+import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.GameScene;
@@ -34,9 +38,20 @@ public class MainMenuScene extends Scene {
     MenuFrame titleFrame;
 
     public MainMenuScene() {
-        createTitle();
-        createTitleShadow();
+        //createTitle();
+        //createTitleShadow();
         createButtons();
+
+        Sprite titleSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/Title.png"));
+        GameObject title = new GameObject();
+        title.setSprite(titleSprite);
+        title.setScale(new Vector2D(0.4, 0.4));
+        title.setPos(
+            (int)(Main.engine.getResolution().width/2 - title.getSize().width/2),
+            (int)(Main.engine.getResolution().height * 0.1)
+        );
+
+        addComponent(title);
 
         // Add foreground
         ColorArea foreground = new ColorArea(
@@ -100,6 +115,7 @@ public class MainMenuScene extends Scene {
         titleFrameShadow.setAccentColor(new Color(0,0,0,0));
 
         titleFrameShadow.setLayout(new BorderLayout());
+
 
         JLabel titleShadow = new JLabel("O N I T A M A", SwingConstants.CENTER);
         titleShadow.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 86));

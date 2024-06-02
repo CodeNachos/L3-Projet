@@ -7,11 +7,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -162,22 +167,43 @@ public class HowToPlayScene extends Scene implements ItemListener {
     private void showSetupContent() {
         MenuFrame contentFrame = createContentFrame();
 
-        JLabel title = new JLabel("This is title", SwingConstants.CENTER);
+        JLabel title = new JLabel(" GAME SETUP ", SwingConstants.CENTER);
         title.setAlignmentX(CENTER_ALIGNMENT);
-        title.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 22));
+        title.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 22));
         title.setForeground(Main.Palette.foreground);
 
-        FlatTextField textContent = new FlatTextField("text here", 0);
+        // Create a JTextArea instead of FlatTextField
+        JTextArea textContent = new JTextArea();
         textContent.setAlignmentX(CENTER_ALIGNMENT);
-        textContent.setHorizontalAlignment(JTextField.CENTER);
-        textContent.setMainColor(new Color(0,0,0,10));
-        textContent.setAccentColor(new Color(0,0,0,0));
+        textContent.setWrapStyleWord(true);
+        textContent.setLineWrap(true);
+        textContent.setEditable(false);
+        textContent.enableInputMethods(false);
+        textContent.setOpaque(false);
         textContent.setForeground(Main.Palette.foreground);
         textContent.setFont(Main.FontManager.getDefaultCustomFont(Font.PLAIN, 14));
+        textContent.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        textContent.setBackground(new Color(0,0,0,0));
+
+        // Read file content and set it to the text area
+        String fileContent = readFile("Onitama/res/Rules/Setup.txt");
+        textContent.setText(fileContent);
+
+        // Put the JTextArea inside a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(textContent);
+        scrollPane.setAlignmentX(CENTER_ALIGNMENT);
+        scrollPane.setBorder(null);
+        scrollPane.setPreferredSize(new Dimension(
+            (int) (Main.engine.getResolution().width * 0.7),
+            (int) (Main.engine.getResolution().height * 0.5)
+        ));
+
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
 
         contentFrame.add(Box.createVerticalGlue());
         contentFrame.add(title);
-        contentFrame.add(textContent);
+        contentFrame.add(scrollPane); // Add the scroll pane instead of the text area
         contentFrame.add(Box.createVerticalGlue());
 
         addComponent(contentFrame);
@@ -215,6 +241,19 @@ public class HowToPlayScene extends Scene implements ItemListener {
         button.setSize(20, 20);
         button.setFocusable(false);
         return button;
+    }
+
+    private String readFile(String filePath) {
+        StringBuilder contentBuilder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                contentBuilder.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return contentBuilder.toString();
     }
 
     @Override
