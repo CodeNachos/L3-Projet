@@ -432,7 +432,7 @@ public class GameScene extends Scene {
         changePlayer(); 
 
         updateGUI();
-
+        
     }
 
     public static void setAction(Action act) {
