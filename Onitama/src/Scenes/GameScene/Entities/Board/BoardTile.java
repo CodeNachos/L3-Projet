@@ -17,8 +17,11 @@ public class BoardTile extends Tile {
 
     private boolean interactable = true;
 
+    private Sprite intialSprite;
+
     public BoardTile(TileMap map, int line, int column, Sprite sprite) {
         super(map, line, column, sprite);
+        intialSprite = sprite;
     }
 
     public void setIteractable(boolean state) {
@@ -99,7 +102,7 @@ public class BoardTile extends Tile {
         } else if (hovering ) {
             sprite = ((Board)parentMap).hoverTileSprite;
         } else {
-            sprite = ((Board)parentMap).tileSprite;
+            sprite = intialSprite;
         }
     }
 

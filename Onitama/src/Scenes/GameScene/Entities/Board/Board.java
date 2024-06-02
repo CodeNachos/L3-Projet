@@ -26,6 +26,9 @@ public class Board extends TileMap {
     Sprite selectedPieceSprite;
     Sprite hoverSelectedPieceSprite;
 
+    Sprite redThroneSprite;
+    Sprite blueThroneSprite;
+
     private boolean highlighting = false; 
 
     BoardTile hoveringTile = null;
@@ -74,6 +77,12 @@ public class Board extends TileMap {
 
         hoverSelectedPieceSprite = new Sprite(new Texture(new Color(255,255,255, 100), tileDimension.width, tileDimension.height,10));
         hoverSelectedPieceSprite.setBorder(5, new Color(255,255,255, 230), 10);
+
+        redThroneSprite = new Sprite(new Texture(new Color(255,0,0,10), tileDimension.width, tileDimension.height, 10));
+        redThroneSprite.setBorder(5, new Color(255,100,100,100), 10);
+
+        blueThroneSprite = new Sprite(new Texture(new Color(139,233,253,10), tileDimension.width, tileDimension.height, 10));
+        blueThroneSprite.setBorder(5, new Color(139,233,253,100), 10);
 
         populateBoard();
 
@@ -264,7 +273,13 @@ public class Board extends TileMap {
         BoardTile tile;
         for (int l = 0 ; l < mapDimension.height; l++) {
             for (int c = 0 ; c < mapDimension.width; c++) {
-                tile = new BoardTile(this, l, c, tileSprite);
+                if (l == 0 && c == 2) {
+                    tile = new BoardTile(this, l, c, blueThroneSprite);
+                } else if (l == 4 && c == 2) {
+                    tile = new BoardTile(this, l, c, redThroneSprite);
+                } else {
+                    tile = new BoardTile(this, l, c, tileSprite);
+                }
                 addTile(l, c, tile);
             }
         }

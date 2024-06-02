@@ -103,7 +103,6 @@ public static class FontManager {
         public static Color selection = new Color(68,71,90,255);
         public static Color foreground = new Color(248,248,242,255);
         public static Color highlight = new Color(98,144,164,255);
-        
         public static Color cyan = new Color(139,233,253,255);
         public static Color green = new Color(80,250,123,255);
         public static Color orange = new Color(255,184,108, 255);

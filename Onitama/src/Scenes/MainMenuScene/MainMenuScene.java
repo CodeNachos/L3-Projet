@@ -25,6 +25,7 @@ import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Scripts.History.History;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
+import Onitama.src.Scenes.HowToPlayScene.HowToPlayScene;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class MainMenuScene extends Scene {
@@ -129,9 +130,9 @@ public class MainMenuScene extends Scene {
 
         FlatButton newGameButton = createBaseButton("New Game");
 
-        FlatButton howToPlayButton = createBaseButton("How To Play");
-
         FlatButton loadButton = createBaseButton("Load Game");
+        
+        FlatButton howToPlayButton = createBaseButton("How To Play");
         
         FlatButton quitButton = createBaseButton("Quit");
 
@@ -164,12 +165,12 @@ public class MainMenuScene extends Scene {
 
         Box buttonBox2 = Box.createHorizontalBox();
         buttonBox2.add(Box.createHorizontalGlue());
-        buttonBox2.add(howToPlayButton);
+        buttonBox2.add(loadButton);
         buttonBox2.add(Box.createHorizontalGlue());
 
         Box buttonBox3 = Box.createHorizontalBox();
         buttonBox3.add(Box.createHorizontalGlue());
-        buttonBox3.add(loadButton);
+        buttonBox3.add(howToPlayButton);
         buttonBox3.add(Box.createHorizontalGlue());
 
         Box buttonBox4 = Box.createHorizontalBox();
@@ -214,9 +215,9 @@ public class MainMenuScene extends Scene {
                     (Main.engine.getResolution().height/2) - (menuArea.height/2)
                 );
 
-                HowToPlayMenu menu = new HowToPlayMenu(menuArea, menuOffset);
-                Main.engine.getCurrentScene().addComponent(menu);
-                
+                //HowToPlayMenu menu = new HowToPlayMenu(menuArea, menuOffset);
+                //Main.engine.getCurrentScene().addComponent(menu);
+                Main.engine.setCurrentScene(new HowToPlayScene(Main.engine.getCurrentScene()));
             }
         });
 

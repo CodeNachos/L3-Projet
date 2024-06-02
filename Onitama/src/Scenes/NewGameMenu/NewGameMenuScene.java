@@ -179,7 +179,7 @@ public class NewGameMenuScene extends Scene implements ItemListener {
         redFirstButton.setMainColor(Main.Palette.selection);
         redFirstButton.setAccentColor(Main.Palette.selection.brighter());
         redFirstButton.setForeground(Main.Palette.foreground);
-        redFirstButton.setCurvature(10, 10);
+        redFirstButton.setCurvature(0, 0);
         redFirstButton.setFocusable(false);
         redFirstButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10,10));
         redFirstButton.addItemListener(this);
@@ -190,7 +190,7 @@ public class NewGameMenuScene extends Scene implements ItemListener {
         blueFirstButton.setMainColor(Main.Palette.selection.darker());
         blueFirstButton.setAccentColor(Main.Palette.selection.brighter());
         blueFirstButton.setForeground(Main.Palette.foreground);
-        blueFirstButton.setCurvature(10, 10);
+        blueFirstButton.setCurvature(0, 0);
         blueFirstButton.setFocusable(false);
         blueFirstButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10,10));
         blueFirstButton.addItemListener(this);
