@@ -316,6 +316,57 @@ public class InGameMenu extends MenuFrame {
         });
 
         
+        leftButtonPlayer1.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newConfig.redDifficulty = newConfig.redDifficulty.previous();
+                player1Label.setText(newConfig.redDifficulty.toString());
+            }
+            
+        });
+
+        rightButtonPlayer1.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newConfig.redDifficulty = newConfig.redDifficulty.next();
+                player1Label.setText(newConfig.redDifficulty.toString());
+            }
+            
+        });
+
+        leftButtonPlayer2.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newConfig.blueDifficulty = newConfig.blueDifficulty.previous();
+                player2Label.setText(newConfig.blueDifficulty.toString());
+            }
+            
+        });
+
+        rightButtonPlayer2.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newConfig.blueDifficulty = newConfig.blueDifficulty.next();
+                player2Label.setText(newConfig.blueDifficulty.toString());
+            }
+            
+        });
+
+        applyConfigButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.gameScene.setGameConfig(newConfig);
+                Main.engine.setCurrentScene(Main.gameScene);
+            }
+            
+        });
+
+        
     }
 
     @Override

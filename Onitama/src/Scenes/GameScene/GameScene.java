@@ -263,6 +263,24 @@ public class GameScene extends Scene {
         return gameConfig.clone();
     }
 
+    public void setGameConfig(Config config) {
+        gameConfig = config.clone();
+
+        // Set player types
+        if (gameConfig.redDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.RED_PLAYER, gameConfig.redDifficulty.deatph());
+        } else {
+            player1.disableAI();
+        }
+        if (gameConfig.blueDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.BLUE_PLAYER, gameConfig.blueDifficulty.deatph());
+        } else {
+            player2.disableAI();
+        }
+
+        setAction(null);        
+    }
+
     public int getWinner() {
         if (!gameOver()) {
             return -1;
