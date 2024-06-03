@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 
 import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
+import Engine.Global.Settings;
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
@@ -212,8 +213,16 @@ public class TopBar extends MenuFrame {
 
     @Override
     public void input(KeyEvent e) {
-        if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            Main.engine.setCurrentScene(new InGameMenuScene());
+        if (e.getID() == KeyEvent.KEY_PRESSED) {
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                Main.engine.setCurrentScene(new InGameMenuScene());
+            } else if (e.getKeyCode() == Settings.undo_key)  {
+                Main.gameScene.history.undo();
+                Main.iaShouldWait = true;
+            } else if (e.getKeyCode() == Settings.redo_key)  {
+                Main.gameScene.history.redo();
+                Main.iaShouldWait = true;
+            }
         }
     }
 

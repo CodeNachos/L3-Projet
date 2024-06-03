@@ -2,13 +2,16 @@ package Onitama.src.Scenes.GameScene.Entities.Board;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import Engine.Entities.TileMap.TileMap;
+import Engine.Global.Settings;
 import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 import Onitama.src.Scenes.GameScene.Entities.Card.Card;
 import Onitama.src.Main;
 
@@ -38,6 +41,8 @@ public class Board extends TileMap {
     // Turn info
     BoardTile selectedTile = null;
     BoardTile selectedAction = null;
+
+    private boolean interactable = true;
 
     public Board(Dimension area, Vector2D offset) {
         super(5, 5, area, offset);
@@ -89,6 +94,7 @@ public class Board extends TileMap {
     }
 
     public void setIteractable(boolean state) {
+        interactable = state;
         for (int l = 0 ; l < mapDimension.height; l++) {
             for (int c = 0 ; c < mapDimension.width; c++) {
                 ((BoardTile)getTile(l, c)).setIteractable(state);;
@@ -112,6 +118,64 @@ public class Board extends TileMap {
         } else if (highlighting) {
             clearHightlighting();
         }
+    }
+
+    @Override
+    public void input(KeyEvent e) {
+        if (!interactable) 
+            return;
+        
+        if (Main.gameScene.getPlayerType(Main.gameScene.getCurrentPlayer()) != PlayerType.HUMAN)
+            return;
+        
+        if (e.getID() == KeyEvent.KEY_RELEASED) {
+            if (e.getKeyCode() == Settings.up_key || e.getKeyCode() == Settings.up_arrow_key) {
+                if (hoveringTile != null) {
+                    hoveringTile.hovering = false;
+                    hoveringTile = (BoardTile)getTile(positiveMod((hoveringTile.getLine() - 1), 5), (hoveringTile.getColumn()));
+                    hoveringTile.hovering = true;
+                } else {
+                    hoveringTile = (BoardTile)getTile(0,0);
+                    hoveringTile.hovering = true;
+                }
+            } else if (e.getKeyCode() == Settings.down_key || e.getKeyCode() == Settings.down_arrow_key) {
+                if (hoveringTile != null) {
+                    hoveringTile.hovering = false;
+                    hoveringTile = (BoardTile)getTile((hoveringTile.getLine() + 1) % 5, (hoveringTile.getColumn()));
+                    hoveringTile.hovering = true;
+                } else {
+                    hoveringTile = (BoardTile)getTile(0,0);
+                    hoveringTile.hovering = true;
+                }
+            } else if (e.getKeyCode() == Settings.left_key || e.getKeyCode() == Settings.left_arrow_key) {
+                if (hoveringTile != null) {
+                    hoveringTile.hovering = false;
+                    hoveringTile = (BoardTile)getTile((hoveringTile.getLine()), positiveMod((hoveringTile.getColumn() - 1), 5));
+                    hoveringTile.hovering = true;
+                } else {
+                    hoveringTile = (BoardTile)getTile(0,0);
+                    hoveringTile.hovering = true;
+                }
+            } else if (e.getKeyCode() == Settings.right_key || e.getKeyCode() == Settings.right_arrow_key) {
+                if (hoveringTile != null) {
+                    hoveringTile.hovering = false;
+                    hoveringTile = (BoardTile)getTile((hoveringTile.getLine()), (hoveringTile.getColumn() + 1) % 5);
+                    hoveringTile.hovering = true;
+                } else {
+                    hoveringTile = (BoardTile)getTile(0,0);
+                    hoveringTile.hovering = true;
+                }
+            } 
+
+        }
+    }
+
+    private int positiveMod(int dividend, int divisor) {
+        int result = dividend % divisor;
+        if (result < 0) {
+            result += divisor;
+        }
+        return result;
     }
 
     public Vector2D getSelectedTile() {

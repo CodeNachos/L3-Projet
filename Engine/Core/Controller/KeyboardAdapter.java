@@ -39,9 +39,8 @@ public class KeyboardAdapter implements KeyListener {
                 forwardKeyEventToTiles(mapObj, e);
             
             // else default treatment
-            } else {
-                obj.input(e);
             }
+            obj.input(e);
         }
     }
 

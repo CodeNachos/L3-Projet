@@ -12,8 +12,8 @@ import Onitama.src.Main;
 
 public class BoardTile extends Tile {
 
-    private boolean hovering = false;
-    private boolean highlighted = false;
+    protected boolean hovering = false;
+    protected boolean highlighted = false;
 
     private boolean interactable = true;
 

@@ -1,6 +1,7 @@
 package Onitama.src;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -39,6 +40,8 @@ public class Main {
         Settings.applicationName = "Onitama";
 
         initialResolution = Settings.resolution;
+
+        Settings.fullscreen_key = KeyEvent.VK_F;
 
         // create engine
         engine = new GameEngine();
