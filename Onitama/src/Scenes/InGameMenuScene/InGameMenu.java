@@ -115,7 +115,7 @@ public class InGameMenu extends MenuFrame {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         buttonsPanel.setBackground(new Color(0,0,0,0));
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(10,45,10,45));
+        
 
         buttonsPanel.add(Box.createVerticalGlue());
         buttonsPanel.add(Box.createVerticalStrut(10));
@@ -234,6 +234,12 @@ public class InGameMenu extends MenuFrame {
         JPanel menuContent = new JPanel();
         menuContent.setLayout(new BoxLayout(menuContent, BoxLayout.X_AXIS));
         menuContent.setBackground(new Color(0,0,0,0));
+
+        Dimension size = new Dimension(area.width/2, area.height); 
+        buttonsPanel.setPreferredSize(size);
+        buttonsPanel.setMaximumSize(size);
+        selectionMenu.setPreferredSize(size);
+        selectionMenu.setMaximumSize(size);
 
         menuContent.add(Box.createHorizontalGlue());
         menuContent.add(buttonsPanel);
