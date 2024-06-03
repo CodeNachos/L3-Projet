@@ -3,6 +3,7 @@ package Onitama.src.Scenes.GameScene.Interface;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -207,6 +208,13 @@ public class TopBar extends MenuFrame {
         sepLabel.setForeground(Main.Palette.selection);
 
         add(sepLabel);
+    }
+
+    @Override
+    public void input(KeyEvent e) {
+        if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            Main.engine.setCurrentScene(new InGameMenuScene());
+        }
     }
 
     @Override

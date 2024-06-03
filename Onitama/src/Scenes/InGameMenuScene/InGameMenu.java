@@ -20,12 +20,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
+import Engine.Core.Renderer.Scene;
 import Engine.Entities.UI.BlurredArea;
 import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.InGameMenuScene.InGameMenuScene.MenuActions;
 import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
@@ -39,6 +41,8 @@ public class InGameMenu extends MenuFrame {
     FlatButton saveButton;
     JLabel saveMessage;
     Timer timer;
+
+    private boolean firstProcess = true;
 
     public InGameMenu(Dimension area, Vector2D offset) {
         
@@ -73,8 +77,6 @@ public class InGameMenu extends MenuFrame {
         saveButton = createBaseButton("Save Game");
         saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(saveButton);
-        add(Box.createVerticalStrut(6));
-
         add(Box.createVerticalStrut(6));
         
         mainButton = createBaseButton("Main Menu");
@@ -138,8 +140,8 @@ public class InGameMenu extends MenuFrame {
         restartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.gameScene.history.resetGame();
-                Main.engine.setCurrentScene(Main.gameScene);
+                createConfirmationMenu(MenuActions.RESTART);
+                removeMenu();
             }
             
         });
@@ -148,7 +150,8 @@ public class InGameMenu extends MenuFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.engine.setCurrentScene(new NewGameMenuScene());
+                createConfirmationMenu(MenuActions.NEW_GAME);
+                removeMenu();
             }
             
             
@@ -181,7 +184,8 @@ public class InGameMenu extends MenuFrame {
         mainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.engine.setCurrentScene(new MainMenuScene());
+                createConfirmationMenu(MenuActions.MAIN_MENU);
+                removeMenu();
             }
             
         });
@@ -192,6 +196,34 @@ public class InGameMenu extends MenuFrame {
         if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             Main.engine.setCurrentScene(Main.gameScene);
         }
+    }
+
+    @Override
+    public void process(double delta) {
+        if (firstProcess) {
+            getParent().setComponentZOrder(this, 0);
+            firstProcess = false;
+        }
+    }
+
+    private void removeMenu() {
+        ((Scene)getParent()).removeComponent(this);
+        firstProcess = true;
+    }
+
+    private void createConfirmationMenu(MenuActions action) {
+        Dimension menuArea = new Dimension(
+            (int)(Main.engine.getResolution().width/3),
+            (int)(Main.engine.getResolution().width/5)
+        );
+    
+        Vector2D menuOffset = new Vector2D(
+            (Main.engine.getResolution().width/2) - (menuArea.width/2),
+            (Main.engine.getResolution().height/2) - (menuArea.height/2)
+        );
+        
+        MenuFrame confirmationFrame = new ConfirmationFrame(this, action, menuArea, menuOffset);
+        ((Scene)getParent()).addComponent(confirmationFrame);
     }
 
     private FlatButton createBaseButton(String content) {
