@@ -13,7 +13,7 @@ public class Settings {
 
     public static String applicationName = "Game";
 
-    public static int fullscreen_key = KeyEvent.VK_ESCAPE;
+    public static int fullscreen_key = KeyEvent.VK_CAPS_LOCK;
     public static int undo_key = KeyEvent.VK_Q;
     public static int redo_key = KeyEvent.VK_E;
 }
