@@ -21,7 +21,7 @@ public class InGameMenuScene extends Scene {
 
     private void createInGameMenu() {
         Dimension menuArea = new Dimension(
-            (int)(Main.engine.getResolution().width/3.5),
+            (int)(Main.engine.getResolution().width/2),
             (int)(Main.engine.getResolution().width/3.2)
         );
     

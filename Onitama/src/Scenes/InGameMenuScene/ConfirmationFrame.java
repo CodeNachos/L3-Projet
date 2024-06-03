@@ -89,16 +89,16 @@ public class ConfirmationFrame extends MenuFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switch (action) {
-                    case MenuActions.RESTART:
+                    case RESTART:
                         Main.gameScene.history.resetGame();
                         Main.engine.setCurrentScene(Main.gameScene);
                         break;
                     
-                    case MenuActions.NEW_GAME:
+                    case NEW_GAME:
                         Main.engine.setCurrentScene(new NewGameMenuScene());
                         break;
                     
-                    case MenuActions.MAIN_MENU:
+                    case MAIN_MENU:
                         Main.engine.setCurrentScene(new MainMenuScene());
                         break;
                 
@@ -129,15 +129,15 @@ public class ConfirmationFrame extends MenuFrame {
         String confText = "";
 
         switch (action) {
-            case MenuActions.RESTART:
+            case RESTART:
                 confText = "Restart current game?";
                 break;
         
-            case MenuActions.NEW_GAME:
+            case NEW_GAME:
                 confText = "Create new game?";
                 break;
             
-            case MenuActions.MAIN_MENU:
+            case MAIN_MENU:
                 confText = "Quit current game?";
                 break;
 
@@ -164,16 +164,16 @@ public class ConfirmationFrame extends MenuFrame {
                 removeMenu();
             } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 switch (action) {
-                    case MenuActions.RESTART:
+                    case RESTART:
                         Main.gameScene.history.resetGame();
                         Main.engine.setCurrentScene(Main.gameScene);
                         break;
                     
-                    case MenuActions.NEW_GAME:
+                    case NEW_GAME:
                         Main.engine.setCurrentScene(new NewGameMenuScene());
                         break;
                     
-                    case MenuActions.MAIN_MENU:
+                    case MAIN_MENU:
                         Main.engine.setCurrentScene(new MainMenuScene());
                         break;
                 
@@ -183,5 +183,4 @@ public class ConfirmationFrame extends MenuFrame {
             }
         }
     }
-    
 }

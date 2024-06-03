@@ -259,6 +259,10 @@ public class GameScene extends Scene {
         }
     }
 
+    public Config getGameConfig() {
+        return gameConfig.clone();
+    }
+
     public int getWinner() {
         if (!gameOver()) {
             return -1;
