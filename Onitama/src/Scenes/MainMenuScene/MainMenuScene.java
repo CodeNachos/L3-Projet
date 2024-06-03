@@ -21,7 +21,6 @@ import Engine.Entities.GameObject;
 import Engine.Entities.UI.ColorArea;
 import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
-import Engine.Entities.UI.UIObject;
 import Engine.Global.Util;
 import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;

@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,13 +18,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Engine.Core.Renderer.Scene;
 import Engine.Entities.UI.ColorArea;
 import Engine.Entities.UI.FlatButton;
-import Engine.Entities.UI.FlatTextField;
 import Engine.Entities.UI.FlatToggleButton;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
@@ -40,12 +37,19 @@ public class HowToPlayScene extends Scene implements ItemListener {
     FlatToggleButton gameStepsButton;
     FlatToggleButton howToWinButton;
 
+    MenuFrame currentFrame;
+    FlatToggleButton selected;
+
     public HowToPlayScene(Scene returnScene) {
         this.returnScene = returnScene;
 
         createReturnButton();
 
         createTabs();
+        
+        selected = gameSetupButton;
+        currentFrame = new SetupFrame();
+        addComponent(currentFrame);
 
         // Add foreground
         ColorArea foreground = new ColorArea(
@@ -99,8 +103,6 @@ public class HowToPlayScene extends Scene implements ItemListener {
         tabsFrame.add(gameStepsButton);
         tabsFrame.add(howToWinButton);
         tabsFrame.add(Box.createHorizontalGlue());
-
-        showSetupContent();
 
         addComponent(tabsFrame);
     }
@@ -207,11 +209,63 @@ public class HowToPlayScene extends Scene implements ItemListener {
         contentFrame.add(title);
         contentFrame.add(scrollPane); // Add the scroll pane instead of the text area
         contentFrame.add(Box.createVerticalGlue());
-
-        addComponent(contentFrame);
     }
 
     private void showStepsContent() {
+        System.out.println( "steps");
+        MenuFrame contentFrame = createContentFrame();
+
+        JLabel title = new JLabel(" GAME STEPS ", SwingConstants.CENTER);
+        title.setAlignmentX(CENTER_ALIGNMENT);
+        title.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 22));
+        title.setForeground(Main.Palette.foreground);
+
+
+        JLabel subTitle1 = new JLabel("1. Movement");
+        subTitle1.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
+        subTitle1.setForeground(Main.Palette.foreground);
+
+        // Create a JTextArea instead of FlatTextField
+        JTextArea textContent = new JTextArea();
+        textContent.setAlignmentX(CENTER_ALIGNMENT);
+        textContent.setWrapStyleWord(true);
+        textContent.setLineWrap(true);
+        textContent.setEditable(false);
+        textContent.enableInputMethods(false);
+        textContent.setOpaque(false);
+        textContent.setForeground(Main.Palette.foreground);
+        textContent.setFont(Main.FontManager.getDefaultCustomFont(Font.PLAIN, 14));
+        textContent.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        textContent.setBackground(new Color(0,0,0,0));
+
+        // Read file content and set it to the text area
+        String fileContent = readFile("Onitama/res/Rules/Steps_Movement.txt");
+        textContent.setText(fileContent);
+
+        // Put the JTextArea inside a JScrollPane
+        JScrollPane scrollPane1 = new JScrollPane(textContent);
+        scrollPane1.setAlignmentX(CENTER_ALIGNMENT);
+        scrollPane1.setBorder(null);
+        scrollPane1.setPreferredSize(new Dimension(
+            (int) (Main.engine.getResolution().width * 0.7),
+            (int) (Main.engine.getResolution().height * 0.5)
+        ));
+
+        scrollPane1.setOpaque(false);
+        scrollPane1.getViewport().setOpaque(false);
+        
+
+        JLabel subTitle2 = new JLabel("2. Card Exchange");
+        subTitle2.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
+        subTitle2.setForeground(Main.Palette.foreground);
+
+        contentFrame.add(Box.createVerticalGlue());
+        contentFrame.add(title);
+        contentFrame.add(subTitle1);
+        contentFrame.add(scrollPane1); // Add the scroll pane instead of the text area\
+        contentFrame.add(subTitle2);
+        contentFrame.add(Box.createVerticalGlue());
+
 
     }
 
@@ -245,11 +299,11 @@ public class HowToPlayScene extends Scene implements ItemListener {
         return button;
     }
 
-    private String readFile(String resourcePath) {
+    protected static String readFile(String resourcePath) {
         StringBuilder contentBuilder = new StringBuilder();
 
         // Use ClassLoader to load the resource
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath);
+        try (InputStream is = HowToPlayScene.class.getClassLoader().getResourceAsStream(resourcePath);
             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
 
             String line;
@@ -267,7 +321,7 @@ public class HowToPlayScene extends Scene implements ItemListener {
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        if (e.getItem() == gameStepsButton) {
+        if (e.getItem() == gameStepsButton && selected != gameStepsButton) {
             gameSetupButton.setSelected(false);
             gameSetupButton.setMainColor(Main.Palette.selection.darker());
             
@@ -275,7 +329,12 @@ public class HowToPlayScene extends Scene implements ItemListener {
             howToWinButton.setMainColor(Main.Palette.selection.darker());
             
             gameStepsButton.setMainColor(Main.Palette.selection);
-        } else if (e.getItem() == gameSetupButton) {
+            
+            removeComponent(currentFrame);
+            currentFrame = new StepsFrame();
+            addComponent(currentFrame);
+            selected = gameStepsButton;
+        } else if (e.getItem() == gameSetupButton && selected != gameSetupButton) {
             gameStepsButton.setSelected(false);
             gameStepsButton.setMainColor(Main.Palette.selection.darker());
             
@@ -283,6 +342,11 @@ public class HowToPlayScene extends Scene implements ItemListener {
             howToWinButton.setMainColor(Main.Palette.selection.darker());
             
             gameSetupButton.setMainColor(Main.Palette.selection);
+            
+            removeComponent(currentFrame);
+            currentFrame = new SetupFrame();
+            addComponent(currentFrame);
+            selected = gameSetupButton;
         } else if (e.getItem() == howToWinButton) {
             gameStepsButton.setSelected(false);
             gameStepsButton.setMainColor(Main.Palette.selection.darker());
@@ -291,6 +355,6 @@ public class HowToPlayScene extends Scene implements ItemListener {
             gameSetupButton.setMainColor(Main.Palette.selection.darker());
             
             howToWinButton.setMainColor(Main.Palette.selection);
-        }
+        } 
     }
 }

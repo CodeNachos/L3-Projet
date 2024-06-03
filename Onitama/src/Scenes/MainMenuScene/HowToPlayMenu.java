@@ -3,7 +3,6 @@ package Onitama.src.Scenes.MainMenuScene;
 
 import java.awt.Dimension;
 
-import Engine.Core.Renderer.Scene;
 import Engine.Entities.UI.BlurredArea;
 import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
