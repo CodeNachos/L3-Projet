@@ -166,7 +166,7 @@ public class Board extends TileMap {
                     hoveringTile = (BoardTile)getTile(0,0);
                     hoveringTile.hovering = true;
                 }
-            } else if (e.getKeyCode() == Settings.accept_key) {
+            } else if (e.getKeyCode() == Settings.accept_key || e.getKeyCode() == KeyEvent.VK_SHIFT) {
                 if (hoveringTile != null) {
                      if (hoveringTile.highlighted) {
                         setSelectedAction(hoveringTile.getMapPosition());
