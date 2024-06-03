@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -229,23 +230,26 @@ public class MainMenuScene extends Scene {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                try (FileInputStream fileIn = new FileInputStream("Onitama/savefiles/game.save");
+                File file = new File("Onitama/savefiles/game.save");
+                if (file.exists())
+                {
+                    try (FileInputStream fileIn = new FileInputStream(file);
                     GZIPInputStream gzipIn = new GZIPInputStream(new BufferedInputStream(fileIn));
-                        ObjectInputStream in = new ObjectInputStream(gzipIn)) {
+                    ObjectInputStream in = new ObjectInputStream(gzipIn)) {
                     State state = (State) in.readObject();
                     History hisotry = (History) in.readObject();
                     Main.gameScene = new GameScene(state, hisotry);
                     Main.engine.setCurrentScene(Main.gameScene);
-                    
-
-                } catch (IOException e1)
-                {
-                    e1.printStackTrace();        
-                } catch (ClassNotFoundException e1) {
+                    } catch (IOException e1)
+                    {
+                        e1.printStackTrace();        
+                    } catch (ClassNotFoundException e1) {
                         e1.printStackTrace();
                     }
-
-
+                } else {
+                    System.err.println("File not foud:" +file.getAbsolutePath());
+                }
+                
             }
             
         });

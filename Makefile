@@ -4,7 +4,7 @@ run: build
 	java -cp out:Onitama/libs/* Onitama.src.Main
 
 build:
-	javac -cp "out;Onitama/lib/json-simple-1.1.1.jar" -d out Engine/**/*.java Onitama/**/*.java 
+	javac -sourcepath ./ ./Onitama/src/Main.java -cp ./Onitama/libs/*.jar -d out
 
 # https://stackoverflow.com/questions/12357136/reference-jars-inside-a-jar
 # Conclusion for jar: this won't work because we can't embed a jar inside a
