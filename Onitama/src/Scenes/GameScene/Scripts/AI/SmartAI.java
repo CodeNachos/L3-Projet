@@ -47,7 +47,7 @@ public class SmartAI extends AI {
     @Override
     public Action play() {
 
-        State s = Main.gameScene.getGameState();
+        //State s = Main.gameScene.getGameState();
 
         //int eval = minmax(s, true, difficulty,
         //                   minusINF, plusINF);
@@ -97,10 +97,15 @@ public class SmartAI extends AI {
         int eval = 0; // evaluation for AI
 
         if (config.isGameOver()) // AI lost
-            eval -= (1000000 + depth);
-        else // ran out of depth, give an estimate
+            eval -= (Integer.MAX_VALUE - difficulty + depth);
+        else { // ran out of depth, give an estimate
             for (int i = 0; i < evaluations.length; i++)
                 eval += weights[i] * evaluations[i].apply(config);
+            if (eval < Integer.MIN_VALUE/2)
+                eval = Integer.MIN_VALUE/2;
+            else if (eval > Integer.MAX_VALUE/2)
+                eval = Integer.MAX_VALUE/2;
+        }
 
         if (config.getCurrentPlayer() == selfID)
             return eval;

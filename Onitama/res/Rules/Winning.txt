@@ -1,0 +1,9 @@
+There are two ways to win in Onitama:
+
+1. Capture the Opponent's Master Pawn
+A player can win by capturing the opponent’s master pawn. To capture the master pawn, a player must move one of their pawns (either a student or their own master) onto the space currently occupied by the opponent’s master pawn. This is done using the movement patterns indicated by the move cards. Once the opponent's master pawn is captured, the game immediately ends, and the capturing player is declared the winner.
+
+2. Way of the Stone
+A player can also win by moving their master pawn onto the opponent’s starting space. The starting space is the central space in the first row of the opponent's side of the board (marked with the player color). This move must be executed using the move cards available to the player. Once a player successfully moves their master pawn to the opponent’s starting space, the game immediately ends, and that player is declared the winner.
+
+The game continues with players alternating turns, moving and exchanging cards, until one of these winning conditions is met.

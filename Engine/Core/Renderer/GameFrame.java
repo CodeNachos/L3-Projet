@@ -49,6 +49,16 @@ public class GameFrame extends JFrame {
         getContentPane().add(scene, BorderLayout.CENTER); // Add the scene to the center of the content pane
         scene.setFocusable(true); // Set the scene focusable
         scene.requestFocusInWindow(); // Request focus for the scene
+
+        if (!getContentPane().getSize().equals(this.scene.currentResolution)) {
+            Vector2D resizeRatio = new Vector2D(
+                (double) getContentPane().getSize().width / (double) this.scene.currentResolution.width,
+                (double) getContentPane().getSize().height / (double) this.scene.currentResolution.height
+            );
+            resizeScene(resizeRatio);
+            this.scene.currentResolution = getContentPane().getSize();
+        }
+
         revalidate(); // Revalidate the frame
     }
 
@@ -116,6 +126,7 @@ public class GameFrame extends JFrame {
                         revalidate();
                     }
                     Settings.resolution = ((JFrame) e.getComponent()).getContentPane().getSize(); // Update screen resolution in settings
+                    scene.currentResolution = ((JFrame) e.getComponent()).getContentPane().getSize();
                 });
             }
         });

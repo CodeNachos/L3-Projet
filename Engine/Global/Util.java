@@ -21,7 +21,7 @@ public class Util {
     }
 		
     public static Image getImage(String path) {
-        InputStream in = open(path);
+        InputStream in = Util.class.getResourceAsStream(path);
         try {
             // Chargement d'une image utilisable dans Swing
             return ImageIO.read(in);

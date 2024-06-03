@@ -43,7 +43,7 @@ public class History implements Serializable {
         State pastState = undo.pop();
         redo.push(Main.gameScene.getGameState());
 
-        GameScene.loadGameState(pastState);
+        Main.gameScene.loadGameState(pastState);
         
     }
 
@@ -56,7 +56,7 @@ public class History implements Serializable {
         State futureState = redo.pop();
         undo.push(Main.gameScene.getGameState());
 
-        GameScene.loadGameState(futureState);
+        Main.gameScene.loadGameState(futureState);
     }
 
     public void addState(State s) {
@@ -76,7 +76,7 @@ public class History implements Serializable {
         if (initialGameState == null) {
             return;
         }
-        GameScene.loadGameState(initialGameState);
+        Main.gameScene.loadGameState(initialGameState);
         clearRecord();
     }
 

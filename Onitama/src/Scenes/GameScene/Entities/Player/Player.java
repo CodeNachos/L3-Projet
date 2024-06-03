@@ -108,7 +108,7 @@ public class Player extends GameObject {
         if (aiAction == null) {
             aiAction = ai.play();
             GameScene.setAction(aiAction);
-            counter = 2*60; // 1 second delay
+            counter = 2*60; // 2 second delay
             return;
         }
         
@@ -259,11 +259,11 @@ public class Player extends GameObject {
     public void loadPieces(PieceType[][] pieces) {
         Sprite kingSprite, pawnSprite;
         if (playerId == Constants.RED_PLAYER) {
-            kingSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redKing.png"));   
-            pawnSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redPawn.png"));   
+            kingSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/redKing.png"));   
+            pawnSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/redPawn.png"));   
         } else {
-            kingSprite = new Sprite(Util.getImage("Onitama/res/Sprites/blueKing.png"));   
-            pawnSprite = new Sprite(Util.getImage("Onitama/res/Sprites/bluePawn.png"));
+            kingSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/blueKing.png"));   
+            pawnSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/bluePawn.png"));
         }
 
         this.pieces = new ArrayList<>();
@@ -417,11 +417,11 @@ public class Player extends GameObject {
     private void initPieces() {
         Sprite kingSprite, pawnSprite;
         if (playerId == Constants.RED_PLAYER) {
-            kingSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redKing.png"));   
-            pawnSprite = new Sprite(Util.getImage("Onitama/res/Sprites/redPawn.png"));   
+            kingSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/redKing.png"));   
+            pawnSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/redPawn.png"));   
         } else {
-            kingSprite = new Sprite(Util.getImage("Onitama/res/Sprites/blueKing.png"));   
-            pawnSprite = new Sprite(Util.getImage("Onitama/res/Sprites/bluePawn.png"));
+            kingSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/blueKing.png"));   
+            pawnSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/bluePawn.png"));
         }
         pieceMap = new PieceMap(GameScene.gameBoard.getSize(), GameScene.gameBoard.getPos(), this);
 

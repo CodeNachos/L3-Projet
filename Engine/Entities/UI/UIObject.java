@@ -12,7 +12,7 @@ import Engine.Structures.Vector2D;
  * The UIObject class represents a user interface element in the game.
  * It inherits properties and functionalities from GameObject.
  */
-public abstract class UIObject extends GameObject {
+public class UIObject extends GameObject {
 
     // DO NOT CHANGE AFTER CONSTRUCTOR INITIALIZATION
     protected Dimension initialArea = null; // Initial area size of the UI object

@@ -7,6 +7,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import Engine.Structures.Vector2D;
 import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
@@ -16,7 +17,6 @@ public class JsonReader {
     public JsonReader()
     {
         jsonCards = new ArrayList<>();
-        //readJson(path);
     }
 
     public List<CardInfo> readJson(String path)
@@ -75,9 +75,7 @@ public class JsonReader {
             }
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (org.json.simple.parser.ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
         return jsonCards;

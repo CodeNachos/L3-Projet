@@ -19,10 +19,10 @@ import Onitama.src.Scenes.GameScene.Scripts.Card.CardInfo;
 import Onitama.src.Scenes.GameScene.Scripts.History.History;
 import Onitama.src.Scenes.GameScene.Scripts.States.Action;
 import Onitama.src.Scenes.GameScene.Scripts.States.Config;
-import Onitama.src.Scenes.GameScene.Scripts.States.PlayerType;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
 import Onitama.src.Scenes.GameScene.Interface.GameOverMenu;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 import Onitama.src.Scenes.GameScene.Entities.Board.Board;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece.PieceType;
@@ -61,7 +61,7 @@ public class GameScene extends Scene {
 
     public static TopBar topBar;
 
-    public static History history;
+    public History history;
 
     public GameScene(Config config) {
         // Create game
@@ -209,12 +209,22 @@ public class GameScene extends Scene {
             cards.add(player2.getStandByCard());
         }
 
-        return new State(getPlayerPieces(Constants.RED_PLAYER), getPlayerPieces(Constants.BLUE_PLAYER), cards, currentPlayer);
+        return new State(getPlayerPieces(Constants.RED_PLAYER), getPlayerPieces(Constants.BLUE_PLAYER), cards, currentPlayer, gameConfig);
     }
 
-    public static void loadGameState(State s) {
+    public void loadGameState(State s) {
+        gameConfig = s.getGameConfig();
+        
         player1.loadState(s);
         player2.loadState(s);
+
+        // Set player types
+        if (gameConfig.redDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.RED_PLAYER, gameConfig.redDifficulty.deatph());
+        }
+        if (gameConfig.blueDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.BLUE_PLAYER, gameConfig.blueDifficulty.deatph());
+        }
 
         currentPlayer = s.getCurrentPlayer();
 
@@ -239,6 +249,46 @@ public class GameScene extends Scene {
 
     public static int getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public PlayerType getPlayerType(int player) {
+        if (player == Constants.RED_PLAYER) {
+            return gameConfig.redDifficulty;
+        } else {
+            return gameConfig.blueDifficulty;
+        }
+    }
+
+    public Config getGameConfig() {
+        return gameConfig.clone();
+    }
+
+    public void setGameConfig(Config config) {
+        gameConfig = config.clone();
+
+        // Set player types
+        if (gameConfig.redDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.RED_PLAYER, gameConfig.redDifficulty.deatph());
+        } else {
+            player1.disableAI();
+        }
+        if (gameConfig.blueDifficulty != PlayerType.HUMAN) {
+            enablePlayerAI(Constants.BLUE_PLAYER, gameConfig.blueDifficulty.deatph());
+        } else {
+            player2.disableAI();
+        }
+
+        setAction(null); 
+        
+        updateGUI();
+    }
+
+    public int getWinner() {
+        if (!gameOver()) {
+            return -1;
+        }
+
+        return winner;
     }
 
     public static HashMap<String, CardInfo> getGameCards() {
@@ -415,6 +465,8 @@ public class GameScene extends Scene {
         } else {
             player2.movePiece(getSelectedPiece(), getSelectedAction());
         }
+
+        player1.update(); player2.update();
         
         gameBoard.setSelectedTile(null); gameBoard.setSelectedAction(null);
 
@@ -423,10 +475,10 @@ public class GameScene extends Scene {
         player1.setSelectedCard(null); player2.setSelectedCard(null);
 
         if (gameOver()) {
-            System.out.println("Player " + (currentPlayer == Constants.RED_PLAYER ? "RED" : "BLUE") + " won");
+            //System.out.println("Player " + (currentPlayer == Constants.RED_PLAYER ? "RED" : "BLUE") + " won");
             winner = currentPlayer;
             createGameOverMenu();
-            
+             
         }
 
         changePlayer(); 
@@ -454,7 +506,7 @@ public class GameScene extends Scene {
         gameBoard.setSelectedAction(act.getMove());
     }
 
-    public static void updateGUI() {
+    public void updateGUI() {
         updatePlayerFade();
         updateTurnLabels();
         updateStandByCardArrows();
@@ -491,7 +543,7 @@ public class GameScene extends Scene {
         }
     }
 
-    public static void updateIteractableEntities() {
+    public void updateIteractableEntities() {
         if (currentPlayer == Constants.RED_PLAYER) {
             if (player1.isAiEnabled()) {
                 player1.setCardsInteractable(false);
@@ -527,9 +579,8 @@ public class GameScene extends Scene {
         }
     }
 
-    public static void updateInterfaceButtons(boolean state) {
+    public void updateInterfaceButtons(boolean state) {
         topBar.setEnabledHint(state);
-        topBar.setEnabledMenu(state);
         
         if (history.canUndo()) {
             topBar.setEnabledUndo(true);
@@ -794,8 +845,8 @@ public class GameScene extends Scene {
 
     private void createGameOverMenu() {
         Dimension menuArea = new Dimension(
-            (int)(Main.engine.getResolution().width / 2),
-            (int)(Main.engine.getResolution().height / 1.5)
+            (int)(Main.engine.getResolution().width / 3),
+            (int)(Main.engine.getResolution().height / 2)
         );
 
         Vector2D menuOffset = new Vector2D(

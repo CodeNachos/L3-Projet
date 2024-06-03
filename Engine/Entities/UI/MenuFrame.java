@@ -68,7 +68,7 @@ public class MenuFrame extends UIObject {
      */
     public void setBorderWidth(int width) {
         borderWidth = width;
-    }   
+    }
 
     /**
      * Overrides the paintComponent method to customize the menu frame's appearance.

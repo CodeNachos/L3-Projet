@@ -19,6 +19,8 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
+import Onitama.src.Scenes.GameScene.Constants;
+import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 
 public class GameOverMenu extends MenuFrame {
@@ -35,7 +37,7 @@ public class GameOverMenu extends MenuFrame {
     public GameOverMenu(Dimension area, Vector2D offset) {
         super(area, offset);
 
-        setMainColor(Main.Palette.selection);
+        setMainColor( new Color(68,71,90,150));
         setAccentColor(Main.Palette.selection.brighter());
         setCurvature(20, 20);
         setBorderWidth(6);
@@ -55,7 +57,8 @@ public class GameOverMenu extends MenuFrame {
     }
 
     private void createWinnerLabel() {
-        String labelText = "<html><center><span style='font-family:" + Main.FontManager.getDefaultCustomFont(Font.ITALIC, 38).getFamily() + ";'>" + "Game<br>Over!</span></center></html>";
+        //String labelText = "<html><center><span style='font-family:" + Main.FontManager.getDefaultCustomFont(Font.ITALIC, 38).getFamily() + ";'>" + "Game<br>Over!</span></center></html>";
+        String labelText = getWinnerText();
         winnerLabel = new JLabel(labelText);
         winnerLabel.setHorizontalAlignment(JLabel.CENTER);
         winnerLabel.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 38));
@@ -176,5 +179,47 @@ public class GameOverMenu extends MenuFrame {
             getParent().setComponentZOrder(blurredArea, 1);
             getParent().setComponentZOrder(this, 0);
         }
+    }
+
+    private String getWinnerText() {
+        String winnerText = "";
+
+        if (
+            Main.gameScene.getPlayerType(Constants.RED_PLAYER) != PlayerType.HUMAN && 
+            Main.gameScene.getPlayerType(Constants.BLUE_PLAYER) != PlayerType.HUMAN
+        ) {
+            if (Main.gameScene.getWinner() == Constants.RED_PLAYER) {
+                winnerText = "RED AI WON";
+            } else {
+                winnerText = "BLUE AI WON";
+            }
+        } else if (
+            Main.gameScene.getPlayerType(Constants.RED_PLAYER) == PlayerType.HUMAN &&
+            Main.gameScene.getPlayerType(Constants.BLUE_PLAYER) == PlayerType.HUMAN
+        ) {
+            if (Main.gameScene.getWinner() == Constants.RED_PLAYER) {
+                winnerText = "RED PLAYER WON!";
+            } else {
+                winnerText = "BLUE PLAYER WON!";
+            }
+        } else if (
+            Main.gameScene.getPlayerType(Constants.RED_PLAYER) != PlayerType.HUMAN ||
+            Main.gameScene.getPlayerType(Constants.BLUE_PLAYER) != PlayerType.HUMAN
+        ) {
+            if (
+                isWinner(Constants.RED_PLAYER) && Main.gameScene.getPlayerType(Constants.RED_PLAYER) != PlayerType.HUMAN || 
+                isWinner(Constants.BLUE_PLAYER) && Main.gameScene.getPlayerType(Constants.BLUE_PLAYER) != PlayerType.HUMAN
+            ) {
+                winnerText = "YOU LOST!";
+            } else { 
+                winnerText = "YOU WON!";
+            }
+        }
+        
+        return winnerText;
+    }
+
+    private boolean isWinner(int player) {
+        return (Main.gameScene.getWinner() == player);
     }
 }

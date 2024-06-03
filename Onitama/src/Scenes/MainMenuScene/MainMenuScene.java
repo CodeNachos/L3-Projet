@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,18 +18,18 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import Engine.Core.Renderer.Scene;
+import Engine.Entities.GameObject;
 import Engine.Entities.UI.ColorArea;
 import Engine.Entities.UI.FlatButton;
 import Engine.Entities.UI.MenuFrame;
+import Engine.Global.Util;
+import Engine.Structures.Sprite;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
-import Onitama.src.Scenes.GameScene.Constants;
-import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 import Onitama.src.Scenes.GameScene.GameScene;
-import Onitama.src.Scenes.GameScene.Interface.InGameMenu;
 import Onitama.src.Scenes.GameScene.Scripts.History.History;
-import Onitama.src.Scenes.GameScene.Scripts.States.Config;
 import Onitama.src.Scenes.GameScene.Scripts.States.State;
+import Onitama.src.Scenes.HowToPlayScene.HowToPlayScene;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class MainMenuScene extends Scene {
@@ -37,9 +38,19 @@ public class MainMenuScene extends Scene {
     MenuFrame titleFrame;
 
     public MainMenuScene() {
-        createTitle();
-        createTitleShadow();
+        //createTitle();
+        //createTitleShadow();
         createButtons();
+
+        Sprite titleSprite = new Sprite(Util.getImage("/Onitama/res/Sprites/Title_byMayaShieda.png"));
+        GameObject title = new GameObject();
+        title.setSprite(titleSprite);
+        title.setScale(new Vector2D(0.4, 0.4));
+        title.setPos(
+            (int)(Main.engine.getResolution().width/2 - title.getSize().width/2),
+            (int)(Main.engine.getResolution().height * 0.1)
+        );
+        addComponent(title);
 
         // Add foreground
         ColorArea foreground = new ColorArea(
@@ -104,6 +115,7 @@ public class MainMenuScene extends Scene {
 
         titleFrameShadow.setLayout(new BorderLayout());
 
+
         JLabel titleShadow = new JLabel("O N I T A M A", SwingConstants.CENTER);
         titleShadow.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 86));
         titleShadow.setForeground(Main.Palette.selection);
@@ -133,14 +145,16 @@ public class MainMenuScene extends Scene {
 
         FlatButton newGameButton = createBaseButton("New Game");
 
+        FlatButton loadButton = createBaseButton("Load Game");
+        
         FlatButton howToPlayButton = createBaseButton("How To Play");
-
-        FlatButton loadButton = createBaseButton("Load");
         
         FlatButton quitButton = createBaseButton("Quit");
+        quitButton.setMainColor(new Color(100,0,0,10));
+        quitButton.setAccentColor(new Color(255,100,100,100));
 
         // Calculate the maximum width needed
-        int maxWidth = Math.max(newGameButton.getPreferredSize().width, quitButton.getPreferredSize().width);
+        int maxWidth = howToPlayButton.getPreferredSize().width;
 
         // Set the maximum width for all buttons
         Dimension buttonSize = new Dimension(maxWidth, newGameButton.getPreferredSize().height);
@@ -168,12 +182,12 @@ public class MainMenuScene extends Scene {
 
         Box buttonBox2 = Box.createHorizontalBox();
         buttonBox2.add(Box.createHorizontalGlue());
-        buttonBox2.add(howToPlayButton);
+        buttonBox2.add(loadButton);
         buttonBox2.add(Box.createHorizontalGlue());
 
         Box buttonBox3 = Box.createHorizontalBox();
         buttonBox3.add(Box.createHorizontalGlue());
-        buttonBox3.add(loadButton);
+        buttonBox3.add(howToPlayButton);
         buttonBox3.add(Box.createHorizontalGlue());
 
         Box buttonBox4 = Box.createHorizontalBox();
@@ -181,6 +195,7 @@ public class MainMenuScene extends Scene {
         buttonBox4.add(quitButton);
         buttonBox4.add(Box.createHorizontalGlue());
 
+        buttonsFrame.add(Box.createVerticalGlue());
         buttonsFrame.add(buttonBox1);
         buttonsFrame.add(Box.createVerticalStrut(6));
         buttonsFrame.add(buttonBox2);
@@ -188,6 +203,7 @@ public class MainMenuScene extends Scene {
         buttonsFrame.add(buttonBox3);
         buttonsFrame.add(Box.createVerticalStrut(6));
         buttonsFrame.add(buttonBox4);
+        buttonsFrame.add(Box.createVerticalGlue());
         //buttonsFrame.add(Box.createVerticalStrut(6));
 
         buttonsFrame.add(Box.createVerticalGlue());
@@ -206,19 +222,7 @@ public class MainMenuScene extends Scene {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                 Dimension menuArea = new Dimension(
-                    (int)(Main.engine.getResolution().width/4),
-                    (int)(Main.engine.getResolution().width/4)
-                );
-
-                Vector2D menuOffset = new Vector2D(
-                    (Main.engine.getResolution().width/2) - (menuArea.width/2),
-                    (Main.engine.getResolution().height/2) - (menuArea.height/2)
-                );
-
-                HowToPlayMenu menu = new HowToPlayMenu(menuArea, menuOffset);
-                Main.engine.getCurrentScene().addComponent(menu);
-                
+                Main.engine.setCurrentScene(new HowToPlayScene(Main.engine.getCurrentScene()));
             }
         });
 
@@ -226,24 +230,26 @@ public class MainMenuScene extends Scene {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                try (FileInputStream fileIn = new FileInputStream("Onitama/savefiles/gameSave1.txt");
+                File file = new File("Onitama/savefiles/game.save");
+                if (file.exists())
+                {
+                    try (FileInputStream fileIn = new FileInputStream(file);
                     GZIPInputStream gzipIn = new GZIPInputStream(new BufferedInputStream(fileIn));
-                        ObjectInputStream in = new ObjectInputStream(gzipIn)) {
+                    ObjectInputStream in = new ObjectInputStream(gzipIn)) {
                     State state = (State) in.readObject();
                     History hisotry = (History) in.readObject();
                     Main.gameScene = new GameScene(state, hisotry);
                     Main.engine.setCurrentScene(Main.gameScene);
-                    
-
-                } catch (IOException e1)
-                {
-                    e1.printStackTrace();        
-                } catch (ClassNotFoundException e1) {
-                        // TODO Auto-generated catch block
+                    } catch (IOException e1)
+                    {
+                        e1.printStackTrace();        
+                    } catch (ClassNotFoundException e1) {
                         e1.printStackTrace();
                     }
-
-
+                } else {
+                    System.err.println("File not foud:" +file.getAbsolutePath());
+                }
+                
             }
             
         });

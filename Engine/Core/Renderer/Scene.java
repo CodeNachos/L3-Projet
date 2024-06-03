@@ -32,6 +32,8 @@ public class Scene extends JPanel {
     // Qeueud objects to be removed
     private Queue<GameObject> rmvQueue;
 
+    protected Dimension currentResolution;
+
     /**
      * Constructs a new Scene instance.
      * Initializes the scene composition and sets up the controller for input events.
@@ -53,6 +55,8 @@ public class Scene extends JPanel {
         } else {
             setPreferredSize(Settings.resolution); // Set preferred size to configured resolution
         }
+
+        currentResolution = getPreferredSize();
 
         setBackground(Color.GRAY);
     }

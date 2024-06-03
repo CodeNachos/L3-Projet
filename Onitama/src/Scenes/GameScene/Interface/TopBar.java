@@ -3,6 +3,7 @@ package Onitama.src.Scenes.GameScene.Interface;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -14,6 +15,10 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.Scripts.AI.SmartAI;
+import Onitama.src.Scenes.GameScene.Scripts.States.Action;
+import Onitama.src.Scenes.HowToPlayScene.HowToPlayScene;
+import Onitama.src.Scenes.InGameMenuScene.InGameMenuScene;
 
 
 public class TopBar extends MenuFrame {
@@ -24,6 +29,8 @@ public class TopBar extends MenuFrame {
     FlatButton hintButton;
     FlatButton redoButton;
     FlatButton helpButton;
+
+    private Dimension currentResolution;
     
     public TopBar(Dimension area, Vector2D offset) {
         super(area, offset);
@@ -63,6 +70,8 @@ public class TopBar extends MenuFrame {
         createHelpButton();
 
         add(Box.createHorizontalGlue());
+
+        currentResolution = Main.engine.getResolution();
     }
 
     public void setEnabledUndo(boolean state) {
@@ -112,7 +121,6 @@ public class TopBar extends MenuFrame {
         undoButton = createBaseButton("↩");
         undoButton.setToolTipText("Undo");
 
-        //undoButton.setEnabled(GameScene.canUndo());
         undoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -129,7 +137,6 @@ public class TopBar extends MenuFrame {
         redoButton = createBaseButton("↪");
         redoButton.setToolTipText("Redo");
 
-        //redoButton.setEnabled(GameScene.canRedo());
         redoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -152,7 +159,9 @@ public class TopBar extends MenuFrame {
         hintButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Util.printWarning("Not implemented");
+                SmartAI hintAI = new SmartAI(2, Main.gameScene.getCurrentPlayer());
+                Action hint = hintAI.play();
+                Main.gameScene.setAction(hint);
             }
         });
 
@@ -165,26 +174,11 @@ public class TopBar extends MenuFrame {
         menuButton.setToolTipText("In Game Menu");
         menuButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 26));
         menuButton.setBorder(BorderFactory.createEmptyBorder(7, 10, 3, 10));
-
-        //undoButton.setEnabled(GameScene.canUndo());s
+        
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Dimension menuArea = new Dimension(
-                    (int)(Main.engine.getResolution().width/3.5),
-                    (int)(Main.engine.getResolution().width/3.5)
-                );
-
-                Vector2D menuOffset = new Vector2D(
-                    (Main.engine.getResolution().width/2) - (menuArea.width/2),
-                    (Main.engine.getResolution().height/2) - (menuArea.height/2)
-                );
-
-                InGameMenu menu = new InGameMenu(menuArea, menuOffset);
-                Main.gameScene.addComponent(menu);
-                
-                Main.gameScene.setEnabledGUI(false);
-                //Util.printWarning("Not implemented");
+                Main.engine.setCurrentScene(new InGameMenuScene());
             }
         });
 
@@ -198,11 +192,10 @@ public class TopBar extends MenuFrame {
         helpButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 18));
         helpButton.setBorder(BorderFactory.createEmptyBorder(9, 10, 9, 10));
         
-        //undoButton.setEnabled(GameScene.canUndo());
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Util.printWarning("Not implemented");
+                Main.engine.setCurrentScene(new HowToPlayScene(Main.engine.getCurrentScene()));
             }
         });
 
@@ -218,8 +211,27 @@ public class TopBar extends MenuFrame {
     }
 
     @Override
-    public void process(double delta) {
+    public void input(KeyEvent e) {
+        if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            Main.engine.setCurrentScene(new InGameMenuScene());
+        }
+    }
 
+    @Override
+    public void process(double delta) {
+        if (!currentResolution.equals(Main.initialResolution)) {
+            Vector2D resizeRatio = new Vector2D(
+                (double) Main.engine.getResolution().width / (double) Main.initialResolution.width,
+                (double) Main.engine.getResolution().height / (double) Main.initialResolution.height
+            );
+            menuButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, (int)(26 * resizeRatio.y)));
+            undoButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, (int)(16 * resizeRatio.y)));
+            redoButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, (int)(16 * resizeRatio.y)));
+            hintButton.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, (int)(16 * resizeRatio.y)));
+            helpButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, (int)(18 * resizeRatio.y)));
+        }
+        
+        currentResolution = Main.engine.getResolution();
 
     }
 
