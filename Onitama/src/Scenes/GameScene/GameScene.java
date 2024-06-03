@@ -278,7 +278,9 @@ public class GameScene extends Scene {
             player2.disableAI();
         }
 
-        setAction(null);        
+        setAction(null); 
+        
+        updateGUI();
     }
 
     public int getWinner() {
