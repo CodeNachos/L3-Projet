@@ -1,4 +1,4 @@
-package Onitama.src.Scenes.GameScene.Interface;
+package Onitama.src.Scenes.InGameMenuScene;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -26,7 +26,6 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
-import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
@@ -35,14 +34,11 @@ public class InGameMenu extends MenuFrame {
 
     FlatButton restartButton;
     FlatButton resumeButton;
-    FlatButton settingsButton;
     FlatButton mainButton;
     FlatButton newGameButton;
     FlatButton saveButton;
     JLabel saveMessage;
     Timer timer;
-
-    private int processCount = 0;
 
     public InGameMenu(Dimension area, Vector2D offset) {
         
@@ -51,10 +47,6 @@ public class InGameMenu extends MenuFrame {
         setMainColor(Main.Palette.selection);
         setAccentColor(Main.Palette.selection.brighter());
         setCurvature(20, 20);
-
-        blurredArea = new BlurredArea(Main.engine.getResolution(), BlurredArea.captureBackground(Main.gameScene));
-        
-        Main.gameScene.addComponent(blurredArea);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -82,10 +74,6 @@ public class InGameMenu extends MenuFrame {
         saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(saveButton);
         add(Box.createVerticalStrut(6));
-
-        settingsButton = createBaseButton("Settings");
-        settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(settingsButton);
 
         add(Box.createVerticalStrut(6));
         
@@ -125,10 +113,6 @@ public class InGameMenu extends MenuFrame {
         saveButton.setMaximumSize(buttonSize);
         saveButton.setMinimumSize(buttonSize);
 
-        settingsButton.setPreferredSize(buttonSize);
-        settingsButton.setMaximumSize(buttonSize);
-        settingsButton.setMinimumSize(buttonSize);
-
         mainButton.setPreferredSize(buttonSize);
         mainButton.setMaximumSize(buttonSize);
         mainButton.setMinimumSize(buttonSize);
@@ -146,8 +130,7 @@ public class InGameMenu extends MenuFrame {
         resumeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.engine.resume();
-                removeMenu();
+                Main.engine.setCurrentScene(Main.gameScene);
             }
             
         });
@@ -155,9 +138,8 @@ public class InGameMenu extends MenuFrame {
         restartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.engine.resume();
                 Main.gameScene.history.resetGame();
-                removeMenu();
+                Main.engine.setCurrentScene(Main.gameScene);
             }
             
         });
@@ -166,7 +148,6 @@ public class InGameMenu extends MenuFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                removeMenu();
                 Main.engine.setCurrentScene(new NewGameMenuScene());
             }
             
@@ -200,16 +181,7 @@ public class InGameMenu extends MenuFrame {
         mainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                removeMenu();
                 Main.engine.setCurrentScene(new MainMenuScene());
-            }
-            
-        });
-
-        settingsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Util.printWarning("Chill, thats for tomorrow");
             }
             
         });
@@ -218,16 +190,8 @@ public class InGameMenu extends MenuFrame {
     @Override
     public void input(KeyEvent e) {
         if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            removeMenu();
+            Main.engine.setCurrentScene(Main.gameScene);
         }
-    }
-
-    private void removeMenu() {
-        Main.engine.resume();
-        Main.gameScene.removeComponent(blurredArea);
-        Main.gameScene.removeComponent(this);
-        Main.gameScene.setEnabledGUI(true);
-        Main.gameScene.updateGUI();
     }
 
     private FlatButton createBaseButton(String content) {
@@ -241,20 +205,6 @@ public class InGameMenu extends MenuFrame {
         button.setSize(20, 20);
         button.setFocusable(false);
         return button;
-    }
-
-    @Override
-    public void process(double delta) {
-        if (getParent().getComponentZOrder(this) > 1) {
-            getParent().setComponentZOrder(blurredArea, 1);
-            getParent().setComponentZOrder(this, 0);
-        }
-        
-        if (processCount == 2) {
-            Main.engine.pause();
-        }
-
-        processCount++;
     }
     
 }

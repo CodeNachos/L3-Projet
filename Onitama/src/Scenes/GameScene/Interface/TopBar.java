@@ -17,6 +17,7 @@ import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.Scripts.AI.SmartAI;
 import Onitama.src.Scenes.GameScene.Scripts.States.Action;
 import Onitama.src.Scenes.HowToPlayScene.HowToPlayScene;
+import Onitama.src.Scenes.InGameMenuScene.InGameMenuScene;
 
 
 public class TopBar extends MenuFrame {
@@ -176,20 +177,7 @@ public class TopBar extends MenuFrame {
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Dimension menuArea = new Dimension(
-                    (int)(Main.engine.getResolution().width/3.5),
-                    (int)(Main.engine.getResolution().width/3.2)
-                );
-
-                Vector2D menuOffset = new Vector2D(
-                    (Main.engine.getResolution().width/2) - (menuArea.width/2),
-                    (Main.engine.getResolution().height/2) - (menuArea.height/2)
-                );
-
-                InGameMenu menu = new InGameMenu(menuArea, menuOffset);
-                Main.gameScene.addComponent(menu);
-                
-                Main.gameScene.setEnabledGUI(false);
+                Main.engine.setCurrentScene(new InGameMenuScene());
             }
         });
 
