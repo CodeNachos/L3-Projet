@@ -50,6 +50,20 @@ public class GameFrame extends JFrame {
         scene.setFocusable(true); // Set the scene focusable
         scene.requestFocusInWindow(); // Request focus for the scene
         revalidate(); // Revalidate the frame
+
+        //System.out.println(this.scene.getSize());
+        //System.out.println(this.scene.currentResolution);
+        //System.out.println(getContentPane().getSize());
+
+        if (!getContentPane().getSize().equals(this.scene.currentResolution)) {
+            Vector2D resizeRatio = new Vector2D(
+                (double) getContentPane().getSize().width / (double) this.scene.currentResolution.width,
+                (double) getContentPane().getSize().height / (double) this.scene.currentResolution.height
+            );
+            System.out.println(resizeRatio);
+            resizeScene(resizeRatio);
+            this.scene.currentResolution = getContentPane().getSize();
+        }
     }
 
     /**
@@ -116,6 +130,7 @@ public class GameFrame extends JFrame {
                         revalidate();
                     }
                     Settings.resolution = ((JFrame) e.getComponent()).getContentPane().getSize(); // Update screen resolution in settings
+                    scene.currentResolution = ((JFrame) e.getComponent()).getContentPane().getSize();
                 });
             }
         });

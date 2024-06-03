@@ -27,6 +27,7 @@ import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.GameScene;
+import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
 
 public class InGameMenu extends MenuFrame {
@@ -35,7 +36,7 @@ public class InGameMenu extends MenuFrame {
     FlatButton restartButton;
     FlatButton resumeButton;
     FlatButton settingsButton;
-    FlatButton quitButton;
+    FlatButton mainButton;
     FlatButton newGameButton;
     FlatButton saveButton;
     JLabel saveMessage;
@@ -88,9 +89,9 @@ public class InGameMenu extends MenuFrame {
 
         add(Box.createVerticalStrut(6));
         
-        quitButton = createBaseButton("Quit");
-        quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(quitButton);
+        mainButton = createBaseButton("Main Menu");
+        mainButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(mainButton);
 
         saveMessage = new JLabel(" ");
         saveMessage.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 14));
@@ -128,9 +129,9 @@ public class InGameMenu extends MenuFrame {
         settingsButton.setMaximumSize(buttonSize);
         settingsButton.setMinimumSize(buttonSize);
 
-        quitButton.setPreferredSize(buttonSize);
-        quitButton.setMaximumSize(buttonSize);
-        quitButton.setMinimumSize(buttonSize);
+        mainButton.setPreferredSize(buttonSize);
+        mainButton.setMaximumSize(buttonSize);
+        mainButton.setMinimumSize(buttonSize);
 
         
         timer = new Timer(2000, new ActionListener() {
@@ -196,10 +197,11 @@ public class InGameMenu extends MenuFrame {
             
         });
 
-        quitButton.addActionListener(new ActionListener() {
+        mainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.engine.stop();
+                removeMenu();
+                Main.engine.setCurrentScene(new MainMenuScene());
             }
             
         });

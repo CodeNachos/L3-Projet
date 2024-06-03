@@ -16,11 +16,11 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 
-public class SetupFrame extends MenuFrame {
+public class WinningFrame extends MenuFrame {
     
     private boolean firstProcess = true;
 
-    public SetupFrame() {
+    public WinningFrame() {
         super(
             new Dimension(
                 (int)(Main.engine.getResolution().width * 0.6),
@@ -36,7 +36,7 @@ public class SetupFrame extends MenuFrame {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        JLabel title = new JLabel(" GAME SETUP ", SwingConstants.CENTER);
+        JLabel title = new JLabel(" HOW TO WIN ", SwingConstants.CENTER);
         title.setAlignmentX(CENTER_ALIGNMENT);
         title.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 22));
         title.setForeground(Main.Palette.foreground);
@@ -55,7 +55,7 @@ public class SetupFrame extends MenuFrame {
         textContent.setBackground(new Color(0,0,0,0));
 
         // Read file content and set it to the text area
-        String fileContent = HowToPlayScene.readFile("Onitama/res/Rules/Setup.txt");
+        String fileContent = HowToPlayScene.readFile("Onitama/res/Rules/Winning.txt");
         textContent.setText(fileContent);
 
         // Put the JTextArea inside a JScrollPane

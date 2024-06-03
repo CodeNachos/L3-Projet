@@ -149,130 +149,6 @@ public class HowToPlayScene extends Scene implements ItemListener {
         });
     }
 
-    private MenuFrame createContentFrame() {
-        MenuFrame contentFrame = new MenuFrame(
-            new Dimension(
-                (int)(Main.engine.getResolution().width * 0.6),
-                (int)(Main.engine.getResolution().height * 0.6)
-            ), new Vector2D(
-                Main.engine.getResolution().width * 0.5 - Main.engine.getResolution().width * (0.6/2),
-                Main.engine.getResolution().height * 0.2
-            )
-        );
-        
-        contentFrame.setMainColor(new Color(0,0,0,0));
-        contentFrame.setAccentColor(new Color(0,0,0,0));
-
-        contentFrame.setLayout(new BoxLayout(contentFrame, BoxLayout.Y_AXIS));
-
-        return contentFrame; 
-    } 
-
-    private void showSetupContent() {
-        MenuFrame contentFrame = createContentFrame();
-
-        JLabel title = new JLabel(" GAME SETUP ", SwingConstants.CENTER);
-        title.setAlignmentX(CENTER_ALIGNMENT);
-        title.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 22));
-        title.setForeground(Main.Palette.foreground);
-
-        // Create a JTextArea instead of FlatTextField
-        JTextArea textContent = new JTextArea();
-        textContent.setAlignmentX(CENTER_ALIGNMENT);
-        textContent.setWrapStyleWord(true);
-        textContent.setLineWrap(true);
-        textContent.setEditable(false);
-        textContent.enableInputMethods(false);
-        textContent.setOpaque(false);
-        textContent.setForeground(Main.Palette.foreground);
-        textContent.setFont(Main.FontManager.getDefaultCustomFont(Font.PLAIN, 14));
-        textContent.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        textContent.setBackground(new Color(0,0,0,0));
-
-        // Read file content and set it to the text area
-        String fileContent = readFile("Onitama/res/Rules/Setup.txt");
-        textContent.setText(fileContent);
-
-        // Put the JTextArea inside a JScrollPane
-        JScrollPane scrollPane = new JScrollPane(textContent);
-        scrollPane.setAlignmentX(CENTER_ALIGNMENT);
-        scrollPane.setBorder(null);
-        scrollPane.setPreferredSize(new Dimension(
-            (int) (Main.engine.getResolution().width * 0.7),
-            (int) (Main.engine.getResolution().height * 0.5)
-        ));
-
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
-
-        contentFrame.add(Box.createVerticalGlue());
-        contentFrame.add(title);
-        contentFrame.add(scrollPane); // Add the scroll pane instead of the text area
-        contentFrame.add(Box.createVerticalGlue());
-    }
-
-    private void showStepsContent() {
-        System.out.println( "steps");
-        MenuFrame contentFrame = createContentFrame();
-
-        JLabel title = new JLabel(" GAME STEPS ", SwingConstants.CENTER);
-        title.setAlignmentX(CENTER_ALIGNMENT);
-        title.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 22));
-        title.setForeground(Main.Palette.foreground);
-
-
-        JLabel subTitle1 = new JLabel("1. Movement");
-        subTitle1.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
-        subTitle1.setForeground(Main.Palette.foreground);
-
-        // Create a JTextArea instead of FlatTextField
-        JTextArea textContent = new JTextArea();
-        textContent.setAlignmentX(CENTER_ALIGNMENT);
-        textContent.setWrapStyleWord(true);
-        textContent.setLineWrap(true);
-        textContent.setEditable(false);
-        textContent.enableInputMethods(false);
-        textContent.setOpaque(false);
-        textContent.setForeground(Main.Palette.foreground);
-        textContent.setFont(Main.FontManager.getDefaultCustomFont(Font.PLAIN, 14));
-        textContent.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        textContent.setBackground(new Color(0,0,0,0));
-
-        // Read file content and set it to the text area
-        String fileContent = readFile("Onitama/res/Rules/Steps_Movement.txt");
-        textContent.setText(fileContent);
-
-        // Put the JTextArea inside a JScrollPane
-        JScrollPane scrollPane1 = new JScrollPane(textContent);
-        scrollPane1.setAlignmentX(CENTER_ALIGNMENT);
-        scrollPane1.setBorder(null);
-        scrollPane1.setPreferredSize(new Dimension(
-            (int) (Main.engine.getResolution().width * 0.7),
-            (int) (Main.engine.getResolution().height * 0.5)
-        ));
-
-        scrollPane1.setOpaque(false);
-        scrollPane1.getViewport().setOpaque(false);
-        
-
-        JLabel subTitle2 = new JLabel("2. Card Exchange");
-        subTitle2.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
-        subTitle2.setForeground(Main.Palette.foreground);
-
-        contentFrame.add(Box.createVerticalGlue());
-        contentFrame.add(title);
-        contentFrame.add(subTitle1);
-        contentFrame.add(scrollPane1); // Add the scroll pane instead of the text area\
-        contentFrame.add(subTitle2);
-        contentFrame.add(Box.createVerticalGlue());
-
-
-    }
-
-    public void showHowToWinContent() {
-
-    }
-
     private FlatButton createBaseButton(String content) {
         FlatButton button = new FlatButton(content);
         button.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 14));
@@ -347,7 +223,7 @@ public class HowToPlayScene extends Scene implements ItemListener {
             currentFrame = new SetupFrame();
             addComponent(currentFrame);
             selected = gameSetupButton;
-        } else if (e.getItem() == howToWinButton) {
+        } else if (e.getItem() == howToWinButton && selected != howToWinButton) {
             gameStepsButton.setSelected(false);
             gameStepsButton.setMainColor(Main.Palette.selection.darker());
             
@@ -355,6 +231,11 @@ public class HowToPlayScene extends Scene implements ItemListener {
             gameSetupButton.setMainColor(Main.Palette.selection.darker());
             
             howToWinButton.setMainColor(Main.Palette.selection);
+            
+            removeComponent(currentFrame);
+            currentFrame = new WinningFrame();
+            addComponent(currentFrame);
+            selected = howToWinButton;
         } 
     }
 }

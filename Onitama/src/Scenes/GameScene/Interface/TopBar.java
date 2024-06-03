@@ -16,6 +16,7 @@ import Engine.Structures.Vector2D;
 import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.Scripts.AI.SmartAI;
 import Onitama.src.Scenes.GameScene.Scripts.States.Action;
+import Onitama.src.Scenes.HowToPlayScene.HowToPlayScene;
 
 
 public class TopBar extends MenuFrame {
@@ -171,8 +172,7 @@ public class TopBar extends MenuFrame {
         menuButton.setToolTipText("In Game Menu");
         menuButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 26));
         menuButton.setBorder(BorderFactory.createEmptyBorder(7, 10, 3, 10));
-
-        //undoButton.setEnabled(GameScene.canUndo());s
+        
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -190,7 +190,6 @@ public class TopBar extends MenuFrame {
                 Main.gameScene.addComponent(menu);
                 
                 Main.gameScene.setEnabledGUI(false);
-                //Util.printWarning("Not implemented");
             }
         });
 
@@ -204,11 +203,10 @@ public class TopBar extends MenuFrame {
         helpButton.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 18));
         helpButton.setBorder(BorderFactory.createEmptyBorder(9, 10, 9, 10));
         
-        //undoButton.setEnabled(GameScene.canUndo());
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Util.printWarning("Not implemented");
+                Main.engine.setCurrentScene(new HowToPlayScene(Main.engine.getCurrentScene()));
             }
         });
 
