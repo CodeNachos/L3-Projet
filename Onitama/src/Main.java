@@ -42,6 +42,8 @@ public class Main {
         initialResolution = Settings.resolution;
 
         Settings.fullscreen_key = KeyEvent.VK_F;
+        Settings.undo_key = KeyEvent.VK_Z;
+        Settings.redo_key = KeyEvent.VK_X;
 
         // create engine
         engine = new GameEngine();

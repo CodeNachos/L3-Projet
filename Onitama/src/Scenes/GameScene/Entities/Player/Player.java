@@ -1,6 +1,7 @@
 package Onitama.src.Scenes.GameScene.Entities.Player;
 
 import java.util.List;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import Engine.Core.Renderer.Scene;
@@ -41,6 +42,8 @@ public class Player extends GameObject {
 
     // Turn info
     Card selectedCard = null;
+
+    private boolean interactable = true;
 
     public Player(int playerId) {
         this.playerId = playerId;
@@ -121,7 +124,22 @@ public class Player extends GameObject {
         aiAction = null;        
     }
 
+    @Override
+    public void input(KeyEvent e) {
+        if (!interactable)
+            return;
+        
+        if (e.getID() == KeyEvent.KEY_RELEASED) {
+            if (e.getKeyCode() == KeyEvent.VK_Q || e.getKeyCode() == KeyEvent.VK_1) {
+                setSelectedCard(card1);
+            } else if (e.getKeyCode() == KeyEvent.VK_E || e.getKeyCode() == KeyEvent.VK_2) {
+                setSelectedCard(card2);
+            } 
+        }
+    }
+
     public void setCardsInteractable(boolean state) {
+        interactable = state;
         card1.setinteractable(state);
         card2.setinteractable(state);
         standBy.setinteractable(state);

@@ -10,6 +10,7 @@ import Engine.Global.Settings;
 import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
 import Engine.Structures.Vector2D;
+import Onitama.src.Scenes.GameScene.Constants;
 import Onitama.src.Scenes.GameScene.GameScene;
 import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 import Onitama.src.Scenes.GameScene.Entities.Card.Card;
@@ -164,6 +165,27 @@ public class Board extends TileMap {
                 } else {
                     hoveringTile = (BoardTile)getTile(0,0);
                     hoveringTile.hovering = true;
+                }
+            } else if (e.getKeyCode() == Settings.accept_key) {
+                if (hoveringTile != null) {
+                     if (hoveringTile.highlighted) {
+                        setSelectedAction(hoveringTile.getMapPosition());
+                        Main.gameScene.updateMatch();
+                     } else if (
+                            Main.gameScene.getPiece(hoveringTile.getMapPosition()) != null &&
+                            (
+                                (
+                                    Main.gameScene.getPiece(hoveringTile.getMapPosition()).isRed() && 
+                                    Main.gameScene.getCurrentPlayer() == Constants.RED_PLAYER
+                                ) ||
+                                (
+                                    Main.gameScene.getPiece(hoveringTile.getMapPosition()).isBlue() && 
+                                    Main.gameScene.getCurrentPlayer() == Constants.BLUE_PLAYER
+                                )
+                            )
+                        ) {
+                            setSelectedTile(hoveringTile.getMapPosition());
+                     }
                 }
             } 
 
