@@ -22,6 +22,10 @@ jar:
 run-jar: jar
 	# java -jar Onitama.jar -classpath ./Onitama/libs/json-simple-1.1.1.jar
 	java -jar Onitama.jar
+add-jar:
+	jar uf L3-Projet.jar -C . Onitama/res/background
+	jar uf L3-Projet.jar -C . Onitama/res/background/tower.jpeg
+	jar uf L3-Projet.jar -C . Onitama/res/Sprites/Title_byMayaShieda.png
 
 
 clean:

@@ -3,6 +3,7 @@ package Onitama.src.Scenes.MainMenuScene;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.util.LinkedList;
 import java.util.zip.GZIPInputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -51,6 +53,22 @@ public class MainMenuScene extends Scene {
             (int)(Main.engine.getResolution().height * 0.1)
         );
         addComponent(title);
+        
+        Sprite bgImgSprite = new Sprite(Util.getImage("/Onitama/res/background/tower.jpeg"));
+        GameObject bgImg = new GameObject();
+        int imgWidth = bgImgSprite.getWidth();
+        int imgHeight = bgImgSprite.getHeight();
+        double widthScale = (double) Main.engine.getResolution().width / imgWidth;
+        double heightScale = (double) Main.engine.getResolution().height / imgHeight;
+        double scaleFactor = Math.min(widthScale, heightScale);
+        int scaledWidth = (int) (imgWidth * scaleFactor);
+        int scaledHeight = (int) (imgHeight * scaleFactor);
+        bgImg.setSprite(bgImgSprite);
+        bgImg.setScale(new Vector2D(scaleFactor,scaleFactor));
+        bgImg.setPos((Main.engine.getResolution().width - scaledWidth)/2, (Main.engine.getResolution().height - scaledHeight)/2);
+        addComponent(bgImg);
+
+        
 
         // Add foreground
         ColorArea foreground = new ColorArea(
@@ -68,8 +86,8 @@ public class MainMenuScene extends Scene {
         addComponent(foreground);
 
         // Add background
-        ColorArea background = new ColorArea(Main.Palette.background.brighter(), new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
-        addComponent(background);
+        //ColorArea background = new ColorArea(Main.Palette.background.brighter(), new Dimension(Main.engine.getResolution().width, Main.engine.getResolution().height));
+        //addComponent(background);
     }
 
     private void createTitle() {

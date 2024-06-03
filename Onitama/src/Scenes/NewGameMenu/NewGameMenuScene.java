@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -318,7 +319,7 @@ public class NewGameMenuScene extends Scene implements ItemListener {
         mainMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.engine.setCurrentScene(new MainMenuScene());
+                    Main.engine.setCurrentScene(new MainMenuScene());
             }
             
         });

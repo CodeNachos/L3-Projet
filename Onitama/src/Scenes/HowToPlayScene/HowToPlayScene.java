@@ -140,7 +140,8 @@ public class HowToPlayScene extends Scene implements ItemListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (returnScene == null) {
-                    Main.engine.setCurrentScene(new MainMenuScene());
+                        Main.engine.setCurrentScene(new MainMenuScene());
+                    
                 } else {
                     Main.engine.setCurrentScene(returnScene);
                 }

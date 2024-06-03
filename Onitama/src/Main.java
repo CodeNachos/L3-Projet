@@ -51,7 +51,7 @@ public class Main {
             Testing.test(); 
         } else {
             // start engine
-            mainMenuScene = new MainMenuScene();
+                mainMenuScene = new MainMenuScene();
             engine.setCurrentScene(mainMenuScene);
             engine.start();
         }
