@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -18,6 +21,8 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 import Engine.Core.Renderer.Scene;
@@ -27,6 +32,7 @@ import Engine.Entities.UI.MenuFrame;
 import Engine.Global.Util;
 import Engine.Structures.Vector2D;
 import Onitama.src.Main;
+import Onitama.src.Scenes.GameScene.Scripts.States.Config;
 import Onitama.src.Scenes.InGameMenuScene.InGameMenuScene.MenuActions;
 import Onitama.src.Scenes.MainMenuScene.MainMenuScene;
 import Onitama.src.Scenes.NewGameMenu.NewGameMenuScene;
@@ -44,6 +50,8 @@ public class InGameMenu extends MenuFrame {
 
     private boolean firstProcess = true;
 
+    private Config newConfig;
+
     public InGameMenu(Dimension area, Vector2D offset) {
         
         super(area, offset);
@@ -54,45 +62,23 @@ public class InGameMenu extends MenuFrame {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        add(Box.createVerticalGlue());
-        add(Box.createVerticalStrut(10));
-
         resumeButton = createBaseButton(" Resume ");
         resumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(resumeButton);
-
-        add(Box.createVerticalStrut(6));
         
         restartButton = createBaseButton("Restart");
         restartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(restartButton);
-
-        add(Box.createVerticalStrut(6));
+        
 
         newGameButton = createBaseButton("New Game");
         newGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(newGameButton);
-        add(Box.createVerticalStrut(6));
+        
 
         saveButton = createBaseButton("Save Game");
         saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(saveButton);
-        add(Box.createVerticalStrut(6));
         
         mainButton = createBaseButton("Main Menu");
         mainButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(mainButton);
-
-        saveMessage = new JLabel(" ");
-        saveMessage.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 14));
-        saveMessage.setForeground(Main.Palette.foreground);
-        saveMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
-        saveMessage.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-        saveMessage.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
-
-        add(Box.createVerticalGlue());
-        add(saveMessage);
-
+        
         // Calculate the maximum width needed
         int maxWidth = saveButton.getPreferredSize().width + 40;
 
@@ -119,6 +105,145 @@ public class InGameMenu extends MenuFrame {
         mainButton.setMaximumSize(buttonSize);
         mainButton.setMinimumSize(buttonSize);
 
+        saveMessage = new JLabel(" ");
+        saveMessage.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 14));
+        saveMessage.setForeground(Main.Palette.foreground);
+        saveMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+        saveMessage.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+        saveMessage.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
+
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+        buttonsPanel.setBackground(new Color(0,0,0,0));
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(10,45,10,45));
+
+        buttonsPanel.add(Box.createVerticalGlue());
+        buttonsPanel.add(Box.createVerticalStrut(10));
+        buttonsPanel.add(resumeButton);
+        buttonsPanel.add(Box.createVerticalStrut(6));
+        buttonsPanel.add(restartButton);
+        buttonsPanel.add(Box.createVerticalStrut(6));
+        buttonsPanel.add(newGameButton);
+        buttonsPanel.add(Box.createVerticalStrut(6));
+        buttonsPanel.add(saveButton);
+        buttonsPanel.add(Box.createVerticalStrut(6));
+        buttonsPanel.add(mainButton);
+        buttonsPanel.add(Box.createVerticalGlue());
+
+        JPanel selectionMenu = new JPanel();
+        selectionMenu.setBackground(new Color(0,0,0,0));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        selectionMenu.setLayout(new GridBagLayout());
+        
+        JLabel menuTitle = new JLabel("Configure Players");
+        menuTitle.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 22));
+        menuTitle.setForeground(Main.Palette.foreground);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.gridwidth = 3;
+        gbc.insets = new Insets(10,10,20,10);
+        selectionMenu.add(menuTitle, gbc);
+
+        newConfig = Main.gameScene.getGameConfig();
+
+        FlatButton leftButtonPlayer1 = new FlatButton("  🞀  ");
+        leftButtonPlayer1.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 18));
+        leftButtonPlayer1.setForeground(Main.Palette.foreground);
+        leftButtonPlayer1.setMainColor(Main.Palette.selection);
+        leftButtonPlayer1.setAccentColor(Main.Palette.selection.brighter());
+        leftButtonPlayer1.setCurvature(10, 10);
+        leftButtonPlayer1.setBorder(BorderFactory.createEmptyBorder());
+        leftButtonPlayer1.setFocusable(false);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        gbc.ipady = 10;
+        gbc.insets = new Insets(10,10,10,10);
+        selectionMenu.add(leftButtonPlayer1, gbc);
+
+        
+        JLabel player1Label = new JLabel(newConfig.redDifficulty.toString(), SwingConstants.CENTER);
+        player1Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 18));
+        player1Label.setForeground(Main.Palette.red);
+        player1Label.setPreferredSize(new Dimension(100,40));
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.ipady = 0;
+        selectionMenu.add(player1Label, gbc);
+
+        FlatButton rightButtonPlayer1 = new FlatButton("  🞂  ");
+        rightButtonPlayer1.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 18));
+        rightButtonPlayer1.setForeground(Main.Palette.foreground);
+        rightButtonPlayer1.setMainColor(Main.Palette.selection);
+        rightButtonPlayer1.setAccentColor(Main.Palette.selection.brighter());
+        rightButtonPlayer1.setCurvature(10, 10);
+        rightButtonPlayer1.setBorder(BorderFactory.createEmptyBorder());
+        rightButtonPlayer1.setFocusable(false);
+        gbc.gridx = 2;
+        gbc.gridy = 3;
+        gbc.ipady = 10;
+        selectionMenu.add(rightButtonPlayer1, gbc);
+
+        FlatButton leftButtonPlayer2 = new FlatButton("  🞀  ");
+        leftButtonPlayer2.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 18));
+        leftButtonPlayer2.setForeground(Main.Palette.foreground);
+        leftButtonPlayer2.setMainColor(Main.Palette.selection);
+        leftButtonPlayer2.setAccentColor(Main.Palette.selection.brighter());
+        leftButtonPlayer2.setCurvature(10, 10);
+        leftButtonPlayer2.setBorder(BorderFactory.createEmptyBorder());
+        leftButtonPlayer2.setFocusable(false);
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.ipady = 10;
+        selectionMenu.add(leftButtonPlayer2, gbc);
+
+        
+        JLabel player2Label = new JLabel(newConfig.blueDifficulty.toString(), SwingConstants.CENTER);
+        player2Label.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 18));
+        player2Label.setForeground(Main.Palette.cyan);
+        player2Label.setPreferredSize(new Dimension(100,40));
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.ipady = 0;
+        selectionMenu.add(player2Label, gbc);
+
+        FlatButton rightButtonPlayer2 = new FlatButton("  🞂  ");
+        rightButtonPlayer2.setFont(Main.FontManager.getUnicodeCustomFont(Font.BOLD, 18));
+        rightButtonPlayer2.setForeground(Main.Palette.foreground);
+        rightButtonPlayer2.setMainColor(Main.Palette.selection);
+        rightButtonPlayer2.setAccentColor(Main.Palette.selection.brighter());
+        rightButtonPlayer2.setCurvature(10, 10);
+        rightButtonPlayer2.setBorder(BorderFactory.createEmptyBorder());
+        rightButtonPlayer2.setFocusable(false);
+        gbc.gridx = 2;
+        gbc.gridy = 5;
+        gbc.ipady = 10;
+        selectionMenu.add(rightButtonPlayer2, gbc);
+
+        FlatButton applyConfigButton = createBaseButton("Apply");
+        applyConfigButton.setBorder(BorderFactory.createEmptyBorder(5,10,5,10));
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.ipady = 10;
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        selectionMenu.add(applyConfigButton, gbc);
+        
+        JPanel menuContent = new JPanel();
+        menuContent.setLayout(new BoxLayout(menuContent, BoxLayout.X_AXIS));
+        menuContent.setBackground(new Color(0,0,0,0));
+
+        menuContent.add(Box.createHorizontalGlue());
+        menuContent.add(buttonsPanel);
+        menuContent.add(selectionMenu);
+        menuContent.add(Box.createHorizontalGlue());
+
+        add(Box.createVerticalGlue());
+        add(menuContent);
+        add(saveMessage);
+        add(Box.createVerticalGlue());
         
         timer = new Timer(2000, new ActionListener() {
 
@@ -189,6 +314,59 @@ public class InGameMenu extends MenuFrame {
             }
             
         });
+
+        
+        leftButtonPlayer1.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newConfig.redDifficulty = newConfig.redDifficulty.previous();
+                player1Label.setText(newConfig.redDifficulty.toString());
+            }
+            
+        });
+
+        rightButtonPlayer1.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newConfig.redDifficulty = newConfig.redDifficulty.next();
+                player1Label.setText(newConfig.redDifficulty.toString());
+            }
+            
+        });
+
+        leftButtonPlayer2.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newConfig.blueDifficulty = newConfig.blueDifficulty.previous();
+                player2Label.setText(newConfig.blueDifficulty.toString());
+            }
+            
+        });
+
+        rightButtonPlayer2.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                newConfig.blueDifficulty = newConfig.blueDifficulty.next();
+                player2Label.setText(newConfig.blueDifficulty.toString());
+            }
+            
+        });
+
+        applyConfigButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.gameScene.setGameConfig(newConfig);
+                Main.engine.setCurrentScene(Main.gameScene);
+            }
+            
+        });
+
+        
     }
 
     @Override
