@@ -110,12 +110,17 @@ public class Player extends GameObject {
 
         if (aiAction == null) {
             aiAction = ai.play();
-            GameScene.setAction(aiAction);
-            counter = 2*60; // 2 second delay
+            GameScene.setAction(null);
+            counter = 3*60; // 3 second delay
             return;
         }
         
         if (counter > 0) {
+            if (counter == 120) {
+                setSelectedCard(card1.getName().equals(aiAction.getCard()) ? card1 : card2);
+            } else if (counter == 60) {
+                Main.gameScene.setAction(aiAction);
+            }
             counter--;
             return;
         }
