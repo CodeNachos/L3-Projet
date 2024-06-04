@@ -18,6 +18,8 @@ public class Settings {
     public static int accept_key = KeyEvent.VK_ENTER;
     public static int undo_key = KeyEvent.VK_Q;
     public static int redo_key = KeyEvent.VK_E;
+    public static int action1_key = KeyEvent.VK_Q;
+    public static int action2_key = KeyEvent.VK_E;
     public static int up_key = KeyEvent.VK_W;
     public static int down_key = KeyEvent.VK_S;
     public static int left_key = KeyEvent.VK_A;

@@ -38,7 +38,7 @@ public class SetupFrame extends MenuFrame {
 
         JLabel title = new JLabel(" GAME SETUP ", SwingConstants.CENTER);
         title.setAlignmentX(CENTER_ALIGNMENT);
-        title.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 22));
+        title.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 32));
         title.setForeground(Main.Palette.foreground);
 
         // Create a JTextArea instead of FlatTextField
@@ -50,7 +50,7 @@ public class SetupFrame extends MenuFrame {
         textContent.enableInputMethods(false);
         textContent.setOpaque(false);
         textContent.setForeground(Main.Palette.foreground);
-        textContent.setFont(Main.FontManager.getDefaultCustomFont(Font.PLAIN, 14));
+        textContent.setFont(Main.FontManager.getDefaultCustomFont(Font.PLAIN, 22));
         textContent.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         textContent.setBackground(new Color(0,0,0,0));
 

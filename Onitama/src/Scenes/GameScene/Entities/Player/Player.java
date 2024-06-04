@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import Engine.Core.Renderer.Scene;
 import Engine.Entities.GameObject;
+import Engine.Global.Settings;
 import Engine.Global.Util;
 import Engine.Structures.Sprite;
 import Engine.Structures.Texture;
@@ -135,9 +136,9 @@ public class Player extends GameObject {
             return;
         
         if (e.getID() == KeyEvent.KEY_RELEASED) {
-            if (e.getKeyCode() == KeyEvent.VK_Q || e.getKeyCode() == KeyEvent.VK_1) {
+            if (e.getKeyCode() == Settings.action1_key || e.getKeyCode() == KeyEvent.VK_1) {
                 setSelectedCard(card1);
-            } else if (e.getKeyCode() == KeyEvent.VK_E || e.getKeyCode() == KeyEvent.VK_2) {
+            } else if (e.getKeyCode() == Settings.action2_key || e.getKeyCode() == KeyEvent.VK_2) {
                 setSelectedCard(card2);
             } 
         }

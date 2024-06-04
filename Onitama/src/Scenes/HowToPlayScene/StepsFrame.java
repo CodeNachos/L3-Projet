@@ -38,12 +38,12 @@ public class StepsFrame extends MenuFrame {
 
         JLabel title = new JLabel(" GAME STEPS ", SwingConstants.CENTER);
         title.setAlignmentX(CENTER_ALIGNMENT);
-        title.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 22));
+        title.setFont(Main.FontManager.getDefaultCustomFont(Font.ITALIC, 32));
         title.setForeground(Main.Palette.foreground);
 
 
         JLabel subTitle1 = new JLabel("1. Movement");
-        subTitle1.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
+        subTitle1.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 26));
         subTitle1.setForeground(Main.Palette.foreground);
         subTitle1.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -56,7 +56,7 @@ public class StepsFrame extends MenuFrame {
         textContent1.enableInputMethods(false);
         textContent1.setOpaque(false);
         textContent1.setForeground(Main.Palette.foreground);
-        textContent1.setFont(Main.FontManager.getDefaultCustomFont(Font.PLAIN, 14));
+        textContent1.setFont(Main.FontManager.getDefaultCustomFont(Font.PLAIN, 22));
         textContent1.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         textContent1.setBackground(new Color(0,0,0,0));
 
@@ -78,7 +78,7 @@ public class StepsFrame extends MenuFrame {
         
 
         JLabel subTitle2 = new JLabel("2. Card Exchange");
-        subTitle2.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 16));
+        subTitle2.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 26));
         subTitle2.setForeground(Main.Palette.foreground);
         subTitle2.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -90,7 +90,7 @@ public class StepsFrame extends MenuFrame {
         textContent2.enableInputMethods(false);
         textContent2.setOpaque(false);
         textContent2.setForeground(Main.Palette.foreground);
-        textContent2.setFont(Main.FontManager.getDefaultCustomFont(Font.PLAIN, 14));
+        textContent2.setFont(Main.FontManager.getDefaultCustomFont(Font.PLAIN, 22));
         textContent2.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         textContent2.setBackground(new Color(0,0,0,0));
 

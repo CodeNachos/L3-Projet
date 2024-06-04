@@ -15,10 +15,6 @@ import java.io.InputStreamReader;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 
 import Engine.Core.Renderer.Scene;
 import Engine.Entities.UI.ColorArea;
@@ -33,6 +29,7 @@ public class HowToPlayScene extends Scene implements ItemListener {
 
     Scene returnScene;
 
+    FlatToggleButton controlButton;
     FlatToggleButton gameSetupButton;
     FlatToggleButton gameStepsButton;
     FlatToggleButton howToWinButton;
@@ -47,8 +44,8 @@ public class HowToPlayScene extends Scene implements ItemListener {
 
         createTabs();
         
-        selected = gameSetupButton;
-        currentFrame = new SetupFrame();
+        selected = controlButton;
+        currentFrame = new ControlFrame();
         addComponent(currentFrame);
 
         // Add foreground
@@ -89,7 +86,10 @@ public class HowToPlayScene extends Scene implements ItemListener {
 
         tabsFrame.setLayout(new BoxLayout(tabsFrame, BoxLayout.X_AXIS));
 
+        controlButton = createToggleButton("Control");
+        controlButton.addItemListener(this);
         gameSetupButton = createToggleButton("Game Setup");
+        gameSetupButton.setMainColor(Main.Palette.selection.darker());
         gameSetupButton.addItemListener(this);
         gameStepsButton = createToggleButton("Game Steps");
         gameStepsButton.setMainColor(Main.Palette.selection.darker());
@@ -99,6 +99,7 @@ public class HowToPlayScene extends Scene implements ItemListener {
         howToWinButton.addItemListener(this);
 
         tabsFrame.add(Box.createHorizontalGlue());
+        tabsFrame.add(controlButton);
         tabsFrame.add(gameSetupButton);
         tabsFrame.add(gameStepsButton);
         tabsFrame.add(howToWinButton);
@@ -203,6 +204,9 @@ public class HowToPlayScene extends Scene implements ItemListener {
             
             howToWinButton.setSelected(false);
             howToWinButton.setMainColor(Main.Palette.selection.darker());
+
+            controlButton.setSelected(false);
+            controlButton.setMainColor(Main.Palette.selection.darker());
             
             gameStepsButton.setMainColor(Main.Palette.selection);
             
@@ -236,6 +240,22 @@ public class HowToPlayScene extends Scene implements ItemListener {
             currentFrame = new WinningFrame();
             addComponent(currentFrame);
             selected = howToWinButton;
-        } 
+        } else if (e.getItem() == controlButton && selected != controlButton) {
+            gameSetupButton.setSelected(false);
+            gameSetupButton.setMainColor(Main.Palette.selection.darker());
+            
+            howToWinButton.setSelected(false);
+            howToWinButton.setMainColor(Main.Palette.selection.darker());
+
+            gameStepsButton.setSelected(false);
+            gameStepsButton.setMainColor(Main.Palette.selection.darker());
+
+            howToWinButton.setMainColor(Main.Palette.selection);
+            
+            removeComponent(currentFrame);
+            currentFrame = new ControlFrame();
+            addComponent(currentFrame);
+            selected = controlButton;
+        }
     }
 }
