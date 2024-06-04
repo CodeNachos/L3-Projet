@@ -1,5 +1,5 @@
-The game is composed of a central board, ten pawns (five red and five blue), including a master of each color, and 16 move cards.
+The game is composed of a central board, ten pawns (five red and five blue), including a king of each color, and 16 move cards.
 
-The game begins by placing each player's pawns at each end of the board such that their master pawn is on the central space of their respective first row, and the four other pawns are on the remaining spaces of the first row.
+The game begins by placing each player's pawns at each end of the board such that their king pawn is on the central space of their respective first row, and the four other pawns are on the remaining spaces of the first row.
 
 Then five move cards are picked from the deck of 16. Those will be the cards used during the game. A player's hand is composed of two of them at any time with the fifth excluded from player's hands and is put on the side of the board.

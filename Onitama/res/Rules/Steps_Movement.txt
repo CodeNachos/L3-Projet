@@ -1,4 +1,4 @@
-Each turn, a player must move one of their pawns (either a student or the master) according to one of the two move cards on its respective side. The move cards dictate how a pawn can move, with each card showing a specific movement pattern. The movement pattern is relative to the pawn's current position, indicating possible destination squares.
+Each turn, a player must move one of their pawns (either a student or the king) according to one of the two move cards on its respective side. The move cards dictate how a pawn can move, with each card showing a specific movement pattern. The movement pattern is relative to the pawn's current position, indicating possible destination squares.
 The white square indicates the pawn position and the colored squares are the possible destinations relative to the pawn.
 
 If a pawn moves onto a space occupied by an opponent's pawn, the opponent's pawn is captured and removed from the board. This is how attacks are made in Onitama.
