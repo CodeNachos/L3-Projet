@@ -226,6 +226,11 @@ public class MainMenuScene extends Scene {
             }
         });
 
+        File file = new File("Onitama/savefiles/game.save");
+        if (!file.exists()) {
+            loadButton.setEnabled(false);
+        }
+
         loadButton.addActionListener(new ActionListener() {
 
             @Override

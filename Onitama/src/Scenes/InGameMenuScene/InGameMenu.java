@@ -14,6 +14,9 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.zip.GZIPOutputStream;
 
 
@@ -290,28 +293,39 @@ public class InGameMenu extends MenuFrame {
 
         saveButton.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try (FileOutputStream fileOut = new FileOutputStream("Onitama/savefiles/game.save");
-				GZIPOutputStream gzipOut = new GZIPOutputStream(new BufferedOutputStream(fileOut));
-				ObjectOutputStream out = new ObjectOutputStream(gzipOut)) {
-                    out.writeObject(Main.gameScene.getGameState());
-                    out.writeObject(Main.gameScene.history);
-                    saveMessage.setForeground(Main.Palette.green);
-                    saveMessage.setText("Game saved!");
-                    timer.start();
-						
-			    } catch (IOException e1) {
-                    e1.printStackTrace();
-                    saveMessage.setForeground(Main.Palette.orange);
-                    saveMessage.setText("Error while saving game");
-                    timer.start();
-                }
-
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Path saveFilePath = Paths.get("Onitama/savefiles/game.save");
+            
+            // Ensure the parent directory exists
+            try {
+                Files.createDirectories(saveFilePath.getParent());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                saveMessage.setForeground(Main.Palette.orange);
+                saveMessage.setText("Error creating directories");
+                timer.start();
+                return;
             }
             
-        });
-
+            try (FileOutputStream fileOut = new FileOutputStream(saveFilePath.toFile());
+                GZIPOutputStream gzipOut = new GZIPOutputStream(new BufferedOutputStream(fileOut));
+                ObjectOutputStream out = new ObjectOutputStream(gzipOut)) {
+                
+                out.writeObject(Main.gameScene.getGameState());
+                out.writeObject(Main.gameScene.history);
+                saveMessage.setForeground(Main.Palette.green);
+                saveMessage.setText("Game saved!");
+                timer.start();
+                    
+            } catch (IOException e1) {
+                e1.printStackTrace();
+                saveMessage.setForeground(Main.Palette.orange);
+                saveMessage.setText("Error while saving game");
+                timer.start();
+            }
+        }
+    });
         mainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
