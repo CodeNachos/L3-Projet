@@ -1,0 +1,20 @@
+Screen Settings:
+
+Fullscreen              F10
+
+
+Gameplay:
+
+Select first card       A
+Select second card      E
+Move up on board        Z
+Move down on board      S
+Move left on board      Q
+Move right on board     D
+Select                  L SHIFT / ENTER
+
+Navigation:
+
+Open in game menu       ESCAPE
+Continue                ENTER
+Cancel                  ESCAPE

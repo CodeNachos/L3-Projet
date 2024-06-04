@@ -91,7 +91,6 @@ public class Board extends TileMap {
         blueThroneSprite.setBorder(5, new Color(139,233,253,100), 10);
 
         populateBoard();
-
     }
 
     public void setIteractable(boolean state) {

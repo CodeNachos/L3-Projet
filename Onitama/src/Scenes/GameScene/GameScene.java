@@ -25,6 +25,7 @@ import Onitama.src.Main;
 import Onitama.src.Scenes.GameScene.Constants.PlayerType;
 import Onitama.src.Scenes.GameScene.Entities.Board.Board;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece;
+import Onitama.src.Scenes.GameScene.Entities.Board.Thrones;
 import Onitama.src.Scenes.GameScene.Entities.Board.Piece.PieceType;
 import Onitama.src.Scenes.GameScene.Entities.Card.Card;
 import Onitama.src.Scenes.GameScene.Entities.Card.CardPlaceholder;
@@ -617,6 +618,7 @@ public class GameScene extends Scene {
         );
 
         // Create game board
+        addComponent(new Thrones(5, 5, boardArea, boardPos));
         gameBoard = new Board(boardArea, boardPos);
     }
 
