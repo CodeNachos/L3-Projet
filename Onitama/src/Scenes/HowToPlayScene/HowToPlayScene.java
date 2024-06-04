@@ -220,6 +220,9 @@ public class HowToPlayScene extends Scene implements ItemListener {
             
             howToWinButton.setSelected(false);
             howToWinButton.setMainColor(Main.Palette.selection.darker());
+
+            controlButton.setSelected(false);
+            controlButton.setMainColor(Main.Palette.selection.darker());
             
             gameSetupButton.setMainColor(Main.Palette.selection);
             
@@ -233,6 +236,9 @@ public class HowToPlayScene extends Scene implements ItemListener {
             
             gameSetupButton.setSelected(false);
             gameSetupButton.setMainColor(Main.Palette.selection.darker());
+
+            controlButton.setSelected(false);
+            controlButton.setMainColor(Main.Palette.selection.darker());
             
             howToWinButton.setMainColor(Main.Palette.selection);
             
@@ -250,7 +256,7 @@ public class HowToPlayScene extends Scene implements ItemListener {
             gameStepsButton.setSelected(false);
             gameStepsButton.setMainColor(Main.Palette.selection.darker());
 
-            howToWinButton.setMainColor(Main.Palette.selection);
+            controlButton.setMainColor(Main.Palette.selection);
             
             removeComponent(currentFrame);
             currentFrame = new ControlFrame();

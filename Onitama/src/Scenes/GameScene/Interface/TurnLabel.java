@@ -30,10 +30,10 @@ public class TurnLabel extends MenuFrame {
         setAccentColor(new Color(255,255,255,15));
         setCurvature(10, 10);
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         turnLabel = new JLabel("LABEL");
-        turnLabel.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 24));
+        turnLabel.setFont(Main.FontManager.getDefaultCustomFont(Font.BOLD, 18));
         turnLabel.setForeground(Main.Palette.foreground);
 
         add(Box.createVerticalGlue()); // Add vertical glue for top spacing
